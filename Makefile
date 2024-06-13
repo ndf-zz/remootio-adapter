@@ -16,6 +16,9 @@ TARGET = $(PROJECT).elf
 # Listing files
 TARGETLIST = $(TARGET:.elf=.lst)
 
+# Random "book" for PRNG seeding
+RANDBOOK = randbook.bin
+
 # Compiler
 CC = avr-gcc
 
@@ -48,7 +51,7 @@ WARN += -Wundef
 WARN += -Wconversion
 
 # Avr MCU
-AVROPTS = -mmcu=atmega328p -mtiny-stack -ffreestanding
+AVROPTS = -mmcu=atmega328p -ffreestanding
 
 # Clock speed
 CPPFLAGS = -DF_CPU=2000000L
@@ -93,6 +96,9 @@ $(OBJECTS): Makefile
 $(TARGET): $(OBJECTS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS) -o $(TARGET) $(OBJECTS)
 
+$(RANDBOOK):
+	dd if=/dev/random bs=1K count=1 of=$(RANDBOOK)
+
 # Override compilation recipe for assembly files
 %.o: %.s
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
@@ -122,13 +128,17 @@ erase:
 upload: $(TARGET)
 	$(DUDECMD) -U flash:w:$(TARGET):e
 
+.PHONY: randbook
+randbook: $(RANDBOOK)
+	$(DUDECMD) -U eeprom:w:$(RANDBOOK):r
+
 .PHONY: fuse
 fuse: Makefile
 	$(DUDECMD) -U efuse:w:$(EFUSE):m -U hfuse:w:$(HFUSE):m -U lfuse:w:$(LFUSE):m -U lock:w:$(LOCKBYTE):m
 
 .PHONY: clean
 clean:
-	-rm -f $(TARGET) $(OBJECTS) $(TARGETLIST)
+	-rm -f $(TARGET) $(OBJECTS) $(TARGETLIST) $(RANDBOOK)
 
 .PHONY: requires
 requires:
