@@ -23,9 +23,12 @@ Commands:\r\n\
 \t2\tP1-P2 time\r\n\
 \tm\tMan time\r\n\
 \th\tH time\r\n\
-\tb\tBrake (1-255)\r\n\
+\tf\tFeed time (min)\r\n\
+\tn\tFeeds/day (0=off)\r\n\
 \tt\tThrottle (1-255)\r\n\
-\ts\tShow Status\r\n\
+\ts\tStatus\r\n\
+\td\tLower\r\n\
+\tu\tRaise\r\n\
 \r\n";
 
 ISR(USART_RX_vect)
@@ -129,38 +132,56 @@ static uint8_t get_cmd(uint8_t ch)
 	switch (ch) {
 	case 0x68:
 	case 0x48:
-		console_write("Set H time: ");
+		console_write("H time? ");
 		return 0x68;
 		break;
 	case 0x31:
-		console_write("Set P1 time: ");
+		console_write("P1 time? ");
 		return 0x31;
 		break;
 	case 0x32:
-		console_write("Set P2 time: ");
+		console_write("P2 time? ");
 		return 0x32;
+		break;
+	case 0x66:
+	case 0x46:
+		console_write("Feed time? ");
+		return 0x66;
+		break;
+	case 0x6e:
+	case 0x4e:
+		console_write("Feeds/day? ");
+		return 0x6e;
 		break;
 	case 0x6d:
 	case 0x4d:
-		console_write("Set Man time: ");
+		console_write("Man time? ");
 		return 0x6d;
 		break;
 	case 0x74:
 	case 0x54:
-		console_write("Set Throttle: ");
+		console_write("Throttle? ");
 		return 0x74;
 		break;
 	case 0x62:
 	case 0x42:
-		console_write("Set Brake: ");
+		console_write("Brake? ");
 		return 0x62;
 		break;
 	case 0x3f:
 		console_write(help);
 		break;
-	case 0x73:
+	case 0x73:		// s : status
 	case 0x53:
 		return 0x73;
+		break;
+	case 0x75:		// u : raise/up
+	case 0x55:
+		return 0x75;
+		break;
+	case 0x64:		// d : lower/down
+	case 0x44:
+		return 0x64;
 		break;
 	default:
 		break;
@@ -182,6 +203,9 @@ static uint16_t read_val(uint8_t ch, uint16_t val)
 	case 0x37:
 	case 0x38:
 	case 0x39:
+		if (val == 0xffff) {
+			val = 0;
+		}
 		send_byte(ch);
 		val = val * 10U + ch - 0x30;
 		break;
@@ -195,7 +219,7 @@ static uint16_t read_val(uint8_t ch, uint16_t val)
 static void read_input(uint8_t ch, struct console_event *event)
 {
 	static uint8_t cmd = 0;
-	static uint16_t val = 0;
+	static uint16_t val = 0xffff;
 
 	event->type = event_none;
 	if (cmd == 0) {
@@ -206,8 +230,20 @@ static void read_input(uint8_t ch, struct console_event *event)
 			event->value = 0;
 			newline();
 			cmd = 0;
+		} else if (cmd == 0x75) {
+			event->type = event_up;
+			event->key = 0;
+			event->value = 0;
+			newline();
+			cmd = 0;
+		} else if (cmd == 0x64) {
+			event->type = event_down;
+			event->key = 0;
+			event->value = 0;
+			newline();
+			cmd = 0;
 		}
-		val = 0;
+		val = 0xffff;
 	} else {
 		switch (ch) {
 		case 0x1b:
@@ -220,7 +256,7 @@ static void read_input(uint8_t ch, struct console_event *event)
 			break;
 		case 0x0d:
 		case 0x0a:
-			if (val) {
+			if (val != 0xffff) {
 				event->type = event_setvalue;
 				event->key = cmd;
 				event->value = val;
@@ -228,7 +264,7 @@ static void read_input(uint8_t ch, struct console_event *event)
 			} else {
 				event->type = event_getvalue;
 				event->key = cmd;
-				event->value = val;
+				event->value = 0;
 				newline();
 			}
 			cmd = 0;
@@ -260,8 +296,8 @@ void console_read(struct console_event *event)
 static void show_voltage(uint8_t vsense)
 {
 	uint16_t scaled = (uint16_t) (vsense << 7U);
-	uint16_t av = (uint8_t) ((scaled + 38U) / 76U);
-	write_string(" Voltage: ");
+	uint16_t av = (uint8_t) ((scaled + 40U) / 80U);
+	write_string(" Batt: ");
 	if (av > 99U) {
 		write_serial((uint8_t) (0x30 + av / 100));
 		av = av % 100;
@@ -281,7 +317,7 @@ static void show_voltage(uint8_t vsense)
 void console_showstate(uint8_t state, uint8_t error, uint8_t vsense)
 {
 	const char *smsg;
-	write_string("Current State: ");
+	write_string("State: ");
 	switch (state) {
 	case state_stop:
 		smsg = "[STOP]";
@@ -320,7 +356,7 @@ void console_showstate(uint8_t state, uint8_t error, uint8_t vsense)
 	}
 	write_string(smsg);
 	if (error) {
-		write_string(" [Sensor Error]");
+		write_string(" [Error]");
 	}
 	show_voltage(vsense);
 	newline();

@@ -13,6 +13,8 @@ enum event_type {
 	event_getvalue,		// Request for the value of a variable
 	event_setvalue,		// Request to set the value of a variable
 	event_status,		// Request for display of state
+	event_down,		// Request to lower
+	event_up,		// Request to raise
 };
 
 // Console event structure

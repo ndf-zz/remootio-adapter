@@ -4,7 +4,9 @@
  * AVR m328p (Nano) Serial "PLC"
  */
 #include <stdint.h>
+#include <stdlib.h>
 #include <avr/sleep.h>
+#include <util/delay_basic.h>
 #include "system.h"
 #include "console.h"
 
@@ -29,65 +31,153 @@ static void motor_start(void)
 	OCR2B = 0;		// lower brake CV
 	PORTD &= (uint8_t) ~ (_BV(R4));	// disable brake sw
 	PORTD |= _BV(R1);	// connect throttle
+	_delay_loop_2(MOTOR_DELAY);	// pause for controller
 	OCR2A = feed.throttle & 0xff;	// raise throttle CV
 }
 
 static void motor_stop(void)
 {
 	OCR2A = 0;		// lower throttle CV
+	_delay_loop_2(THROTTLE_DELAY);	// pause to allow CV to settle
 	PORTD &= (uint8_t) ~ (_BV(R1));	// disable throttle sw
+	PORTD &= (uint8_t) ~ (_BV(R2) | _BV(R3));	// disable direction
 	PORTD |= _BV(R4);	// connect brake sw
 	OCR2B = feed.brake & 0xff;	// raise brake CV
 }
 
 static void motor_reverse(void)
 {
-	PORTD &= (uint8_t) ~ (_BV(R2));	// disable R2 FWD
 	PORTD |= _BV(R3);	// enable R3 REV
+	_delay_loop_2(MOTOR_DELAY);	// pause for controller
 }
 
 static void motor_forward(void)
 {
-	PORTD &= (uint8_t) ~ (_BV(R3));	// disable R3 REV
 	PORTD |= _BV(R2);	// enable R2 FWD
+	_delay_loop_2(MOTOR_DELAY);	// pause for controller
+}
+
+static void set_state(uint8_t newstate)
+{
+	feed.state = newstate;
+	feed.count = 0;
+	console_showstate(feed.state, feed.error, ADCH);
 }
 
 static void stop_at(uint8_t newstate)
 {
+	set_state(newstate);
 	motor_stop();
-	feed.state = newstate;
+}
+
+static void set_randfeed(void)
+{
+	if (feed.nf) {
+		uint16_t period = 1440 / feed.nf;
+		if (period) {
+			uint16_t oft = period >> 1;
+			uint32_t randval = (uint32_t) random();
+			uint32_t tmp =
+			    ((uint32_t) (period) * (randval >> 12) +
+			     (1UL << 18)) >> 19;
+			feed.nf_timeout = oft + (uint16_t) (tmp);
+		} else {
+			feed.nf_timeout = 0;
+		}
+	} else {
+		feed.nf_timeout = 0;
+	}
+	console_showval("Feed in (min): ", feed.nf_timeout);
 }
 
 static void stop_at_home(void)
 {
 	stop_at(state_at_h);
 	clear_error();
+	set_randfeed();
+	feed.nf_count = 0;
 }
 
 static void move_up(uint8_t newstate)
 {
-	motor_reverse();
-	motor_start();
-	feed.state = newstate;
+	if ((feed.bstate & TRIGGER_HOME) == 0) {
+		set_state(newstate);
+		motor_stop();
+		motor_reverse();
+		motor_start();
+	} else {
+		console_write("Sensor error\r\n");
+		flag_error();
+		stop_at(state_stop);
+	}
 }
 
 static void move_down(uint8_t newstate)
 {
+	set_state(newstate);
 	motor_forward();
 	motor_start();
-	feed.state = newstate;
+}
+
+static void trigger_p1(void)
+{
+	if (feed.state == state_move_h_p1) {
+		console_write("Trigger: P1\r\n");
+		stop_at(state_at_p1);
+		feed.f = 0;
+	} else {
+		console_write("Spurious P1 trigger ignored\r\n");
+	}
+}
+
+static void trigger_reset(void)
+{
+	console_write("Trigger: Reset\r\n");
+	stop_at(state_stop);
+}
+
+static void trigger_p2(void)
+{
+	if (feed.state == state_move_p1_p2) {
+		console_write("Trigger: P2\r\n");
+		stop_at(state_at_p2);
+	} else {
+		console_write("Spurious P2 trigger ignored\r\n");
+	}
+}
+
+static void trigger_man(void)
+{
+	if (feed.state == state_move_man) {
+		console_write("Trigger: Man\r\n");
+		stop_at(state_stop);
+	} else {
+		console_write("Spurious Man trigger ignored\r\n");
+	}
+}
+
+static void trigger_max(void)
+{
+	if (feed.state == state_move_h) {
+		console_write("Trigger: Max\r\n");
+		flag_error();	// failed to reach home
+		stop_at(state_stop);
+	} else {
+		console_write("Spurious Max trigger ignored\r\n");
+	}
 }
 
 static void trigger_up(void)
 {
+	console_write("Trigger: UP\r\n");
 	switch (feed.state) {
 	case state_stop:
 	case state_stop_h_p1:
 	case state_stop_p1_p2:
 	case state_at_p1:
 	case state_at_p2:
-		feed.h = 0;
 		move_up(state_move_h);
+		feed.h = 0;
 		break;
 	case state_move_h_p1:
 		stop_at(state_stop_h_p1);
@@ -101,16 +191,18 @@ static void trigger_up(void)
 		break;
 	case state_at_h:
 	default:
+		console_write("Ignored spurious UP trigger\r\n");
 		break;
 	}
 }
 
 static void trigger_down(void)
 {
+	console_write("Trigger: DOWN\r\n");
 	switch (feed.state) {
 	case state_stop:
-		feed.man = 0;
 		move_down(state_move_man);
+		feed.man = 0;
 		break;
 	case state_stop_h_p1:
 		move_down(state_move_h_p1);
@@ -119,16 +211,16 @@ static void trigger_down(void)
 		move_down(state_move_p1_p2);
 		break;
 	case state_at_h:
-		feed.p1 = 0;
 		move_down(state_move_h_p1);
+		feed.p1 = 0;
 		break;
 	case state_at_p1:
-		feed.p2 = 0;
 		move_down(state_move_p1_p2);
+		feed.p2 = 0;
 		break;
 	case state_at_p2:
-		feed.man = 0;
 		move_down(state_move_man);
+		feed.man = 0;
 		break;
 	case state_move_h_p1:
 		stop_at(state_stop_h_p1);
@@ -141,12 +233,14 @@ static void trigger_down(void)
 		stop_at(state_stop);
 		break;
 	default:
+		console_write("Ignored spurious DOWN trigger\r\n");
 		break;
 	}
 }
 
 static void trigger_home(void)
 {
+	console_write("Trigger: Home\r\n");
 	switch (feed.state) {
 	case state_stop:
 	case state_move_h:
@@ -157,8 +251,10 @@ static void trigger_home(void)
 		// possible noise problem
 		break;
 	default:
-		// spurious home sense
-		flag_error();
+		// spurious home sense - assume return to home or error?
+		console_write("Spurious Home trigger\r\n");
+		//flag_error();
+		stop_at_home();
 		break;
 	}
 }
@@ -185,23 +281,24 @@ static void read_triggers(void)
 static void read_timers(void)
 {
 	uint16_t thresh;
+	feed.count++;
 	switch (feed.state) {
 	case state_move_h_p1:
 		feed.p1++;
 		if (feed.p1 > feed.p1_timeout) {
-			stop_at(state_at_p1);
+			trigger_p1();
 		}
 		break;
 	case state_move_p1_p2:
 		feed.p2++;
 		if (feed.p2 > feed.p2_timeout) {
-			stop_at(state_at_p2);
+			trigger_p2();
 		}
 		break;
 	case state_move_man:
 		feed.man++;
 		if (feed.man > feed.man_timeout) {
-			stop_at(state_stop);
+			trigger_man();
 		}
 		break;
 	case state_move_h:
@@ -212,12 +309,30 @@ static void read_timers(void)
 			thresh = feed.h_timeout;
 		}
 		if (feed.h > thresh) {
-			stop_at(state_stop);
-			flag_error();	// failed to reach home
+			trigger_max();
+		}
+		break;
+	case state_at_p1:
+		if (feed.f_timeout > 0 && feed.count >= ONEMINUTE) {
+			feed.f++;
+			if (feed.f >= feed.f_timeout) {
+				trigger_up();
+			}
+		}
+		break;
+	case state_at_h:
+		if (feed.nf_timeout > 0 && feed.count >= ONEMINUTE) {
+			feed.nf_count++;
+			if (feed.nf_count >= feed.nf_timeout) {
+				trigger_down();
+			}
 		}
 		break;
 	default:
 		break;
+	}
+	if (feed.count >= ONEMINUTE) {
+		feed.count = 0;
 	}
 }
 
@@ -249,6 +364,12 @@ static void show_value(struct console_event *event)
 	case 0x32:
 		console_showval("P2 time = ", feed.p2_timeout);
 		break;
+	case 0x66:
+		console_showval("Feed time = ", feed.f_timeout);
+		break;
+	case 0x6e:
+		console_showval("Feeds/day = ", feed.nf);
+		break;
 	case 0x6d:
 		console_showval("Man time = ", feed.man_timeout);
 		break;
@@ -268,29 +389,51 @@ static void update_value(struct console_event *event)
 {
 	switch (event->key) {
 	case 0x31:
-		feed.p1_timeout = event->value;
+		if (event->value) {
+			feed.p1_timeout = event->value;
+		}
 		console_showval("P1 time = ", feed.p1_timeout);
-		save_config(0, feed.p1_timeout);
+		save_config(NVM_P1, feed.p1_timeout);
 		break;
 	case 0x32:
-		feed.p2_timeout = event->value;
+		if (event->value) {
+			feed.p2_timeout = event->value;
+		}
 		console_showval("P2 time = ", feed.p2_timeout);
-		save_config(0x2, feed.p2_timeout);
+		save_config(NVM_P2, feed.p2_timeout);
+		break;
+	case 0x66:
+		feed.f_timeout = event->value;
+		console_showval("Feed time = ", feed.f_timeout);
+		save_config(NVM_F, feed.f_timeout);
+		break;
+	case 0x6e:
+		feed.nf = event->value;
+		console_showval("Feeds/day = ", feed.nf);
+		save_config(NVM_NF, feed.nf);
+		if (feed.state == state_at_h) {
+			set_randfeed();
+			feed.nf_count = 0;
+		}
 		break;
 	case 0x6d:
-		feed.man_timeout = event->value;
+		if (event->value) {
+			feed.man_timeout = event->value;
+		}
 		console_showval("Man time = ", feed.man_timeout);
-		save_config(0x4, feed.man_timeout);
+		save_config(NVM_MAN, feed.man_timeout);
 		break;
 	case 0x68:
-		feed.h_timeout = event->value;
+		if (event->value) {
+			feed.h_timeout = event->value;
+		}
 		console_showval("H time = ", feed.h_timeout);
-		save_config(0x6, feed.h_timeout);
+		save_config(NVM_H, feed.h_timeout);
 		break;
 	case 0x62:
 		feed.brake = event->value;
 		console_showval("Brake = ", feed.brake & 0xff);
-		save_config(0x8, feed.brake);
+		save_config(NVM_BRAKE, feed.brake);
 		if (bit_is_set(PORTD, R4)) {
 			OCR2B = (uint8_t) (feed.brake & 0xff);
 		}
@@ -298,7 +441,7 @@ static void update_value(struct console_event *event)
 	case 0x74:
 		feed.throttle = event->value;
 		console_showval("Throttle = ", feed.throttle & 0xff);
-		save_config(0xa, feed.throttle);
+		save_config(NVM_THROTTLE, feed.throttle);
 		if (bit_is_set(PORTD, R1)) {
 			OCR2A = (uint8_t) (feed.throttle & 0xff);
 		}
@@ -326,6 +469,12 @@ static void handle_event(struct console_event *event)
 	case event_status:
 		show_status();
 		break;
+	case event_down:
+		trigger_down();
+		break;
+	case event_up:
+		trigger_up();
+		break;
 	default:
 		break;
 	}
@@ -337,7 +486,7 @@ void main(void)
 	uint8_t nt;
 	struct console_event event;
 	system_init();
-	feed.state = state_stop;
+	trigger_reset();
 
 	do {
 		sleep_mode();
