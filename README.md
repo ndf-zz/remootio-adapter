@@ -17,13 +17,10 @@ position after the configured feed time minutes have elapsed.
 
 A further "down" command will lower the hoist to the P2 height.
 
-Return to home position on reception of an "up" signal. On error
-or low voltage, signal Remootio "closed"
-via input 1.
+Return to home position on reception of an "up" signal, or
+after a programmable duration without input.
 
-Refer to
-[state machine diagram](reference/remootio_adapter_state_diagram.pdf)
-in reference folder.
+![State Machine](reference/remootio_adapter_state_diagram.svg "State Diagram")
 
 ### Scheduled Feeding
 
@@ -37,7 +34,7 @@ then retract to the home position. Manual operation "down" or
 
 To disable scheduled feeding, manually lower the hoist slightly
 from the home position. To re-enable, return hoist to home
-position.
+("open") position.
 
 
 ## Wiring
@@ -73,12 +70,14 @@ CV is roughly 5.0 * val / 255 Volts.
    - Configure both "open" and "close" impulse length to 50ms.
    - Enable sensor add-on: Input 1, Flip logic
 
-Application interface displays "open" (ready for use) when the
-unit is operating normally, and displays "closed" (reduced function)
-when there is a sensor error or low battery condition.
+Application interface displays "open" when the hay hoist is
+retracted to the home position. The display will show "closed"
+when the hoist has been lowered to the feeding position (P1).
 
-To clear an error state, lower pulley slightly, then raise until the
-home state is reached.
+In case of an error or low battery, the ready LED will be
+turned off and a message will be printed on the console output.
+To clear an error state, lower pulley slightly,
+then raise to the home ("open") state.
 
 
 ## Motor Controller Preparation

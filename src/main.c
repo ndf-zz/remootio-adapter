@@ -14,14 +14,14 @@ struct state_machine feed;
 
 static void flag_error(void)
 {
-	PORTD &= (uint8_t) ~ _BV(R5);
+	// Clear Indicator
 	PORTB &= (uint8_t) ~ _BV(LED);
 	feed.error = 1U;
 }
 
 static void clear_error(void)
 {
-	PORTD |= _BV(R5);
+	// Set Indicator
 	PORTB |= _BV(LED);
 	feed.error = 0;
 }
@@ -68,6 +68,11 @@ static void stop_at(uint8_t newstate)
 {
 	set_state(newstate);
 	motor_stop();
+	if (newstate == state_at_p2 || newstate == state_stop
+	    || newstate == state_stop_p1_p2) {
+		// Reset safe return counter
+		feed.s = 0;
+	}
 }
 
 static void set_randfeed(void)
@@ -94,6 +99,8 @@ static void stop_at_home(void)
 {
 	stop_at(state_at_h);
 	clear_error();
+	// Set "closed" signal to Remootio
+	PORTD |= _BV(R5);
 	set_randfeed();
 	feed.nf_count = 0;
 }
@@ -125,6 +132,8 @@ static void trigger_p1(void)
 		console_write("Trigger: P1\r\n");
 		stop_at(state_at_p1);
 		feed.f = 0;
+		// Indicate "open" to Remootio
+		PORTD &= (uint8_t) ~ _BV(R5);
 	} else {
 		console_write("Spurious P1 trigger ignored\r\n");
 	}
@@ -141,6 +150,7 @@ static void trigger_p2(void)
 	if (feed.state == state_move_p1_p2) {
 		console_write("Trigger: P2\r\n");
 		stop_at(state_at_p2);
+		feed.s = 0;
 	} else {
 		console_write("Spurious P2 trigger ignored\r\n");
 	}
@@ -325,6 +335,17 @@ static void read_timers(void)
 			feed.nf_count++;
 			if (feed.nf_count >= feed.nf_timeout) {
 				trigger_down();
+			}
+		}
+		break;
+	case state_stop:
+	case state_stop_p1_p2:
+	case state_at_p2:
+		if (feed.count >= ONEMINUTE) {
+			feed.s++;
+			if (feed.s >= DEFAULT_S) {
+				console_write("Safe time reached\r\n");
+				trigger_up();
 			}
 		}
 		break;

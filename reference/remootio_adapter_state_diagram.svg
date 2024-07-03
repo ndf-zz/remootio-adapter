@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Creator: fig2dev Version 3.2.8b -->
+<!-- CreationDate: 2024-07-03 16:20:32 -->
+<!-- Magnification: 1.05 -->
+<svg	xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	width="573pt" height="363pt"
+	viewBox="584 89 9092 5762">
+<g fill="none">
+<!-- Line -->
+<rect x="585" y="90" width="9090" height="5760" fill="#ffffff"/>
+<!-- Line -->
+<rect x="2295" y="1395" width="1440" height="495" rx="105"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Text -->
+<text xml:space="preserve" x="3015" y="1710" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="120" text-anchor="middle">AT H</text>
+<!-- Line -->
+<rect x="1125" y="2295" width="1440" height="495" rx="105"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Text -->
+<text xml:space="preserve" x="1845" y="2610" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="120" text-anchor="middle">MOVE H-P1</text>
+<!-- Line -->
+<rect x="2295" y="3195" width="1440" height="495" rx="105"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Text -->
+<text xml:space="preserve" x="3015" y="3510" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="120" text-anchor="middle">AT P1</text>
+<!-- Line -->
+<rect x="1125" y="4095" width="1440" height="495" rx="105"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Text -->
+<text xml:space="preserve" x="1800" y="4410" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="120" text-anchor="middle">MOVE P1-P2</text>
+<!-- Line -->
+<rect x="3465" y="4095" width="1440" height="495" rx="105"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Text -->
+<text xml:space="preserve" x="4185" y="4410" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="120" text-anchor="middle">STOP P1-P2</text>
+<!-- Line -->
+<rect x="5400" y="3195" width="1440" height="495" rx="105"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Text -->
+<text xml:space="preserve" x="6120" y="3510" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="120" text-anchor="middle">STOP</text>
+<!-- Line -->
+<rect x="7740" y="3195" width="1440" height="495" rx="105"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Text -->
+<text xml:space="preserve" x="8505" y="3510" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="120" text-anchor="middle">MOVE -H</text>
+<!-- Circle -->
+<circle cx="4274" cy="3556" r="224"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Text -->
+<text xml:space="preserve" x="4273" y="3645" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="120" text-anchor="middle">*</text>
+<!-- Line -->
+<rect x="3465" y="2295" width="1440" height="495" rx="105"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Text -->
+<text xml:space="preserve" x="4185" y="2610" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="120" text-anchor="middle">STOP H-P1</text>
+<!-- Line -->
+<rect x="7740" y="4995" width="1440" height="495" rx="105"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Text -->
+<text xml:space="preserve" x="8505" y="5310" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="120" text-anchor="middle">MOVE MAN</text>
+<!-- Line -->
+<rect x="2295" y="4995" width="1440" height="495" rx="105"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Text -->
+<text xml:space="preserve" x="3015" y="5310" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="120" text-anchor="middle">AT P2</text>
+<!-- Arc -->
+<defs>
+<clipPath id="cp0">
+	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
+		M 3347,2356 3327,2413 3469,2439 3474,2426z"/>
+</clipPath>
+</defs>
+<path d="M 2565,2430 A 1170 1170 0 0 1 3465 2430" clip-path="url(#cp0)"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Forward arrow to point 3465,2430 -->
+<polygon points=" 3327,2413 3450,2425 3347,2356 3327,2413"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Arc -->
+<defs>
+<clipPath id="cp1">
+	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
+		M 3347,4156 3327,4213 3469,4239 3474,4226z"/>
+</clipPath>
+</defs>
+<path d="M 2565,4230 A 1170 1170 0 0 1 3465 4230" clip-path="url(#cp1)"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Forward arrow to point 3465,4230 -->
+<polygon points=" 3327,4213 3450,4225 3347,4156 3327,4213"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Arc -->
+<defs>
+<clipPath id="cp2">
+	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
+		M 2683,4529 2703,4472 2561,4446 2556,4459z"/>
+</clipPath>
+</defs>
+<path d="M 3465,4455 A 1170 1170 0 0 1 2565 4455" clip-path="url(#cp2)"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Forward arrow to point 2565,4455 -->
+<polygon points=" 2703,4472 2580,4460 2683,4529 2703,4472"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Arc -->
+<defs>
+<clipPath id="cp3">
+	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
+		M 2683,2729 2703,2672 2561,2646 2556,2659z"/>
+</clipPath>
+</defs>
+<path d="M 3465,2655 A 1170 1170 0 0 1 2565 2655" clip-path="url(#cp3)"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Forward arrow to point 2565,2655 -->
+<polygon points=" 2703,2672 2580,2660 2683,2729 2703,2672"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Arc -->
+<defs>
+<clipPath id="cp4">
+	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
+		M 2168,3272 2156,3331 2300,3338 2303,3325z"/>
+</clipPath>
+</defs>
+<path d="M 1665,2790 A 741 741 0 0 0 2295 3330" clip-path="url(#cp4)"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Forward arrow to point 2295,3330 -->
+<polygon points=" 2156,3331 2279,3327 2168,3272 2156,3331"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Arc -->
+<defs>
+<clipPath id="cp5">
+	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
+		M 2168,5072 2156,5131 2300,5138 2303,5125z"/>
+</clipPath>
+</defs>
+<path d="M 1665,4590 A 741 741 0 0 0 2295 5130" clip-path="url(#cp5)"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Forward arrow to point 2295,5130 -->
+<polygon points=" 2156,5131 2279,5127 2168,5072 2156,5131"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Arc -->
+<defs>
+<clipPath id="cp6">
+	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
+		M 2168,5072 2156,5131 2300,5138 2303,5125z
+		M 1741,2178 1684,2157 1656,2299 1669,2304z"/>
+</clipPath>
+</defs>
+<path d="M 1665,2295 A 741 741 0 0 1 2295 1755" clip-path="url(#cp6)"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Backward arrow to point 1665,2295 -->
+<polygon points=" 1684,2157 1671,2280 1741,2178 1684,2157"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Arc -->
+<defs>
+<clipPath id="cp7">
+	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
+		M 2168,5072 2156,5131 2300,5138 2303,5125z
+		M 1741,3978 1684,3957 1656,4099 1669,4104z"/>
+</clipPath>
+</defs>
+<path d="M 1665,4095 A 741 741 0 0 1 2295 3555" clip-path="url(#cp7)"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Backward arrow to point 1665,4095 -->
+<polygon points=" 1684,3957 1671,4080 1741,3978 1684,3957"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Arc -->
+<defs>
+<clipPath id="cp8">
+	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
+		M 5262,3572 5282,3629 5409,3559 5404,3546z
+		M 1741,3978 1684,3957 1656,4099 1669,4104z"/>
+</clipPath>
+</defs>
+<path d="M 4500,3555 A 1170 1170 0 0 0 5400 3555" clip-path="url(#cp8)"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Forward arrow to point 5400,3555 -->
+<polygon points=" 5282,3629 5385,3560 5262,3572 5282,3629"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Arc -->
+<defs>
+<clipPath id="cp9">
+	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
+		M 7622,3256 7602,3313 7744,3339 7749,3326z
+		M 1741,3978 1684,3957 1656,4099 1669,4104z"/>
+</clipPath>
+</defs>
+<path d="M 6840,3330 A 1170 1170 0 0 1 7740 3330" clip-path="url(#cp9)"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Forward arrow to point 7740,3330 -->
+<polygon points=" 7602,3313 7725,3325 7622,3256 7602,3313"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Arc -->
+<defs>
+<clipPath id="cp10">
+	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
+		M 6958,3629 6978,3572 6836,3546 6831,3559z
+		M 1741,3978 1684,3957 1656,4099 1669,4104z"/>
+</clipPath>
+</defs>
+<path d="M 7740,3555 A 1170 1170 0 0 1 6840 3555" clip-path="url(#cp10)"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Forward arrow to point 6840,3555 -->
+<polygon points=" 6978,3572 6855,3560 6958,3629 6978,3572"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Arc -->
+<defs>
+<clipPath id="cp11">
+	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
+		M 8405,3098 8373,3149 8507,3204 8514,3193z
+		M 1741,3978 1684,3957 1656,4099 1669,4104z"/>
+</clipPath>
+</defs>
+<path d="M 4905,2520 A 4874 4874 0 0 1 8505 3195" clip-path="url(#cp11)"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Forward arrow to point 8505,3195 -->
+<polygon points=" 8373,3149 8491,3186 8405,3098 8373,3149"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Arc -->
+<defs>
+<clipPath id="cp12">
+	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
+		M 7990,3109 7964,3164 8103,3204 8109,3192z
+		M 1741,3978 1684,3957 1656,4099 1669,4104z"/>
+</clipPath>
+</defs>
+<path d="M 3735,3375 A 4585 4585 0 0 1 8100 3195" clip-path="url(#cp12)"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Forward arrow to point 8100,3195 -->
+<polygon points=" 7964,3164 8085,3188 7990,3109 7964,3164"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Arc -->
+<defs>
+<clipPath id="cp13">
+	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
+		M 3870,1789 3872,1729 3728,1748 3728,1762z
+		M 1741,3978 1684,3957 1656,4099 1669,4104z"/>
+</clipPath>
+</defs>
+<path d="M 6075,3195 A 2631 2631 0 0 0 3735 1755" clip-path="url(#cp13)"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Forward arrow to point 3735,1755 -->
+<polygon points=" 3872,1729 3751,1755 3870,1789 3872,1729"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Arc -->
+<defs>
+<clipPath id="cp14">
+	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
+		M 8377,3746 8413,3795 8514,3691 8506,3681z
+		M 1741,3978 1684,3957 1656,4099 1669,4104z"/>
+</clipPath>
+</defs>
+<path d="M 3735,5130 A 7268 7268 0 0 0 8505 3690" clip-path="url(#cp14)"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Forward arrow to point 8505,3690 -->
+<polygon points=" 8413,3795 8492,3700 8377,3746 8413,3795"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Arc -->
+<defs>
+<clipPath id="cp15">
+	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
+		M 7601,5350 7611,5409 7748,5360 7745,5347z
+		M 1741,3978 1684,3957 1656,4099 1669,4104z"/>
+</clipPath>
+</defs>
+<path d="M 3735,5355 A 11117 11117 0 0 0 7740 5355" clip-path="url(#cp15)"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Forward arrow to point 7740,5355 -->
+<polygon points=" 7611,5409 7724,5358 7601,5350 7611,5409"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Arc -->
+<defs>
+<clipPath id="cp16">
+	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
+		M 7604,5233 7603,5293 7747,5272 7747,5258z
+		M 1741,3978 1684,3957 1656,4099 1669,4104z"/>
+</clipPath>
+</defs>
+<path d="M 5850,3690 A 1879 1879 0 0 0 7740 5265" clip-path="url(#cp16)"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Forward arrow to point 7740,5265 -->
+<polygon points=" 7603,5293 7724,5265 7604,5233 7603,5293"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Arc -->
+<defs>
+<clipPath id="cp17">
+	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
+		M 6313,3829 6370,3811 6304,3682 6292,3686z
+		M 1741,3978 1684,3957 1656,4099 1669,4104z"/>
+</clipPath>
+</defs>
+<path d="M 7740,5130 A 2101 2101 0 0 1 6300 3690" clip-path="url(#cp17)"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Forward arrow to point 6300,3690 -->
+<polygon points=" 6370,3811 6305,3705 6313,3829 6370,3811"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Arc -->
+<defs>
+<clipPath id="cp18">
+	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
+		M 8013,3736 8045,3787 8154,3692 8147,3681z
+		M 1741,3978 1684,3957 1656,4099 1669,4104z"/>
+</clipPath>
+</defs>
+<path d="M 4905,4365 A 4681 4681 0 0 0 8145 3690" clip-path="url(#cp18)"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Forward arrow to point 8145,3690 -->
+<polygon points=" 8045,3787 8131,3699 8013,3736 8045,3787"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Arc -->
+<defs>
+<clipPath id="cp19">
+	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
+		M 2738,1256 2680,1272 2740,1403 2753,1400z
+		M 1741,3978 1684,3957 1656,4099 1669,4104z"/>
+</clipPath>
+</defs>
+<path d="M 3285,1395 A 306 306 0 1 0 2745 1395" clip-path="url(#cp19)"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Forward arrow to point 2745,1395 -->
+<polygon points=" 2680,1272 2741,1379 2738,1256 2680,1272"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Arc -->
+<defs>
+<clipPath id="cp20">
+	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
+		M 3866,1622 3874,1562 3729,1567 3727,1581z
+		M 1741,3978 1684,3957 1656,4099 1669,4104z"/>
+</clipPath>
+</defs>
+<path d="M 8955,3195 A 15578 15578 0 0 0 3735 1575" clip-path="url(#cp20)"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Forward arrow to point 3735,1575 -->
+<polygon points=" 3874,1562 3751,1577 3866,1622 3874,1562"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Line -->
+<polyline points=" 2115,1485"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Text -->
+<text xml:space="preserve" x="1530" y="1755" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">down/randfeed</text>
+<!-- Text -->
+<text xml:space="preserve" x="3015" y="2250" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">up/down</text>
+<!-- Text -->
+<text xml:space="preserve" x="1800" y="3600" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">down</text>
+<!-- Text -->
+<text xml:space="preserve" x="1575" y="3105" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">p1</text>
+<!-- Text -->
+<text xml:space="preserve" x="1575" y="4860" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">p2</text>
+<!-- Text -->
+<text xml:space="preserve" x="3015" y="4050" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">up/down</text>
+<!-- Text -->
+<text xml:space="preserve" x="3015" y="4770" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">down</text>
+<!-- Text -->
+<text xml:space="preserve" x="3015" y="2970" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">down</text>
+<!-- Text -->
+<text xml:space="preserve" x="4770" y="3510" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">reset</text>
+<!-- Text -->
+<text xml:space="preserve" x="6300" y="3105" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">home</text>
+<!-- Text -->
+<text xml:space="preserve" x="9090" y="3060" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">home</text>
+<!-- Text -->
+<text xml:space="preserve" x="3870" y="3060" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">up/feedtime</text>
+<!-- Text -->
+<text xml:space="preserve" x="5040" y="2385" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">up</text>
+<!-- Text -->
+<text xml:space="preserve" x="5625" y="3960" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">down</text>
+<!-- Text -->
+<text xml:space="preserve" x="4005" y="5625" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">down</text>
+<!-- Text -->
+<text xml:space="preserve" x="7875" y="4860" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">up/down/man</text>
+<!-- Text -->
+<text xml:space="preserve" x="7335" y="3825" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">up/down/max</text>
+<!-- Text -->
+<text xml:space="preserve" x="945" y="405" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="120" text-anchor="start">Remootio Hay Hoist - State Diagram</text>
+<!-- Text -->
+<text xml:space="preserve" x="3465" y="1215" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">up</text>
+<!-- Text -->
+<text xml:space="preserve" x="6840" y="405" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">up</text>
+<!-- Text -->
+<text xml:space="preserve" x="6030" y="405" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Triggers:</text>
+<!-- Text -->
+<text xml:space="preserve" x="6840" y="585" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">down</text>
+<!-- Text -->
+<text xml:space="preserve" x="6840" y="765" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">home</text>
+<!-- Text -->
+<text xml:space="preserve" x="6840" y="945" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">p1</text>
+<!-- Text -->
+<text xml:space="preserve" x="6840" y="1125" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">p2</text>
+<!-- Text -->
+<text xml:space="preserve" x="6840" y="1305" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">max</text>
+<!-- Text -->
+<text xml:space="preserve" x="6840" y="1485" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">man</text>
+<!-- Text -->
+<text xml:space="preserve" x="6840" y="1665" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">reset</text>
+<!-- Text -->
+<text xml:space="preserve" x="6840" y="1845" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">feedtime</text>
+<!-- Text -->
+<text xml:space="preserve" x="6840" y="2025" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">randfeed</text>
+<!-- Text -->
+<text xml:space="preserve" x="7560" y="405" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Raise hoist</text>
+<!-- Text -->
+<text xml:space="preserve" x="7560" y="585" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Lower Hoist</text>
+<!-- Text -->
+<text xml:space="preserve" x="7560" y="945" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">P1 elapsed</text>
+<!-- Text -->
+<text xml:space="preserve" x="7560" y="1125" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">P2 elapsed</text>
+<!-- Text -->
+<text xml:space="preserve" x="7560" y="1305" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Max H time elapsed</text>
+<!-- Text -->
+<text xml:space="preserve" x="7560" y="1485" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Man time elapsed</text>
+<!-- Text -->
+<text xml:space="preserve" x="7560" y="1665" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">System reset</text>
+<!-- Text -->
+<text xml:space="preserve" x="7560" y="1845" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Feedtime minutes elapsed</text>
+<!-- Text -->
+<text xml:space="preserve" x="7560" y="2025" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Randfeed minutes elapsed</text>
+<!-- Text -->
+<text xml:space="preserve" x="7560" y="765" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Home limit switch</text>
+<!-- Text -->
+<text xml:space="preserve" x="6840" y="2205" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">safetime</text>
+<!-- Text -->
+<text xml:space="preserve" x="7560" y="2205" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Safetime minutes elapsed</text>
+<!-- Text -->
+<text xml:space="preserve" x="7200" y="3150" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">up/safetime</text>
+<!-- Text -->
+<text xml:space="preserve" x="5355" y="4590" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">up/safetime</text>
+<!-- Text -->
+<text xml:space="preserve" x="4185" y="5040" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">up/safetime</text>
+<!-- Text -->
+<text xml:space="preserve" x="945" y="630" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Prototype 2024-07-03</text>
+</g>
+</svg>

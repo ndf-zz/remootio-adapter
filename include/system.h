@@ -12,6 +12,7 @@
 #define DEFAULT_H	4000U	// 40s Max return home time
 #define DEFAULT_BRAKE	0U	// Brake voltage ~= 5.0*val/255
 #define DEFAULT_THROTTLE 255U	// Throttle voltage ~= 5.0*val/255
+#define DEFAULT_S	30U	// 30 minutes safe time
 
 // Fixed voltage threshold
 #define LOWVOLTS	0x35	// ~8.5V
@@ -81,25 +82,26 @@ enum machine_state {
 };
 
 struct state_machine {
-	uint8_t state;	// machine state
-	uint8_t error;  // error flag
-	uint8_t bstate;  // current accepted input state
-	uint16_t p1;  // elapsed 0.01s from H->P1
-	uint16_t p1_timeout;  // target elapsed p1
-	uint16_t p2;  // elapsed 0.01s from P1->P2
-	uint16_t p2_timeout;  // target elapsed p2
-	uint16_t man; // elapsed 0.01s manual adjust
-	uint16_t man_timeout;  // max manual adjust
-	uint16_t h;  // elapsed 0.01s moving toward h
-	uint16_t h_timeout;  // maximum h movement
-	uint16_t f;  // elapsed minutes at p1
-	uint16_t f_timeout;  // maximum minutes at p1
-	uint16_t nf;  // number of feeds/day
-	uint16_t nf_count;  // minutes waiting for next feed
-	uint16_t nf_timeout;  // target minutes for h->p1
-	uint16_t brake;  // brake CV [unused]
-	uint16_t throttle;  // throttle CV
-	uint16_t count;  // 0.01s state counter for determining minutes
+	uint8_t state;		// machine state
+	uint8_t error;		// error flag
+	uint8_t bstate;		// current accepted input state
+	uint16_t p1;		// elapsed 0.01s from H->P1
+	uint16_t p1_timeout;	// target elapsed p1
+	uint16_t p2;		// elapsed 0.01s from P1->P2
+	uint16_t p2_timeout;	// target elapsed p2
+	uint16_t man;		// elapsed 0.01s manual adjust
+	uint16_t man_timeout;	// max manual adjust
+	uint16_t h;		// elapsed 0.01s moving toward h
+	uint16_t h_timeout;	// maximum h movement
+	uint16_t f;		// elapsed minutes at p1
+	uint16_t s;		// elapsed safe return minutes
+	uint16_t f_timeout;	// maximum minutes at p1
+	uint16_t nf;		// number of feeds/day
+	uint16_t nf_count;	// minutes waiting for next feed
+	uint16_t nf_timeout;	// target minutes for h->p1
+	uint16_t brake;		// brake CV [unused]
+	uint16_t throttle;	// throttle CV
+	uint16_t count;		// 0.01s state counter for determining minutes
 };
 
 // global system variable
