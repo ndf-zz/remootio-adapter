@@ -26,6 +26,7 @@ Commands:\r\n\
 \tf\tFeed time (min)\r\n\
 \tn\tFeeds/day (0=off)\r\n\
 \tt\tThrottle (1-255)\r\n\
+\tv\tShow current values\r\n\
 \ts\tStatus\r\n\
 \td\tLower\r\n\
 \tu\tRaise\r\n\
@@ -175,6 +176,10 @@ static uint8_t get_cmd(uint8_t ch)
 	case 0x53:
 		return 0x73;
 		break;
+	case 0x76:		// v : get all values
+	case 0x56:
+		return 0x76;
+		break;
 	case 0x75:		// u : raise/up
 	case 0x55:
 		return 0x75;
@@ -226,6 +231,12 @@ static void read_input(uint8_t ch, struct console_event *event)
 		cmd = get_cmd(ch);
 		if (cmd == 0x73) {
 			event->type = event_status;
+			event->key = 0;
+			event->value = 0;
+			newline();
+			cmd = 0;
+		} else if (cmd == 0x76) {
+			event->type = event_values;
 			event->key = 0;
 			event->value = 0;
 			newline();

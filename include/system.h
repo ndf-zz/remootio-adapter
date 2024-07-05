@@ -81,27 +81,27 @@ enum machine_state {
 	state_error,
 };
 
+// Note: counters p1 and p2 are preserved across move/stop transitions:
+//       MOVE H-P1 <-> STOP H-P1
+//       MOVE P1-P2 <-> STOP P1-P2
 struct state_machine {
 	uint8_t state;		// machine state
 	uint8_t error;		// error flag
 	uint8_t bstate;		// current accepted input state
-	uint16_t p1;		// elapsed 0.01s from H->P1
+	uint16_t p1;		// elapsed 0.01s moving h->p1
 	uint16_t p1_timeout;	// target elapsed p1
-	uint16_t p2;		// elapsed 0.01s from P1->P2
+	uint16_t p2;		// elapsed 0.01s moving p1->p2
 	uint16_t p2_timeout;	// target elapsed p2
-	uint16_t man;		// elapsed 0.01s manual adjust
 	uint16_t man_timeout;	// max manual adjust
-	uint16_t h;		// elapsed 0.01s moving toward h
 	uint16_t h_timeout;	// maximum h movement
-	uint16_t f;		// elapsed minutes at p1
-	uint16_t s;		// elapsed safe return minutes
 	uint16_t f_timeout;	// maximum minutes at p1
 	uint16_t nf;		// number of feeds/day
-	uint16_t nf_count;	// minutes waiting for next feed
 	uint16_t nf_timeout;	// target minutes for h->p1
 	uint16_t brake;		// brake CV [unused]
 	uint16_t throttle;	// throttle CV
-	uint16_t count;		// 0.01s state counter for determining minutes
+	uint16_t count;		// 0.01s state counter
+	uint16_t mincount;	// 0.01s state counter for determining minutes
+	uint16_t minutes;	// minute state counter
 };
 
 // global system variable

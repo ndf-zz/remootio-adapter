@@ -12,6 +12,7 @@ enum event_type {
 	event_error,		// Serial read error
 	event_getvalue,		// Request for the value of a variable
 	event_setvalue,		// Request to set the value of a variable
+	event_values,		// Request values of all variables
 	event_status,		// Request for display of state
 	event_down,		// Request to lower
 	event_up,		// Request to raise

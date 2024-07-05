@@ -61,6 +61,8 @@ static void set_state(uint8_t newstate)
 {
 	feed.state = newstate;
 	feed.count = 0;
+	feed.mincount = 0;
+	feed.minutes = 0;
 	console_showstate(feed.state, feed.error, ADCH);
 }
 
@@ -68,11 +70,6 @@ static void stop_at(uint8_t newstate)
 {
 	set_state(newstate);
 	motor_stop();
-	if (newstate == state_at_p2 || newstate == state_stop
-	    || newstate == state_stop_p1_p2) {
-		// Reset safe return counter
-		feed.s = 0;
-	}
 }
 
 static void set_randfeed(void)
@@ -99,10 +96,9 @@ static void stop_at_home(void)
 {
 	stop_at(state_at_h);
 	clear_error();
-	// Set "closed" signal to Remootio
+	// Signal AT H state to Remootio
 	PORTD |= _BV(R5);
 	set_randfeed();
-	feed.nf_count = 0;
 }
 
 static void move_up(uint8_t newstate)
@@ -129,10 +125,9 @@ static void move_down(uint8_t newstate)
 static void trigger_p1(void)
 {
 	if (feed.state == state_move_h_p1) {
-		console_write("Trigger: P1\r\n");
+		console_write("Trigger: p1\r\n");
 		stop_at(state_at_p1);
-		feed.f = 0;
-		// Indicate "open" to Remootio
+		// Signal AT P1 state to Remootio
 		PORTD &= (uint8_t) ~ _BV(R5);
 	} else {
 		console_write("Spurious P1 trigger ignored\r\n");
@@ -141,16 +136,15 @@ static void trigger_p1(void)
 
 static void trigger_reset(void)
 {
-	console_write("Trigger: Reset\r\n");
+	console_write("Trigger: reset\r\n");
 	stop_at(state_stop);
 }
 
 static void trigger_p2(void)
 {
 	if (feed.state == state_move_p1_p2) {
-		console_write("Trigger: P2\r\n");
+		console_write("Trigger: p2\r\n");
 		stop_at(state_at_p2);
-		feed.s = 0;
 	} else {
 		console_write("Spurious P2 trigger ignored\r\n");
 	}
@@ -159,7 +153,7 @@ static void trigger_p2(void)
 static void trigger_man(void)
 {
 	if (feed.state == state_move_man) {
-		console_write("Trigger: Man\r\n");
+		console_write("Trigger: man\r\n");
 		stop_at(state_stop);
 	} else {
 		console_write("Spurious Man trigger ignored\r\n");
@@ -169,7 +163,7 @@ static void trigger_man(void)
 static void trigger_max(void)
 {
 	if (feed.state == state_move_h) {
-		console_write("Trigger: Max\r\n");
+		console_write("Trigger: max\r\n");
 		flag_error();	// failed to reach home
 		stop_at(state_stop);
 	} else {
@@ -179,7 +173,7 @@ static void trigger_max(void)
 
 static void trigger_up(void)
 {
-	console_write("Trigger: UP\r\n");
+	console_write("Trigger: up\r\n");
 	switch (feed.state) {
 	case state_stop:
 	case state_stop_h_p1:
@@ -187,7 +181,6 @@ static void trigger_up(void)
 	case state_at_p1:
 	case state_at_p2:
 		move_up(state_move_h);
-		feed.h = 0;
 		break;
 	case state_move_h_p1:
 		stop_at(state_stop_h_p1);
@@ -208,11 +201,10 @@ static void trigger_up(void)
 
 static void trigger_down(void)
 {
-	console_write("Trigger: DOWN\r\n");
+	console_write("Trigger: down\r\n");
 	switch (feed.state) {
 	case state_stop:
 		move_down(state_move_man);
-		feed.man = 0;
 		break;
 	case state_stop_h_p1:
 		move_down(state_move_h_p1);
@@ -230,7 +222,6 @@ static void trigger_down(void)
 		break;
 	case state_at_p2:
 		move_down(state_move_man);
-		feed.man = 0;
 		break;
 	case state_move_h_p1:
 		stop_at(state_stop_h_p1);
@@ -250,7 +241,7 @@ static void trigger_down(void)
 
 static void trigger_home(void)
 {
-	console_write("Trigger: Home\r\n");
+	console_write("Trigger: home\r\n");
 	switch (feed.state) {
 	case state_stop:
 	case state_move_h:
@@ -292,6 +283,7 @@ static void read_timers(void)
 {
 	uint16_t thresh;
 	feed.count++;
+	feed.mincount++;
 	switch (feed.state) {
 	case state_move_h_p1:
 		feed.p1++;
@@ -306,34 +298,30 @@ static void read_timers(void)
 		}
 		break;
 	case state_move_man:
-		feed.man++;
-		if (feed.man > feed.man_timeout) {
+		if (feed.count > feed.man_timeout) {
 			trigger_man();
 		}
 		break;
 	case state_move_h:
-		feed.h++;
 		if (feed.error) {
 			thresh = feed.man_timeout;
 		} else {
 			thresh = feed.h_timeout;
 		}
-		if (feed.h > thresh) {
+		if (feed.count > thresh) {
 			trigger_max();
 		}
 		break;
 	case state_at_p1:
-		if (feed.f_timeout > 0 && feed.count >= ONEMINUTE) {
-			feed.f++;
-			if (feed.f >= feed.f_timeout) {
+		if (feed.f_timeout) {
+			if (feed.minutes >= feed.f_timeout) {
 				trigger_up();
 			}
 		}
 		break;
 	case state_at_h:
-		if (feed.nf_timeout > 0 && feed.count >= ONEMINUTE) {
-			feed.nf_count++;
-			if (feed.nf_count >= feed.nf_timeout) {
+		if (feed.nf_timeout > 0) {
+			if (feed.minutes >= feed.nf_timeout) {
 				trigger_down();
 			}
 		}
@@ -341,19 +329,17 @@ static void read_timers(void)
 	case state_stop:
 	case state_stop_p1_p2:
 	case state_at_p2:
-		if (feed.count >= ONEMINUTE) {
-			feed.s++;
-			if (feed.s >= DEFAULT_S) {
-				console_write("Safe time reached\r\n");
-				trigger_up();
-			}
+		if (feed.minutes >= DEFAULT_S) {
+			console_write("Safe time reached\r\n");
+			trigger_up();
 		}
 		break;
 	default:
 		break;
 	}
-	if (feed.count >= ONEMINUTE) {
-		feed.count = 0;
+	if (feed.mincount >= ONEMINUTE) {
+		feed.minutes++;
+		feed.mincount = 0;
 	}
 }
 
@@ -434,7 +420,6 @@ static void update_value(struct console_event *event)
 		save_config(NVM_NF, feed.nf);
 		if (feed.state == state_at_h) {
 			set_randfeed();
-			feed.nf_count = 0;
 		}
 		break;
 	case 0x6d:
@@ -473,6 +458,21 @@ static void update_value(struct console_event *event)
 	}
 }
 
+static void show_values(void)
+{
+	console_write("Current Values:\r\n");
+	console_showval("\tH-P1 time (0.01s)= ", feed.p1_timeout);
+	console_showval("\tP1-P2 time = ", feed.p2_timeout);
+	console_showval("\tMan time = ", feed.man_timeout);
+	console_showval("\tH time = ", feed.h_timeout);
+	console_showval("\tFeed time (min)= ", feed.f_timeout);
+	console_showval("\tFeeds/day (0=off)= ", feed.nf);
+	console_showval("\tThrottle (1-255)= ", feed.throttle & 0xff);
+	console_showval("\tState counter = ", feed.count);
+	console_showval("\tState minutes = ", feed.minutes);
+	console_write("\r\n");
+}
+
 static void show_status(void)
 {
 	console_showstate(feed.state, feed.error, ADCH);
@@ -489,6 +489,9 @@ static void handle_event(struct console_event *event)
 		break;
 	case event_status:
 		show_status();
+		break;
+	case event_values:
+		show_values();
 		break;
 	case event_down:
 		trigger_down();
