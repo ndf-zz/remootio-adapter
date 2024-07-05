@@ -89,7 +89,9 @@ static void set_randfeed(void)
 	} else {
 		feed.nf_timeout = 0;
 	}
-	console_showval("Feed in (min): ", feed.nf_timeout);
+	if (feed.nf_timeout) {
+		console_showval("Feed in (min): ", feed.nf_timeout);
+	}
 }
 
 static void stop_at_home(void)
