@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name "remootio-adapter")(type "KiCad")(uri "${KIPRJMOD}/remootio-adapter.pretty")(options "")(descr ""))
+)
