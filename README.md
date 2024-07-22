@@ -40,7 +40,7 @@ from the home position. To re-enable, return hoist to home
 ## Wiring
 
 Connect Remootio and motor controller as indicated in
-the [wiring diagram](reference/remootio_adapter_wiring_diagram.pdf).
+the [wiring diagram](reference/remootio_adapter_protoype_wiring.pdf).
 
 ## Configuration
 
@@ -137,9 +137,9 @@ Run the Kelly Controllers configuration program (v4.5)
 ## Prototype Layout
 
 Refer to 
-[port-pins diagram](reference/remootio_adapter_portpins.pdf)
+[port-pins diagram](reference/remootio_adapter_prototype_portpins.pdf)
 and
-[schematic diagram](reference/remootio_adapter_schematic.pdf)
+[schematic diagram](reference/remootio_adapter_prototype_schematic.pdf)
 in reference folder.
 
 
