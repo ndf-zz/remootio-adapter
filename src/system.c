@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <avr/wdt.h>
 #include <util/atomic.h>
 #include "system.h"
 #include "console.h"
@@ -29,6 +30,12 @@ uint8_t read_inputs(void)
 	}
 	prev = cur;
 	return flags;
+}
+
+static void watchdog_init(void)
+{
+	// set watchdog timer to ~ 0.25s
+	wdt_enable(WDTO_250MS);
 }
 
 static void timer_init(void)
@@ -154,6 +161,7 @@ void save_config(uint16_t addr, uint16_t val)
 
 void system_init(void)
 {
+	watchdog_init();
 	timer_init();
 	gpio_init();
 	adc_init();

@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <avr/sleep.h>
+#include <avr/wdt.h>
 #include <util/delay_basic.h>
 #include "system.h"
 #include "console.h"
@@ -525,5 +526,6 @@ void main(void)
 		if (event.type != event_none) {
 			handle_event(&event);
 		}
+		wdt_reset();
 	} while (1);
 }

@@ -84,7 +84,7 @@ PROGRAMMER = avrisp2
 DUDECMD = $(AVRDUDE) -c $(PROGRAMMER) -p $(PARTNO)
 EFUSE = 0xfd
 LFUSE = 0x7f
-HFUSE = 0xd6
+HFUSE = 0xc6
 LOCKBYTE = 0xff
 
 # Default target is $(TARGET)
