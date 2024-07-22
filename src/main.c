@@ -15,23 +15,33 @@ struct state_machine feed;
 
 static void flag_error(void)
 {
-	// Clear Indicator
-	PORTB &= (uint8_t) ~ _BV(LED);
 	feed.error = 1U;
 }
 
 static void clear_error(void)
 {
-	// Set Indicator
-	PORTB |= _BV(LED);
 	feed.error = 0;
+}
+
+static void read_voltage(void)
+{
+	if (ADCH < LOWVOLTS) {
+		// Set Indicator
+		PORTB |= _BV(LED);
+	} else {
+		// Clear Indicator
+		PORTB &= (uint8_t) ~ _BV(LED);
+	}
+}
+
+static uint8_t check_voltage(uint8_t override)
+{
+	return (override || ADCH >= LOWVOLTS);
 }
 
 static void motor_start(void)
 {
-	OCR2B = 0;		// lower brake CV
-	PORTD &= (uint8_t) ~ (_BV(R4));	// disable brake sw
-	PORTD |= _BV(R1);	// connect throttle
+	PORTD |= _BV(R1);	// enable controller
 	_delay_loop_2(MOTOR_DELAY);	// pause for controller
 	OCR2A = feed.throttle & 0xff;	// raise throttle CV
 }
@@ -39,11 +49,9 @@ static void motor_start(void)
 static void motor_stop(void)
 {
 	OCR2A = 0;		// lower throttle CV
-	_delay_loop_2(THROTTLE_DELAY);	// pause to allow CV to settle
-	PORTD &= (uint8_t) ~ (_BV(R1));	// disable throttle sw
+	_delay_loop_2(MOTOR_DELAY);	// pause to allow CV to settle
+	PORTD &= (uint8_t) ~ (_BV(R1));	// disable controller
 	PORTD &= (uint8_t) ~ (_BV(R2) | _BV(R3));	// disable direction
-	PORTD |= _BV(R4);	// connect brake sw
-	OCR2B = feed.brake & 0xff;	// raise brake CV
 }
 
 static void motor_reverse(void)
@@ -202,7 +210,7 @@ static void trigger_up(void)
 	}
 }
 
-static void trigger_down(void)
+static void trigger_down(uint8_t override)
 {
 	console_write("Trigger: down\r\n");
 	switch (feed.state) {
@@ -216,8 +224,13 @@ static void trigger_down(void)
 		move_down(state_move_p1_p2);
 		break;
 	case state_at_h:
-		move_down(state_move_h_p1);
-		feed.p1 = 0;
+		if (check_voltage(override)) {
+			move_down(state_move_h_p1);
+			feed.p1 = 0;
+		} else {
+			console_write("Ignore trigger due to low voltage\r\n");
+			stop_at_home();
+		}
 		break;
 	case state_at_p1:
 		move_down(state_move_p1_p2);
@@ -252,13 +265,13 @@ static void trigger_home(void)
 		break;
 	case state_at_h:
 	case state_move_h_p1:
-		// possible noise problem
+		// ignore - possible noise problem
 		break;
 	default:
-		// spurious home sense - assume return to home or error?
+		// spurious home sense - flag error and stop
 		console_write("Spurious Home trigger\r\n");
-		//flag_error();
-		stop_at_home();
+		flag_error();
+		stop_at(state_stop);
 		break;
 	}
 }
@@ -272,7 +285,7 @@ static void read_triggers(void)
 			trigger_home();
 		} else {
 			if (triggers & TRIGGER_DOWN) {
-				trigger_down();
+				trigger_down(1U);
 			}
 			if (triggers & TRIGGER_UP) {
 				// up cancels a concurrent down
@@ -325,7 +338,7 @@ static void read_timers(void)
 	case state_at_h:
 		if (feed.nf_timeout > 0) {
 			if (feed.minutes >= feed.nf_timeout) {
-				trigger_down();
+				trigger_down(0);
 			}
 		}
 		break;
@@ -343,13 +356,6 @@ static void read_timers(void)
 	if (feed.mincount >= ONEMINUTE) {
 		feed.minutes++;
 		feed.mincount = 0;
-	}
-}
-
-static void read_voltage()
-{
-	if (ADCH < LOWVOLTS) {
-		flag_error();
 	}
 }
 
@@ -385,9 +391,6 @@ static void show_value(struct console_event *event)
 		break;
 	case 0x74:
 		console_showval("Throttle = ", feed.throttle & 0xff);
-		break;
-	case 0x62:
-		console_showval("Brake = ", feed.brake & 0xff);
 		break;
 	default:
 		console_write("Unknown value\r\n");
@@ -439,14 +442,6 @@ static void update_value(struct console_event *event)
 		console_showval("H time = ", feed.h_timeout);
 		save_config(NVM_H, feed.h_timeout);
 		break;
-	case 0x62:
-		feed.brake = event->value;
-		console_showval("Brake = ", feed.brake & 0xff);
-		save_config(NVM_BRAKE, feed.brake);
-		if (bit_is_set(PORTD, R4)) {
-			OCR2B = (uint8_t) (feed.brake & 0xff);
-		}
-		break;
 	case 0x74:
 		feed.throttle = event->value;
 		console_showval("Throttle = ", feed.throttle & 0xff);
@@ -497,7 +492,7 @@ static void handle_event(struct console_event *event)
 		show_values();
 		break;
 	case event_down:
-		trigger_down();
+		trigger_down(1U);
 		break;
 	case event_up:
 		trigger_up();

@@ -10,12 +10,11 @@
 #define DEFAULT_NF	3	// 3 feeds per day (~4-12h gaps)
 #define DEFAULT_MAN	250U	// 2.5s MAN Adjustment
 #define DEFAULT_H	4000U	// 40s Max return home time
-#define DEFAULT_BRAKE	0U	// Brake voltage ~= 5.0*val/255
 #define DEFAULT_THROTTLE 255U	// Throttle voltage ~= 5.0*val/255
 #define DEFAULT_S	30U	// 30 minutes safe time
 
 // Fixed voltage threshold
-#define LOWVOLTS	0x35	// ~8.5V
+#define LOWVOLTS	0x4a	// ~11.8V
 
 // Define I/O aliases, Refer: remootio_adapter_portpins.pdf
 #define V1	3U		// PORTB.3:OCR2A
@@ -30,7 +29,6 @@
 #define R2	6U		// PORTD.6
 #define R3	5U		// PORTD.5
 #define R4	4U		// PORTD.4
-#define V2	3U		// PORTD.3:OCR2B
 #define R5	2U		// PORTD.2
 #define A1	7U		// ADC7
 #define SMASK	(_BV(S1)|_BV(S2)|_BV(S3)|_BV(S4)|_BV(S5)|_BV(S6))
@@ -45,7 +43,6 @@
 #define NVM_H		(NVM_BASE + 0x6)
 #define NVM_F		(NVM_BASE + 0x8)
 #define NVM_NF		(NVM_BASE + 0xa)
-#define NVM_BRAKE	(NVM_BASE + 0xc)
 #define NVM_THROTTLE	(NVM_BASE + 0xe)
 #define NVM_SEEDOFT	(NVM_BASE + 0x10)
 #define NVM_KEY		(NVM_BASE + 0x12)
@@ -57,8 +54,7 @@
 // Timing estimator (for 7812.5 Hz / 78 timer)
 #define ONEMINUTE	6000U
 
-// Throttle CV and motor switch pause
-#define THROTTLE_DELAY 0x2000
+// Motor enable/disable delay time
 #define MOTOR_DELAY 0xf00
 
 // Input switch triggers (asserted after debouncing via read_input)
@@ -97,7 +93,6 @@ struct state_machine {
 	uint16_t f_timeout;	// maximum minutes at p1
 	uint16_t nf;		// number of feeds/day
 	uint16_t nf_timeout;	// target minutes for h->p1
-	uint16_t brake;		// brake CV [unused]
 	uint16_t throttle;	// throttle CV
 	uint16_t count;		// 0.01s state counter
 	uint16_t mincount;	// 0.01s state counter for determining minutes

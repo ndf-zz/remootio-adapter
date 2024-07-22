@@ -164,11 +164,6 @@ static uint8_t get_cmd(uint8_t ch)
 		console_write("Throttle? ");
 		return 0x74;
 		break;
-	case 0x62:
-	case 0x42:
-		console_write("Brake? ");
-		return 0x62;
-		break;
 	case 0x3f:
 		console_write(help);
 		break;

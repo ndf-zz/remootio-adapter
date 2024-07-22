@@ -48,8 +48,7 @@ static void timer_init(void)
 
 	// fast PWM output timer
 	OCR2A = 0;
-	OCR2B = 0;
-	TCCR2A = _BV(COM2A1) | _BV(COM2B1) | _BV(WGM20) | _BV(WGM21);
+	TCCR2A = _BV(COM2A1) | _BV(WGM20) | _BV(WGM21);
 	TCCR2B = _BV(CS20);
 }
 
@@ -64,7 +63,7 @@ static void gpio_init(void)
 
 	// Enable outputs
 	DDRB |= _BV(3) | _BV(5);
-	DDRD |= _BV(2) | _BV(3) | _BV(4) | _BV(5) | _BV(6) | _BV(7);
+	DDRD |= _BV(2) | _BV(4) | _BV(5) | _BV(6) | _BV(7);
 
 }
 
@@ -118,7 +117,6 @@ static void load_parameters(void)
 		feed.h_timeout = read_word(NVM_H);
 		feed.f_timeout = read_word(NVM_F);
 		feed.nf = read_word(NVM_NF);
-		feed.brake = read_word(NVM_BRAKE);
 		feed.throttle = read_word(NVM_THROTTLE);
 		seedoft = read_word(NVM_SEEDOFT) + 4U;
 		if (seedoft >= SEEDOFT_LEN) {
@@ -138,8 +136,6 @@ static void load_parameters(void)
 		write_word(NVM_F, feed.f_timeout);
 		feed.nf = DEFAULT_NF;
 		write_word(NVM_NF, feed.nf);
-		feed.brake = DEFAULT_BRAKE;
-		write_word(NVM_BRAKE, feed.brake);
 		feed.throttle = DEFAULT_THROTTLE;
 		write_word(NVM_THROTTLE, feed.throttle);
 		write_word(NVM_SEEDOFT, seedoft);
