@@ -57,13 +57,11 @@ static void motor_stop(void)
 static void motor_reverse(void)
 {
 	PORTD |= _BV(R3);	// enable R3 REV
-	_delay_loop_2(MOTOR_DELAY);	// pause for controller
 }
 
 static void motor_forward(void)
 {
 	PORTD |= _BV(R2);	// enable R2 FWD
-	_delay_loop_2(MOTOR_DELAY);	// pause for controller
 }
 
 static void set_state(uint8_t newstate)

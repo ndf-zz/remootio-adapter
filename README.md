@@ -39,14 +39,31 @@ from the home position. To re-enable, return hoist to home
 
 ### Special Cases
 
-Scheduled feeding is suppressed when the battery voltage
-falls below 11.8V. Manual operation is still possible. Low voltage
-condition is indicated via LED.
+If an error condition is flagged, the hoist will only allow
+movement up and down small amounts determined by the "Man time"
+setting. To correct an error state, clear the sensor
+switch and then manually operate the hoist down slightly and
+then up to the home position.
 
-In the case of a spurious triggering of the home sensor,
-an error condition is flagged and the motor is stopped. To
-correct the error state, clear the sensor, then lower and
-raise the hoist to the home position.
+Errors and exceptions may be triggered by the following conditions:
+
+   - Low Battery: Scheduled feeding is suppressed when battery
+     voltage falls below 11.8V. In this state, the battery LED
+     is illuminated, manual operation is still enabled.
+   - Spurious Sensor: In the case of a spurious triggering of
+     the home sensor, an error condition is flagged and the
+     motor is stopped.
+   - Sensor Failure: If the home sensor fails "open", or if the
+     state logic is out of sync, the hoist will not react to
+     up (raise) commands. If the sensor fails "closed", and max
+     H time has elapsed, the hoist will flag an error condition.
+   - Safetime: If the hoist is left at position P2, between P1 and P2,
+     or in the STOP state, it will attempt to retract automatically
+     to the home position after about 30 minutes.
+   - Disable Schedule: Scheduled feeding may be temporarily disabled
+     by manually lowering the hoist slightly from the home position
+     to state "STOP H-P1". To re-enable scheduled feeding, return
+     hoist to home position.
 
 
 ### Serial Console
