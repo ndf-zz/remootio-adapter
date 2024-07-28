@@ -150,14 +150,14 @@ when the hoist has been lowered to the feeding position (P1).
 ## Motor Controller Preparation
 
 Use [spmtool](https://github.com/ndf-zz/spmtool) to update
-controller settings unsing config file
+controller settings with config file
 [spm_config.bin](reference/spm_config.bin):
 
 	$ spmtool -s SPM24121 -w spm_config.bin
 
 Refer to [spm_config.txt](reference/spm_config.txt) for
-setting detail. If using Kelly Controller software, use the
-following:
+setting detail. If using Kelly Controller software, set as
+follows:
 
 ### Step 1: General Setting
 
