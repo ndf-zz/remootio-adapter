@@ -149,24 +149,38 @@ when the hoist has been lowered to the feeding position (P1).
 
 ## Motor Controller Preparation
 
-Run the Kelly Controllers configuration program (v4.5)
+Use [spmtool](https://github.com/ndf-zz/spmtool) to update
+controller settings unsing config file
+[spm_config.bin](reference/spm_config.bin):
 
-### General Setting
+	$ spmtool -s SPM24121 -w spm_config.bin
+
+Refer to [spm_config.txt](reference/spm_config.txt) for
+setting detail. If using Kelly Controller software, use the
+following:
+
+### Step 1: General Setting
 
    - Forward Switch: Enable
    - Foot Switch: Disable
    - Throttle Sensor Type: 0-5V
-   - Throttle Effective Starting: 5%
-   - Throttle Effective Ending: 95%
-   - Max Motor Current: 30%
-   - Max Battery Current: 50%
+   - Throttle Effective Starting: 4%
+   - Throttle Effective Ending: 96%
+   - Max Motor Current: 100%
+   - Max Battery Current: 40%
+
+### Step 2: General Setting
+
    - Start-up Delay: 0 sec
    - Control Mode: Balanced
-   - Under voltage: 9V
-   - Over Voltage: 30V
+   - Under voltage: 10V
+   - Over Voltage: 20V
    - Throttle Up/Down Rate: 1 (Fast)
    - Power On High Pedal Disable: Disable
    - Releasing Brake High Pedal Disable: Disable
+
+### Step 3: General Setting
+
    - Motor Top Speed: 100%
    - Boost Function: Disable
    - Economy Function: Disable
@@ -176,29 +190,23 @@ Run the Kelly Controllers configuration program (v4.5)
    - Motor Top Speed in Reverse: 100%
    - Joysticker[sic] Throttle: Disable
 
-### Regeneration Setting
+### Step 4: Regeneration Setting
 
    - Regeneration: Disable
    - Brake Switch: Disable
    - Releasing Throttle Starts Regen: Disable
-   - Regen Current By Brake Switch On: 20% [unused]
-   - Max Regen Current: 100% [unused]
+   - Regen Current By Brake Switch On: 5% [unused]
+   - Max Regen Current: 20% [unused]
    - Brake Sensor Type: No
-   - Brake Sensor Starting Point: 20% [unused]
-   - Brake Sensor Ending Point: 80% [unused]
+   - Brake Sensor Starting Point: 0% [unused]
+   - Brake Sensor Ending Point: 100% [unused]
 
-### Sensor Setting
+### Step 5: Sensor, CAN, Smooth Setting
 
    - Motor Temperature Sensor: Disable
    - Controller Stop Output Temperature: 125C
    - Controller Resume Output 90C
-
-### CAN Setting
-
-[empty]
-
-### Smooth Setting
-
+   - CAN [empty]
    - Smooth: Disable
 
 ## Firmware layout
