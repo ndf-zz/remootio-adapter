@@ -68,7 +68,7 @@ Errors and exceptions may be triggered by the following conditions:
 
 ### Serial Console
 
-Connect RS-232 serial adapter to console port
+Connect RS-232 serial adapter to J4 (console)
 and open a terminal at 9600 baud, 8n1.
 
 Triggers, state changes and errors will
@@ -122,12 +122,16 @@ J5:4 | C2:4 | "GND" Encoder/Counter Ground
 J6:1 | M1:7 | "PWR" Controller power
 J6:2 | M1:6 | "GND" Controller ground
 J6:3 | M2:3 | "Throttle" Controller speed
-J6:4 | M1:14 | "FWD" Controller forward
-J6:5 | M1:12 | "REV" Controller reverse
+J6:4 | M1:12 | "FWD" Controller reverse *
+J6:5 | M1:14 | "REV" Controller forward *
 J6:6 | M3:Rx | "Rx" Controller serial receive
 J6:7 | M3:Tx | "Tx" Controller serial transmit
 J6:8 | M2:20 | "GND" Controller ground
 
+Notes:
+
+   - J6:4 "FWD" and J6:5 "REV" may need to be swapped
+     to match motor wiring.
 
 ## Remootio Preparation
 
