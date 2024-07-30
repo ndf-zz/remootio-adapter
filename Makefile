@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MIT
 #
-# AVR m328p (Nano) USB Serial "PLC"
+# Remootio Adapter - Makefile: avr-gcc, avr-libc & avrdude
 #
 
 PROJECT = remootio-adapter
@@ -50,7 +50,7 @@ WARN += -Wundef
 # Warn for implicit conversions that may alter a value [annoying]
 WARN += -Wconversion
 
-# Avr MCU
+# Avr MCU (Note: 328pb not yet supported in Deb stable avr-libc)
 AVROPTS = -mmcu=atmega328p -ffreestanding
 
 # Clock speed
@@ -79,12 +79,12 @@ OBJDUMP = avr-objdump
 
 # programmer
 AVRDUDE = avrdude
-PARTNO = m328p
+PARTNO = m328pb
 PROGRAMMER = avrisp2
 DUDECMD = $(AVRDUDE) -c $(PROGRAMMER) -p $(PARTNO)
-EFUSE = 0xfd
+EFUSE = 0xff
 LFUSE = 0x7f
-HFUSE = 0xc6
+HFUSE = 0xc7
 LOCKBYTE = 0xff
 
 # Default target is $(TARGET)

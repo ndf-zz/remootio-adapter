@@ -25,7 +25,6 @@ Commands:\r\n\
 \th\tH time\r\n\
 \tf\tFeed time (min)\r\n\
 \tn\tFeeds/day (0=off)\r\n\
-\tt\tThrottle (1-255)\r\n\
 \tv\tShow current values\r\n\
 \ts\tStatus\r\n\
 \td\tLower\r\n\
@@ -158,11 +157,6 @@ static uint8_t get_cmd(uint8_t ch)
 	case 0x4d:
 		console_write("Man time? ");
 		return 0x6d;
-		break;
-	case 0x74:
-	case 0x54:
-		console_write("Throttle? ");
-		return 0x74;
 		break;
 	case 0x3f:
 		console_write(help);

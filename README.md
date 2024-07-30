@@ -83,7 +83,6 @@ Enter '?' to display available commands:
 	        h       H time
 	        f       Feed time (min)
 	        n       Feeds/day (0=off)
-	        t       Throttle (1-255)
 	        v       Show current values
 	        s       Status
 	        d       Lower
@@ -123,8 +122,8 @@ J5:4 | C2:4 | "GND" Encoder/Counter Ground
 J6:1 | M1:7 | "PWR" Controller power
 J6:2 | M1:6 | "GND" Controller ground
 J6:3 | M2:3 | "Throttle" Controller speed
-J6:4 | M1:12 | "FWD" Controller forward
-J6:5 | M1:14 | "REV" Controller reverse
+J6:4 | M1:14 | "FWD" Controller forward
+J6:5 | M1:12 | "REV" Controller reverse
 J6:6 | M3:Rx | "Rx" Controller serial receive
 J6:7 | M3:Tx | "Tx" Controller serial transmit
 J6:8 | M2:20 | "GND" Controller ground
@@ -140,7 +139,7 @@ In the Remootio application:
 
    - Select output configuration 4: "Output 1 to open, Output 2 to close"
    - Configure both "open" and "close" impulse length to 50ms.
-   - Enable sensor add-on: Input 1, Flip logic
+   - Enable sensor add-on: Input 1
 
 Application interface displays "open" when the hay hoist is
 retracted to the home position. The display will show "closed"

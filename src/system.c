@@ -9,6 +9,11 @@
 #include "system.h"
 #include "console.h"
 
+// Define PORTE - fixed in avr-libc 2.2
+#ifndef PORTE
+#define PORTE _SFR_IO8(0x0E)
+#endif // PORTE
+
 // Global state machine
 struct state_machine feed;
 
@@ -20,7 +25,7 @@ ISR(TIMER0_COMPA_vect)
 uint8_t read_inputs(void)
 {
 	static uint8_t prev = _BV(S3) | _BV(S4);
-	uint8_t cur = PINC & SMASK;
+	uint8_t cur = PINC & IMASK;
 	uint8_t flags = 0;
 	uint8_t mask;
 	if ((cur ^ prev) == 0) {
@@ -45,26 +50,23 @@ static void timer_init(void)
 	TCCR0A = _BV(WGM01);
 	TCCR0B = _BV(CS02);
 	TIMSK0 |= _BV(OCIE0A);
-
-	// fast PWM output timer
-	OCR2A = 0;
-	TCCR2A = _BV(COM2A1) | _BV(WGM20) | _BV(WGM21);
-	TCCR2B = _BV(CS20);
 }
 
 // Refer: remootio_adapter_portpins.pdf
 static void gpio_init(void)
 {
 	// Pullup unused inputs
-	PORTB |= _BV(0) | _BV(1) | _BV(2) | _BV(4);
+	PORTB |= _BV(0) | _BV(1) | _BV(2);
+	PORTE |= _BV(0) | _BV(1) | _BV(2);
 
-	// Pullup non-protected inputs S3-S6
-	PORTC |= _BV(2) | _BV(3) | _BV(4) | _BV(5);
+	// TEMP: disable motor serial lines
+	PORTB |= _BV(3) | _BV(4);
+
+	// Pullup inputs
+	PORTC |= IMASK;
 
 	// Enable outputs
-	DDRB |= _BV(3) | _BV(5);
-	DDRD |= _BV(2) | _BV(4) | _BV(5) | _BV(6) | _BV(7);
-
+	DDRD |= OMASK;
 }
 
 static void adc_init(void)
@@ -117,7 +119,6 @@ static void load_parameters(void)
 		feed.h_timeout = read_word(NVM_H);
 		feed.f_timeout = read_word(NVM_F);
 		feed.nf = read_word(NVM_NF);
-		feed.throttle = read_word(NVM_THROTTLE);
 		seedoft = read_word(NVM_SEEDOFT) + 4U;
 		if (seedoft >= SEEDOFT_LEN) {
 			seedoft = 0;
@@ -136,8 +137,6 @@ static void load_parameters(void)
 		write_word(NVM_F, feed.f_timeout);
 		feed.nf = DEFAULT_NF;
 		write_word(NVM_NF, feed.nf);
-		feed.throttle = DEFAULT_THROTTLE;
-		write_word(NVM_THROTTLE, feed.throttle);
 		write_word(NVM_SEEDOFT, seedoft);
 		write_word(NVM_KEY, NVM_KEYVAL);
 	}

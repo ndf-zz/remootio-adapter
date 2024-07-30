@@ -10,29 +10,27 @@
 #define DEFAULT_NF	3	// 3 feeds per day (~4-12h gaps)
 #define DEFAULT_MAN	250U	// 2.5s MAN Adjustment
 #define DEFAULT_H	4000U	// 40s Max return home time
-#define DEFAULT_THROTTLE 255U	// Throttle voltage ~= 5.0*val/255
 #define DEFAULT_S	30U	// 30 minutes safe time
 
 // Fixed voltage threshold
 #define LOWVOLTS	0x4a	// ~11.8V
 
-// Define I/O aliases, Refer: remootio_adapter_portpins.pdf
-#define V1	3U		// PORTB.3:OCR2A
-#define LED	5U		// PORTB.5
+// Define I/O aliases, Refer: pcb/m328pb_portpins.pdf
 #define S1	0		// PORTC.0
 #define S2	1U		// PORTC.1
-#define S3	2U		// PORTC.2
-#define S4	3U		// PORTC.3
-#define S5	4U		// PORTC.4
-#define S6	5U		// PORTC.5
-#define R1	7U		// PORTD.7
-#define R2	6U		// PORTD.6
-#define R3	5U		// PORTD.5
+#define S6	2U		// PORTC.2
+#define S5	3U		// PORTC.3
+#define S3	4U		// PORTC.4
+#define S4	5U		// PORTC.5
+#define LED	2U		// PORTD.2
+#define V1	3U		// PORTD.3
 #define R4	4U		// PORTD.4
-#define R5	2U		// PORTD.2
-#define A1	7U		// ADC7
-#define SMASK	(_BV(S1)|_BV(S2)|_BV(S3)|_BV(S4)|_BV(S5)|_BV(S6))
-#define RMASK	(_BV(R1)|_BV(R2)|_BV(R3)|_BV(R4)|_BV(R5))
+#define R3	5U		// PORTD.5
+#define R1	6U		// PORTD.6
+#define R2	7U		// PORTD.7
+#define A1	3U		// PORTE.3:ADC7
+#define IMASK	(_BV(S1)|_BV(S2)|_BV(S3)|_BV(S4)|_BV(S5)|_BV(S6))
+#define OMASK	(_BV(LED)|_BV(V1)|_BV(R1)|_BV(R2)|_BV(R3)|_BV(R4))
 #define SYSTICK	GPIOR0
 
 // Non-volatile data addresses
@@ -43,7 +41,6 @@
 #define NVM_H		(NVM_BASE + 0x6)
 #define NVM_F		(NVM_BASE + 0x8)
 #define NVM_NF		(NVM_BASE + 0xa)
-#define NVM_THROTTLE	(NVM_BASE + 0xe)
 #define NVM_SEEDOFT	(NVM_BASE + 0x10)
 #define NVM_KEY		(NVM_BASE + 0x12)
 #define NVM_KEYVAL	0x55aa
@@ -56,6 +53,13 @@
 
 // Motor enable/disable delay time
 #define MOTOR_DELAY 0xf00
+
+// Output function labels
+#define FWD		R1
+#define REV		R2
+#define PWR		R3
+#define ATP1		R4
+#define THROTTLE	V1
 
 // Input switch triggers (asserted after debouncing via read_input)
 #define TRIGGER_HOME	_BV(S1)
@@ -93,7 +97,6 @@ struct state_machine {
 	uint16_t f_timeout;	// maximum minutes at p1
 	uint16_t nf;		// number of feeds/day
 	uint16_t nf_timeout;	// target minutes for h->p1
-	uint16_t throttle;	// throttle CV
 	uint16_t count;		// 0.01s state counter
 	uint16_t mincount;	// 0.01s state counter for determining minutes
 	uint16_t minutes;	// minute state counter

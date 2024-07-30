@@ -27,10 +27,10 @@ static void read_voltage(void)
 {
 	if (ADCH < LOWVOLTS) {
 		// Set Indicator
-		PORTB |= _BV(LED);
+		PORTD |= _BV(LED);
 	} else {
 		// Clear Indicator
-		PORTB &= (uint8_t) ~ _BV(LED);
+		PORTD &= (uint8_t) ~ _BV(LED);
 	}
 }
 
@@ -41,27 +41,26 @@ static uint8_t check_voltage(uint8_t override)
 
 static void motor_start(void)
 {
-	PORTD |= _BV(R1);	// enable controller
+	PORTD |= _BV(PWR);	// enable controller power
 	_delay_loop_2(MOTOR_DELAY);	// pause for controller
-	OCR2A = feed.throttle & 0xff;	// raise throttle CV
+	PORTD |= _BV(THROTTLE);	// raise throttle CV
 }
 
 static void motor_stop(void)
 {
-	OCR2A = 0;		// lower throttle CV
+	PORTD &= (uint8_t) ~ _BV(THROTTLE);	// lower throttle CV
 	_delay_loop_2(MOTOR_DELAY);	// pause to allow CV to settle
-	PORTD &= (uint8_t) ~ (_BV(R1));	// disable controller
-	PORTD &= (uint8_t) ~ (_BV(R2) | _BV(R3));	// disable direction
+	PORTD &= (uint8_t) ~ (_BV(PWR) | _BV(FWD) | _BV(REV));	// disable
 }
 
 static void motor_reverse(void)
 {
-	PORTD |= _BV(R3);	// enable R3 REV
+	PORTD |= _BV(REV);
 }
 
 static void motor_forward(void)
 {
-	PORTD |= _BV(R2);	// enable R2 FWD
+	PORTD |= _BV(FWD);
 }
 
 static void set_state(uint8_t newstate)
@@ -106,7 +105,7 @@ static void stop_at_home(void)
 	stop_at(state_at_h);
 	clear_error();
 	// Signal AT H state to Remootio
-	PORTD |= _BV(R5);
+	PORTD &= (uint8_t) ~ _BV(ATP1);
 	set_randfeed();
 }
 
@@ -137,7 +136,7 @@ static void trigger_p1(void)
 		console_write("Trigger: p1\r\n");
 		stop_at(state_at_p1);
 		// Signal AT P1 state to Remootio
-		PORTD &= (uint8_t) ~ _BV(R5);
+		PORTD |= _BV(ATP1);
 	} else {
 		console_write("Spurious P1 trigger ignored\r\n");
 	}
@@ -387,9 +386,6 @@ static void show_value(struct console_event *event)
 	case 0x6d:
 		console_showval("Man time = ", feed.man_timeout);
 		break;
-	case 0x74:
-		console_showval("Throttle = ", feed.throttle & 0xff);
-		break;
 	default:
 		console_write("Unknown value\r\n");
 		break;
@@ -440,14 +436,6 @@ static void update_value(struct console_event *event)
 		console_showval("H time = ", feed.h_timeout);
 		save_config(NVM_H, feed.h_timeout);
 		break;
-	case 0x74:
-		feed.throttle = event->value;
-		console_showval("Throttle = ", feed.throttle & 0xff);
-		save_config(NVM_THROTTLE, feed.throttle);
-		if (bit_is_set(PORTD, R1)) {
-			OCR2A = (uint8_t) (feed.throttle & 0xff);
-		}
-		break;
 	default:
 		console_write("Unknown value\r\n");
 		break;
@@ -463,7 +451,6 @@ static void show_values(void)
 	console_showval("\tH time = ", feed.h_timeout);
 	console_showval("\tFeed time (min)= ", feed.f_timeout);
 	console_showval("\tFeeds/day (0=off)= ", feed.nf);
-	console_showval("\tThrottle (1-255)= ", feed.throttle & 0xff);
 	console_showval("\tState counter = ", feed.count);
 	console_showval("\tState minutes = ", feed.minutes);
 	console_write("\r\n");
