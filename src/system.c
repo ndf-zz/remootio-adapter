@@ -8,14 +8,13 @@
 #include <util/atomic.h>
 #include "system.h"
 #include "console.h"
-
-// Define PORTE - fixed in avr-libc 2.2
-#ifndef PORTE
-#define PORTE _SFR_IO8(0x0E)
-#endif // PORTE
+#include "spmcheck.h"
 
 // Global state machine
 struct state_machine feed;
+
+// Global software version
+uint16_t sw_version = SW_VERSION;
 
 ISR(TIMER0_COMPA_vect)
 {
@@ -59,14 +58,14 @@ static void gpio_init(void)
 	PORTB |= _BV(0) | _BV(1) | _BV(2);
 	PORTE |= _BV(0) | _BV(1) | _BV(2);
 
-	// TEMP: disable motor serial lines
-	PORTB |= _BV(3) | _BV(4);
-
 	// Pullup inputs
 	PORTC |= IMASK;
 
 	// Enable outputs
 	DDRD |= OMASK;
+
+	// Turn on indicator LED
+	PORTD |= _BV(LED);
 }
 
 static void adc_init(void)
@@ -163,4 +162,5 @@ void system_init(void)
 	console_init();
 	load_parameters();
 	sei();
+	spm_check();
 }

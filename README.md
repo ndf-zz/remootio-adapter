@@ -119,14 +119,14 @@ J5:1 | C2:1 | "Home" Home Limit Input (NC output)
 J5:2 | C2:2 | "GND" Home Limit Ground
 J5:3 | C2:3 | "AUX" Encoder/Counter Input (unused)
 J5:4 | C2:4 | "GND" Encoder/Counter Ground
-J6:1 | M1:7 | "PWR" Controller power
-J6:2 | M1:6 | "GND" Controller ground
-J6:3 | M2:3 | "Throttle" Controller speed
-J6:4 | M1:12 | "FWD" Controller reverse *
-J6:5 | M1:14 | "REV" Controller forward *
-J6:6 | M3:Rx | "Rx" Controller serial receive
-J6:7 | M3:Tx | "Tx" Controller serial transmit
-J6:8 | M2:20 | "GND" Controller ground
+J6:1 | M1:7 | "PWR" Controller power (pink)
+J6:2 | M:6,20 | "GND" Controller ground (black)
+J6:3 | M:3 | "Throttle" Controller speed (dark green)
+J6:4 | M:12 | "FWD" Controller forward (white)
+J6:5 | M:14 | "REV" Controller reverse (orange)
+J6:6 | M:Rx | "Rx" Controller serial receive (light blue)
+J6:7 | M:Tx | "Tx" Controller serial transmit (light green)
+J6:8 | M:Gnd | "GND" Controller ground (black)
 
 Notes:
 
@@ -152,15 +152,14 @@ when the hoist has been lowered to the feeding position (P1).
 
 ## Motor Controller Preparation
 
-Use [spmtool](https://github.com/ndf-zz/spmtool) to update
-controller settings with config file
-[spm_config.bin](reference/spm_config.bin):
+Motor controller is configured by firmware at boot time
+as necessary according to
+[spm_config.bin](reference/spm_config.bin)
+and [spm_config.txt](reference/spm_config.txt).
 
-	$ spmtool -s SPM24121 -w spm_config.bin
-
-Refer to [spm_config.txt](reference/spm_config.txt) for
-setting detail. If using Kelly Controller software, set as
-follows:
+Use [spmtool](https://github.com/ndf-zz/spmtool) to create
+a new config if required. Settings match the following in
+Kelly Controller software:
 
 ### Step 1: General Setting
 
@@ -241,6 +240,7 @@ firmware will not overwrite stored configuration.
    - binutils-avr
    - avr-libc
    - avrdude
+   - python3 (if controller config is edited)
 
 On a Debian system, use make to install required packages:
 

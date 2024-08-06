@@ -4,11 +4,13 @@
 #
 
 PROJECT = remootio-adapter
+VERSION = 24011
 
 # Build objects
 OBJECTS = src/main.o
 OBJECTS += src/system.o
 OBJECTS += src/console.o
+OBJECTS += src/spmcheck.o
 
 # Target binary
 TARGET = $(PROJECT).elf
@@ -54,7 +56,7 @@ WARN += -Wconversion
 AVROPTS = -mmcu=atmega328p -ffreestanding
 
 # Clock speed
-CPPFLAGS = -DF_CPU=2000000L
+CPPFLAGS = -DF_CPU=2000000L -DSW_VERSION=$(VERSION)
 
 # Add include path for headers
 CPPFLAGS += -Iinclude
@@ -69,7 +71,7 @@ LDFLAGS = -Wl,--gc-sections
 CFLAGS = $(DIALECT) $(DEBUG) $(OPTIMISE) $(WARN) $(AVROPTS)
 LCFLAGS = CFLAGS
 
-# binutils
+# Binutils
 OBJCOPY = avr-objcopy
 SIZE = avr-size
 NM = avr-nm
@@ -77,7 +79,10 @@ NMFLAGS = -n -r
 DISFLAGS = -d -S -m avr5
 OBJDUMP = avr-objdump
 
-# programmer
+# Python
+PYTHON = python3
+
+# Programmer
 AVRDUDE = avrdude
 PARTNO = m328pb
 PROGRAMMER = avrisp2
@@ -87,11 +92,20 @@ LFUSE = 0x7f
 HFUSE = 0xc7
 LOCKBYTE = 0xff
 
-# Default target is $(TARGET)
+# Default target
 .PHONY: elf
 elf: $(TARGET)
 
-$(OBJECTS): Makefile
+# Object dependencies
+$(OBJECTS): Makefile include/system.h include/console.h
+
+src/spmcheck.o: include/spm_config.h
+
+src/system.o: include/spmcheck.h
+
+# Build recipes
+include/spm_config.h: reference/spm_mkconf.py reference/spm_config.bin reference/spm_config.txt
+	$(PYTHON) reference/spm_mkconf.py reference/spm_config.bin reference/spm_config.txt include/spm_config.h
 
 $(TARGET): $(OBJECTS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS) -o $(TARGET) $(OBJECTS)
@@ -99,13 +113,12 @@ $(TARGET): $(OBJECTS)
 $(RANDBOOK):
 	dd if=/dev/random bs=1K count=1 of=$(RANDBOOK)
 
-# Override compilation recipe for assembly files
 %.o: %.s
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
 
-# Add recipe for listing files
 %.lst: %.o
 	$(OBJDUMP) $(DISFLAGS) $< > $@
+
 %.lst: %.elf
 	$(OBJDUMP) $(DISFLAGS) $< > $@
 

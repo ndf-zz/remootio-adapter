@@ -34,6 +34,12 @@ void console_showval(const char *message, uint16_t value);
 // Output current machine state and voltage
 void console_showstate(uint8_t state, uint8_t error, uint8_t vsense);
 
+// Show buffer as hex values
+void console_showhex(const char *message, uint8_t * buf, uint8_t len);
+
+// Show ascii string with max length
+void console_showascii(const char *message, uint8_t * buf, uint8_t len);
+
 // Write null-terminated message to console
 void console_write(const char *message);
 

@@ -106,6 +106,31 @@ static void write_wordval(uint16_t value)
 	}
 }
 
+static void write_nibble(uint8_t nibble)
+{
+	if (nibble > 0x09) {
+		nibble = (uint8_t) (nibble + 0x7);
+	}
+	write_serial((uint8_t) (0x30 + nibble));
+}
+
+// Write a single ascii character
+static void write_ascii(uint8_t value)
+{
+	if (value >= 0x20 && value < 0x7f) {
+		write_serial(value);
+	} else {
+		write_serial(0x3f);
+	}
+}
+
+// Write a single byte to console as hexadecimal string
+static void write_hexval(uint8_t value)
+{
+	write_nibble(value >> 4);
+	write_nibble(value & 0xf);
+}
+
 // Copy string to write buffer
 static void write_string(const char *message)
 {
@@ -368,6 +393,37 @@ void console_showval(const char *message, uint16_t value)
 	write_string(message);
 	write_wordval(value);
 	newline();
+	enable_transfer();
+}
+
+// Show buffer as hex values
+void console_showhex(const char *message, uint8_t * buf, uint8_t len)
+{
+	write_string(message);
+	while (len) {
+		write_hexval(*(buf++));
+		--len;
+	}
+	newline();
+	enable_transfer();
+}
+
+// Show ascii string with max length
+void console_showascii(const char *message, uint8_t * buf, uint8_t len)
+{
+	write_string(message);
+	uint8_t ch;
+	while (len) {
+		ch = *buf;
+		if (ch) {
+			write_ascii(*(buf++));
+			--len;
+		} else {
+			break;
+		}
+	}
+	newline();
+	enable_transfer();
 }
 
 void console_init(void)
@@ -376,4 +432,5 @@ void console_init(void)
 	UBRR0L = 12;
 	UCSR0B = _BV(RXCIE0) | _BV(RXEN0) | _BV(TXEN0);
 	UCSR0C = _BV(UCSZ01) | _BV(UCSZ00);
+	console_showval("Info: Boot v", sw_version);
 }

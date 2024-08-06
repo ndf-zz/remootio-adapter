@@ -2,6 +2,17 @@
 
 #ifndef SYSTEM_H
 #define SYSTEM_H
+#include <avr/io.h>
+
+// Define missing IO regs - fixed in avr-libc 2.2
+#ifndef PORTE
+#define PORTE _SFR_IO8(0x0E)
+#define UBRR1L  _SFR_MEM8(0xCC)
+#define UCSR1A  _SFR_MEM8(0xC8)
+#define UCSR1B  _SFR_MEM8(0xC9)
+#define UCSR1C  _SFR_MEM8(0xCA)
+#define UDR1    _SFR_MEM8(0xCE)
+#endif // PORTE
 
 // Default user settings
 #define DEFAULT_P1	800U	// 8s H -> P1
@@ -104,6 +115,9 @@ struct state_machine {
 
 // global system variable
 extern struct state_machine feed;
+
+// global system version
+extern uint16_t sw_version;
 
 // Function prototypes
 uint8_t read_inputs(void);
