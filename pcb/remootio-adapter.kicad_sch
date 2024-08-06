@@ -6,7 +6,7 @@
 
   (title_block
     (title "Remootio Adapter - Hay Hoist")
-    (date "2024-07-30")
+    (date "2024-08-06")
     (rev "1.1")
     (company "Hyspec / 6-v")
   )
@@ -6007,7 +6007,7 @@
     (uuid edcf1849-349d-4d22-9ff8-a3b3b9d08838)
     (property "Reference" "D1" (id 0) (at 217.4875 71.6112 0))
     (property "Value" "VAOL-3GWY4" (id 1) (at 217.4875 74.1481 0))
-    (property "Footprint" "LED_THT:LED_D3.0mm_Clear" (id 2) (at 215.9 77.47 0)
+    (property "Footprint" "remootio-adapter:bivar-led" (id 2) (at 215.9 77.47 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "VAOL-3GWY4.pdf" (id 3) (at 215.9 77.47 0)
@@ -6285,7 +6285,7 @@
       (reference "C13") (unit 1) (value "1µ") (footprint "Capacitor_SMD:C_0603_1608Metric")
     )
     (path "/edcf1849-349d-4d22-9ff8-a3b3b9d08838"
-      (reference "D1") (unit 1) (value "VAOL-3GWY4") (footprint "LED_THT:LED_D3.0mm_Clear")
+      (reference "D1") (unit 1) (value "VAOL-3GWY4") (footprint "remootio-adapter:bivar-led")
     )
     (path "/201afaf1-c2db-44e9-a493-4de777d50aa5"
       (reference "D2") (unit 1) (value "B5819W SL") (footprint "Diode_SMD:D_SOD-123")
