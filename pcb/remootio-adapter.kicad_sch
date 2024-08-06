@@ -4037,7 +4037,7 @@
   (symbol (lib_id "Device:C_Polarized") (at 41.91 39.37 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 1ec37b13-f381-496f-b90d-d4c7f1cd4209)
-    (property "Reference" "C4" (id 0) (at 35.56 40.005 0)
+    (property "Reference" "C7" (id 0) (at 35.56 40.005 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "22µ/63V" (id 1) (at 31.75 43.18 0)
@@ -4140,7 +4140,7 @@
   (symbol (lib_id "Device:R") (at 241.3 82.55 90) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 269cb287-cb2b-45c5-8840-1c44e90acab0)
-    (property "Reference" "R11" (id 0) (at 241.3 77.8342 90))
+    (property "Reference" "R12" (id 0) (at 241.3 77.8342 90))
     (property "Value" "680" (id 1) (at 241.3 80.3711 90))
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (id 2) (at 241.3 84.328 90)
       (effects (font (size 1.27 1.27)) hide)
@@ -4161,7 +4161,7 @@
   (symbol (lib_id "Device:C") (at 83.82 144.78 270) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 2a36314b-ea90-4cf5-98d3-5d76cec2eac2)
-    (property "Reference" "C10" (id 0) (at 78.74 142.24 90)
+    (property "Reference" "C9" (id 0) (at 78.74 142.24 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "1µ" (id 1) (at 86.36 142.24 90)
@@ -4239,7 +4239,7 @@
   (symbol (lib_id "Device:R") (at 185.42 116.84 0) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 34f76050-6e9d-4308-a16b-4c6fd19f3223)
-    (property "Reference" "R5" (id 0) (at 187.198 116.0053 0)
+    (property "Reference" "R4" (id 0) (at 187.198 116.0053 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "33k" (id 1) (at 187.198 118.5422 0)
@@ -4264,7 +4264,7 @@
   (symbol (lib_id "Device:R") (at 67.31 78.74 90) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 37f2dc71-43c9-477e-8648-83ac8bc16e35)
-    (property "Reference" "R4" (id 0) (at 67.31 74.0242 90))
+    (property "Reference" "R3" (id 0) (at 67.31 74.0242 90))
     (property "Value" "100" (id 1) (at 67.31 76.5611 90))
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (id 2) (at 67.31 80.518 90)
       (effects (font (size 1.27 1.27)) hide)
@@ -4338,7 +4338,7 @@
   (symbol (lib_id "Device:C") (at 142.24 77.47 270) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 46d10357-3b52-44de-a11e-9b8bbdc9f779)
-    (property "Reference" "C7" (id 0) (at 138.43 73.66 90)
+    (property "Reference" "C6" (id 0) (at 138.43 73.66 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "1µ" (id 1) (at 143.51 73.66 90)
@@ -4535,7 +4535,7 @@
     (property "Value" "Console" (id 1) (at 112.522 169.3422 0)
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
-    (property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-3-5.08_1x03_P5.08mm_Horizontal" (id 2) (at 110.49 167.64 0)
+    (property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-3-5.0-H_1x03_P5.00mm_Horizontal" (id 2) (at 110.49 167.64 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "" (id 3) (at 110.49 167.64 0)
@@ -4593,7 +4593,7 @@
   (symbol (lib_id "Device:R") (at 207.01 77.47 270) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 5de2599c-fbeb-484b-8fcf-91d79ad8d43b)
-    (property "Reference" "R2" (id 0) (at 205.74 72.39 90)
+    (property "Reference" "R8" (id 0) (at 205.74 72.39 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "4.7k" (id 1) (at 204.47 74.93 90)
@@ -4692,7 +4692,7 @@
   (symbol (lib_id "Regulator_Linear:L7805") (at 55.88 34.29 0) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 6e9e06fa-c138-402b-9f14-b11acacb07ab)
-    (property "Reference" "U2" (id 0) (at 55.88 28.6852 0))
+    (property "Reference" "U3" (id 0) (at 55.88 28.6852 0))
     (property "Value" "LM2940S-5.0" (id 1) (at 55.88 31.2221 0))
     (property "Footprint" "Package_TO_SOT_SMD:SOT-223-3_TabPin2" (id 2) (at 56.515 38.1 0)
       (effects (font (size 1.27 1.27) italic) (justify left) hide)
@@ -4752,7 +4752,7 @@
     (property "Value" "BATT" (id 1) (at 19.05 31.8571 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" (id 2) (at 19.05 34.29 0)
+    (property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-2-5.0-H_1x02_P5.00mm_Horizontal" (id 2) (at 19.05 34.29 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "" (id 3) (at 19.05 34.29 0)
@@ -4913,7 +4913,7 @@
   (symbol (lib_id "Device:C") (at 97.79 144.78 270) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 827bb00c-07e9-4ce9-8120-ac28bd2c3d15)
-    (property "Reference" "C9" (id 0) (at 99.06 139.7 90)
+    (property "Reference" "C10" (id 0) (at 99.06 139.7 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "1µ" (id 1) (at 100.33 142.24 90)
@@ -4938,7 +4938,7 @@
   (symbol (lib_id "Device:C") (at 124.46 77.47 270) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 85438281-fd9f-4965-ab99-b454bb29a030)
-    (property "Reference" "C6" (id 0) (at 121.92 73.66 90)
+    (property "Reference" "C4" (id 0) (at 121.92 73.66 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "1µ" (id 1) (at 125.73 73.66 90)
@@ -5071,7 +5071,7 @@
   (symbol (lib_id "Device:R") (at 185.42 127 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 948210b1-800f-42b7-b999-45082b6c4e14)
-    (property "Reference" "R7" (id 0) (at 179.07 125.73 0)
+    (property "Reference" "R5" (id 0) (at 179.07 125.73 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "4.7k" (id 1) (at 179.07 128.27 0)
@@ -5198,7 +5198,7 @@
   (symbol (lib_id "Device:R") (at 67.31 83.82 90) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid a3683059-f184-47f9-aa43-3b3783266d1d)
-    (property "Reference" "R3" (id 0) (at 67.31 86.36 90))
+    (property "Reference" "R2" (id 0) (at 67.31 86.36 90))
     (property "Value" "100" (id 1) (at 67.31 88.9 90))
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (id 2) (at 67.31 85.598 90)
       (effects (font (size 1.27 1.27)) hide)
@@ -5305,7 +5305,7 @@
   (symbol (lib_id "Device:R") (at 266.7 149.86 90) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid b65e7bde-9b83-46fd-8e06-7ea3c123dcf1)
-    (property "Reference" "R8" (id 0) (at 266.7 145.1442 90))
+    (property "Reference" "R7" (id 0) (at 266.7 145.1442 90))
     (property "Value" "10" (id 1) (at 266.7 147.6811 90))
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (id 2) (at 266.7 151.638 90)
       (effects (font (size 1.27 1.27)) hide)
@@ -5454,7 +5454,7 @@
   (symbol (lib_id "Relay_SolidState:TLP3543") (at 254 152.4 0) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid c1bc3891-d4c5-4a3d-af07-e42d28535bf4)
-    (property "Reference" "U3" (id 0) (at 254 144.8902 0))
+    (property "Reference" "U2" (id 0) (at 254 144.8902 0))
     (property "Value" "AQV252GAX" (id 1) (at 254 147.4271 0))
     (property "Footprint" "remootio-adapter:SMDIP-6_W7.62mm" (id 2) (at 254 160.02 0)
       (effects (font (size 1.27 1.27)) hide)
@@ -5476,7 +5476,7 @@
   (symbol (lib_id "Device:C_Polarized") (at 67.31 39.37 0) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid c36e4879-095d-4af3-b801-afd1e89ffc06)
-    (property "Reference" "C5" (id 0) (at 70.231 37.6463 0)
+    (property "Reference" "C8" (id 0) (at 70.231 37.6463 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "22µ/63V" (id 1) (at 70.231 40.1832 0)
@@ -5523,7 +5523,7 @@
     (property "Value" "SPM Connector" (id 1) (at 168.402 37.2622 0)
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
-    (property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-8-5.08_1x08_P5.08mm_Horizontal" (id 2) (at 166.37 34.29 0)
+    (property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-8-5.0-H_1x08_P5.00mm_Horizontal" (id 2) (at 166.37 34.29 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "" (id 3) (at 166.37 34.29 0)
@@ -5542,7 +5542,7 @@
   (symbol (lib_id "Device:R") (at 241.3 101.6 90) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid c9789520-0701-4386-94d9-9285b178cc91)
-    (property "Reference" "R12" (id 0) (at 241.3 96.8842 90))
+    (property "Reference" "R13" (id 0) (at 241.3 96.8842 90))
     (property "Value" "680" (id 1) (at 241.3 99.4211 90))
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (id 2) (at 241.3 103.378 90)
       (effects (font (size 1.27 1.27)) hide)
@@ -5646,7 +5646,7 @@
   (symbol (lib_id "Device:C") (at 111.76 92.71 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid d367266a-04ee-4900-bcaa-9c0199a5e78a)
-    (property "Reference" "C8" (id 0) (at 105.41 91.44 0)
+    (property "Reference" "C5" (id 0) (at 105.41 91.44 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "1µ" (id 1) (at 105.41 95.25 0)
@@ -5673,7 +5673,9 @@
     (uuid d3bed3fa-52c1-4a23-9ef9-5c53ebed779a)
     (property "Reference" "U8" (id 0) (at 254 124.5702 0))
     (property "Value" "AQV252GAX" (id 1) (at 254 127.1071 0))
-    (property "Footprint" "remootio-adapter:SMDIP-6_W7.62mm" (id 2) (at 254 139.7 0))
+    (property "Footprint" "remootio-adapter:SMDIP-6_W7.62mm" (id 2) (at 254 139.7 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (property "Datasheet" "AQV252GAX.pdf" (id 3) (at 254 132.08 0)
       (effects (font (size 0 0)) hide)
     )
@@ -5861,7 +5863,7 @@
   (symbol (lib_id "Device:R") (at 271.78 35.56 90) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid e71ee25a-ca14-485d-8d5f-0c2e615225d3)
-    (property "Reference" "R13" (id 0) (at 271.78 38.1 90))
+    (property "Reference" "R11" (id 0) (at 271.78 38.1 90))
     (property "Value" "100" (id 1) (at 271.78 40.64 90))
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (id 2) (at 271.78 37.338 90)
       (effects (font (size 1.27 1.27)) hide)
@@ -5886,7 +5888,7 @@
     (property "Value" "SwitchIn" (id 1) (at 193.04 28.0471 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4-5.08_1x04_P5.08mm_Horizontal" (id 2) (at 193.04 33.02 0)
+    (property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-4-5.0-H_1x04_P5.00mm_Horizontal" (id 2) (at 193.04 33.02 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "" (id 3) (at 193.04 33.02 0)
@@ -6254,25 +6256,25 @@
     (path "/1da3b783-3aac-4b06-b35a-4571024bff68"
       (reference "C3") (unit 1) (value "1µ") (footprint "Capacitor_SMD:C_0603_1608Metric")
     )
-    (path "/1ec37b13-f381-496f-b90d-d4c7f1cd4209"
-      (reference "C4") (unit 1) (value "22µ/63V") (footprint "remootio-adapter:CP_Elec_6.3x7.7_V")
-    )
-    (path "/c36e4879-095d-4af3-b801-afd1e89ffc06"
-      (reference "C5") (unit 1) (value "22µ/63V") (footprint "remootio-adapter:CP_Elec_6.3x7.7_V")
-    )
     (path "/85438281-fd9f-4965-ab99-b454bb29a030"
-      (reference "C6") (unit 1) (value "1µ") (footprint "Capacitor_SMD:C_0603_1608Metric")
-    )
-    (path "/46d10357-3b52-44de-a11e-9b8bbdc9f779"
-      (reference "C7") (unit 1) (value "1µ") (footprint "Capacitor_SMD:C_0603_1608Metric")
+      (reference "C4") (unit 1) (value "1µ") (footprint "Capacitor_SMD:C_0603_1608Metric")
     )
     (path "/d367266a-04ee-4900-bcaa-9c0199a5e78a"
-      (reference "C8") (unit 1) (value "1µ") (footprint "Capacitor_SMD:C_0603_1608Metric")
+      (reference "C5") (unit 1) (value "1µ") (footprint "Capacitor_SMD:C_0603_1608Metric")
     )
-    (path "/827bb00c-07e9-4ce9-8120-ac28bd2c3d15"
-      (reference "C9") (unit 1) (value "1µ") (footprint "Capacitor_SMD:C_0603_1608Metric")
+    (path "/46d10357-3b52-44de-a11e-9b8bbdc9f779"
+      (reference "C6") (unit 1) (value "1µ") (footprint "Capacitor_SMD:C_0603_1608Metric")
+    )
+    (path "/1ec37b13-f381-496f-b90d-d4c7f1cd4209"
+      (reference "C7") (unit 1) (value "22µ/63V") (footprint "remootio-adapter:CP_Elec_6.3x7.7_V")
+    )
+    (path "/c36e4879-095d-4af3-b801-afd1e89ffc06"
+      (reference "C8") (unit 1) (value "22µ/63V") (footprint "remootio-adapter:CP_Elec_6.3x7.7_V")
     )
     (path "/2a36314b-ea90-4cf5-98d3-5d76cec2eac2"
+      (reference "C9") (unit 1) (value "1µ") (footprint "Capacitor_SMD:C_0603_1608Metric")
+    )
+    (path "/827bb00c-07e9-4ce9-8120-ac28bd2c3d15"
       (reference "C10") (unit 1) (value "1µ") (footprint "Capacitor_SMD:C_0603_1608Metric")
     )
     (path "/df6fed25-ea28-4c45-b1fb-6242a85d2d1e"
@@ -6327,43 +6329,43 @@
       (reference "J1") (unit 1) (value "AUX") (footprint "Connector_PinHeader_2.54mm:PinHeader_2x02_P2.54mm_Vertical")
     )
     (path "/73e68542-a980-4247-accd-3e9aaa24d819"
-      (reference "J2") (unit 1) (value "BATT") (footprint "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal")
+      (reference "J2") (unit 1) (value "BATT") (footprint "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-2-5.0-H_1x02_P5.00mm_Horizontal")
     )
     (path "/8c1ddbf9-5153-471b-a80d-a9659604a6dc"
       (reference "J3") (unit 1) (value "ICSP") (footprint "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Vertical")
     )
     (path "/54b7fe39-d458-4190-8052-63cd26fa9c61"
-      (reference "J4") (unit 1) (value "Console") (footprint "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-3-5.08_1x03_P5.08mm_Horizontal")
+      (reference "J4") (unit 1) (value "Console") (footprint "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-3-5.0-H_1x03_P5.00mm_Horizontal")
     )
     (path "/e8a34648-5db1-421d-a38e-04e417372ed7"
-      (reference "J5") (unit 1) (value "SwitchIn") (footprint "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-4-5.08_1x04_P5.08mm_Horizontal")
+      (reference "J5") (unit 1) (value "SwitchIn") (footprint "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-4-5.0-H_1x04_P5.00mm_Horizontal")
     )
     (path "/c67e82b8-bb22-42c1-87b3-6f7454b6dfcc"
-      (reference "J6") (unit 1) (value "SPM Connector") (footprint "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-8-5.08_1x08_P5.08mm_Horizontal")
+      (reference "J6") (unit 1) (value "SPM Connector") (footprint "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-8-5.0-H_1x08_P5.00mm_Horizontal")
     )
     (path "/b6fb716c-d73d-4cb2-82ba-361713ac886b"
       (reference "R1") (unit 1) (value "4.7k") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
-    (path "/5de2599c-fbeb-484b-8fcf-91d79ad8d43b"
-      (reference "R2") (unit 1) (value "4.7k") (footprint "Resistor_SMD:R_0603_1608Metric")
-    )
     (path "/a3683059-f184-47f9-aa43-3b3783266d1d"
-      (reference "R3") (unit 1) (value "100") (footprint "Resistor_SMD:R_0603_1608Metric")
+      (reference "R2") (unit 1) (value "100") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
     (path "/37f2dc71-43c9-477e-8648-83ac8bc16e35"
-      (reference "R4") (unit 1) (value "100") (footprint "Resistor_SMD:R_0603_1608Metric")
+      (reference "R3") (unit 1) (value "100") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
     (path "/34f76050-6e9d-4308-a16b-4c6fd19f3223"
-      (reference "R5") (unit 1) (value "33k") (footprint "Resistor_SMD:R_0603_1608Metric")
+      (reference "R4") (unit 1) (value "33k") (footprint "Resistor_SMD:R_0603_1608Metric")
+    )
+    (path "/948210b1-800f-42b7-b999-45082b6c4e14"
+      (reference "R5") (unit 1) (value "4.7k") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
     (path "/13086401-7b04-4ef1-b39f-d6f981cb754a"
       (reference "R6") (unit 1) (value "680") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
-    (path "/948210b1-800f-42b7-b999-45082b6c4e14"
-      (reference "R7") (unit 1) (value "4.7k") (footprint "Resistor_SMD:R_0603_1608Metric")
-    )
     (path "/b65e7bde-9b83-46fd-8e06-7ea3c123dcf1"
-      (reference "R8") (unit 1) (value "10") (footprint "Resistor_SMD:R_0603_1608Metric")
+      (reference "R7") (unit 1) (value "10") (footprint "Resistor_SMD:R_0603_1608Metric")
+    )
+    (path "/5de2599c-fbeb-484b-8fcf-91d79ad8d43b"
+      (reference "R8") (unit 1) (value "4.7k") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
     (path "/521524e2-fc1c-4d7f-8923-4d33c9b0e9a3"
       (reference "R9") (unit 1) (value "680") (footprint "Resistor_SMD:R_0603_1608Metric")
@@ -6371,14 +6373,14 @@
     (path "/e60713b5-8222-41dc-bc9e-dad921750b82"
       (reference "R10") (unit 1) (value "100") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
-    (path "/269cb287-cb2b-45c5-8840-1c44e90acab0"
-      (reference "R11") (unit 1) (value "680") (footprint "Resistor_SMD:R_0603_1608Metric")
+    (path "/e71ee25a-ca14-485d-8d5f-0c2e615225d3"
+      (reference "R11") (unit 1) (value "100") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
-    (path "/c9789520-0701-4386-94d9-9285b178cc91"
+    (path "/269cb287-cb2b-45c5-8840-1c44e90acab0"
       (reference "R12") (unit 1) (value "680") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
-    (path "/e71ee25a-ca14-485d-8d5f-0c2e615225d3"
-      (reference "R13") (unit 1) (value "100") (footprint "Resistor_SMD:R_0603_1608Metric")
+    (path "/c9789520-0701-4386-94d9-9285b178cc91"
+      (reference "R13") (unit 1) (value "680") (footprint "Resistor_SMD:R_0603_1608Metric")
     )
     (path "/948ae2d7-6cdd-4ca6-b192-02e9436ab11b"
       (reference "R14") (unit 1) (value "100") (footprint "Resistor_SMD:R_0603_1608Metric")
@@ -6410,11 +6412,11 @@
     (path "/4f5587d1-eed5-48f2-b24e-4bae5b814a81"
       (reference "U1") (unit 1) (value "remootio-3") (footprint "remootio-adapter:remootio-3")
     )
-    (path "/6e9e06fa-c138-402b-9f14-b11acacb07ab"
-      (reference "U2") (unit 1) (value "LM2940S-5.0") (footprint "Package_TO_SOT_SMD:SOT-223-3_TabPin2")
-    )
     (path "/c1bc3891-d4c5-4a3d-af07-e42d28535bf4"
-      (reference "U3") (unit 1) (value "AQV252GAX") (footprint "remootio-adapter:SMDIP-6_W7.62mm")
+      (reference "U2") (unit 1) (value "AQV252GAX") (footprint "remootio-adapter:SMDIP-6_W7.62mm")
+    )
+    (path "/6e9e06fa-c138-402b-9f14-b11acacb07ab"
+      (reference "U3") (unit 1) (value "LM2940S-5.0") (footprint "Package_TO_SOT_SMD:SOT-223-3_TabPin2")
     )
     (path "/ebaf2b81-8432-4142-9920-6faf4f23aa7d"
       (reference "U4") (unit 1) (value "ATmega328PB-ANR") (footprint "Package_QFP:TQFP-32_7x7mm_P0.8mm")
