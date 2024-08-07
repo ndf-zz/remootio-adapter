@@ -69,12 +69,13 @@ static void enable_transfer(void)
 static void write_serial(uint8_t ch)
 {
 	uint8_t look = (uint8_t) ((TXWI + 1) & BUFMASK);
+
 	if (look != TXRI) {
 		txbuf[look] = ch;
 		TXWI = look;
 	} else {
-		// stall reader to purge write buf
 		rx_stall = 1U;
+		// drop output
 	}
 }
 
@@ -428,8 +429,9 @@ void console_showascii(const char *message, uint8_t * buf, uint8_t len)
 
 void console_init(void)
 {
-	// 9600,8n1 w/ interrupt receive & send
+	// 19200,8n1 w/ interrupt receive & send
 	UBRR0L = 12;
+	UCSR0A |= _BV(U2X0);    // x2 clock
 	UCSR0B = _BV(RXCIE0) | _BV(RXEN0) | _BV(TXEN0);
 	UCSR0C = _BV(UCSZ01) | _BV(UCSZ00);
 	console_showval("Info: Boot v", sw_version);

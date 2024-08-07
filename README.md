@@ -69,7 +69,7 @@ Errors and exceptions may be triggered by the following conditions:
 ### Serial Console
 
 Connect RS-232 serial adapter to J4 (console)
-and open a terminal at 9600 baud, 8n1.
+and open a terminal at 19200 baud, 8n1.
 
 Triggers, state changes and errors will
 be displayed.
