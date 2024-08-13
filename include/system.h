@@ -52,6 +52,7 @@
 #define NVM_H		(NVM_BASE + 0x6)
 #define NVM_F		(NVM_BASE + 0x8)
 #define NVM_NF		(NVM_BASE + 0xa)
+#define NVM_SPMOFT	(NVM_BASE + 0xc)
 #define NVM_SEEDOFT	(NVM_BASE + 0x10)
 #define NVM_KEY		(NVM_BASE + 0x12)
 #define NVM_KEYVAL	0x55aa
@@ -63,7 +64,7 @@
 #define ONEMINUTE	6000U
 
 // Motor enable/disable delay time
-#define MOTOR_DELAY 0xf00
+#define MOTOR_DELAY	0x1680
 
 // Output function labels
 #define FWD		R1
@@ -120,6 +121,8 @@ extern struct state_machine feed;
 extern uint16_t sw_version;
 
 // Function prototypes
+void write_word(uint16_t addr, uint16_t val);
+uint16_t read_word(uint16_t addr);
 uint8_t read_inputs(void);
 void save_config(uint16_t addr, uint16_t val);
 void system_init(void);

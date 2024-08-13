@@ -249,11 +249,25 @@ static void spm_checkmem(void)
 	}
 	if (spm_comparemem()) {
 		console_showhex("SPM: ", &cfgmem[0x4c], 4);
+		write_word(NVM_SPMOFT, 1U);
 		return;
 	}
 	wdt_reset();
+	// Avoid reboot loop
+	uint16_t seedoft = read_word(NVM_SEEDOFT);
+	uint16_t spmkey = read_word(NVM_SPMOFT);
+	uint16_t nextkey = seedoft + 4U;
+	if (nextkey >= SEEDOFT_LEN) {
+		nextkey = 0;
+	}
+	write_word(NVM_SPMOFT, nextkey);
 	if (spm_writemem()) {
-		spm_lockup("SPM: Config updated\r\n");
+		if (spmkey == seedoft) {
+			console_write("SPM: Update reboot error\r\n");
+			return;
+		} else {
+			spm_lockup("SPM: Config updated\r\n");
+		}
 	} else {
 		console_write("SPM: Update error\r\n");
 	}

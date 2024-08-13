@@ -55,6 +55,7 @@ static void timer_init(void)
 static void gpio_init(void)
 {
 	// Pullup unused inputs
+	// Note: Controller serial lines are pulled low externally
 	PORTB |= _BV(0) | _BV(1) | _BV(2);
 	PORTE |= _BV(0) | _BV(1) | _BV(2);
 
@@ -83,7 +84,7 @@ static void write_eeprom(uint16_t addr, uint8_t val)
 	EECR |= _BV(EEPE);
 }
 
-static void write_word(uint16_t addr, uint16_t val)
+void write_word(uint16_t addr, uint16_t val)
 {
 	write_eeprom(addr++, val & 0xff);
 	write_eeprom(addr, (uint8_t) (val >> 8));
@@ -97,7 +98,7 @@ static uint8_t read_eeprom(uint16_t addr)
 	return EEDR;
 }
 
-static uint16_t read_word(uint16_t addr)
+uint16_t read_word(uint16_t addr)
 {
 	uint16_t val = read_eeprom(addr++);
 	return val | (uint16_t) (read_eeprom(addr) << 8);
@@ -136,6 +137,7 @@ static void load_parameters(void)
 		write_word(NVM_F, feed.f_timeout);
 		feed.nf = DEFAULT_NF;
 		write_word(NVM_NF, feed.nf);
+		write_word(NVM_SPMOFT, 1U);
 		write_word(NVM_SEEDOFT, seedoft);
 		write_word(NVM_KEY, NVM_KEYVAL);
 	}

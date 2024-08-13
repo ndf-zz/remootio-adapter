@@ -431,7 +431,7 @@ void console_init(void)
 {
 	// 19200,8n1 w/ interrupt receive & send
 	UBRR0L = 12;
-	UCSR0A |= _BV(U2X0);    // x2 clock
+	UCSR0A |= _BV(U2X0);	// x2 clock
 	UCSR0B = _BV(RXCIE0) | _BV(RXEN0) | _BV(TXEN0);
 	UCSR0C = _BV(UCSZ01) | _BV(UCSZ00);
 	console_showval("Info: Boot v", sw_version);
