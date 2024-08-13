@@ -6,7 +6,9 @@ AVR m328pb for remote control of a hay hoist.
 
 ![PCB](pcb/remootio-adapter.png "PCB")
 
+
 ## Operation
+
 
 ### Manual Operation
 
@@ -100,12 +102,14 @@ CV is roughly 5.0 * val / 255 Volts.
 
 Adapter | Connector | Description
 --- | --- | ---
-J1:1 |  | "S5" Auxiliary I/O
-J1:2 |  | "GND" Auxiliary I/O
-J1:3 |  | "S6" Auxiliary I/O
-J1:4 |  | "GND" Auxiliary I/O
-J2:1 | C4:1 | "+12V" Battery +
-J2:2 | C4:2 | "0V" Battery -
+J1:1 |  | "S5" Auxiliary I/O (unused)
+J1:2 |  | "GND"
+J1:3 |  | "S6" Auxiliary I/O (unused)
+J1:4 |  | "GND"
+ | C3:B | Motor + (blue)
+ | C3:C | Motor - (yellow)
+J2:1 | C4:D | "+12V" Battery + (red)
+J2:2 | C4:A | "0V" Battery - (black)
 J3:1 |  | ICSP MISO
 J3:2 |  | ICSP VCC
 J3:3 |  | ICSP SCK
@@ -115,10 +119,12 @@ J3:6 |  | ICSP GND
 J4:1 | C1:2 | "RxD" Console DCE Received Data
 J4:2 | C1:3 | "TxD" Console DCE Transmitted Data
 J4:3 | C1:5 | "GND" Console DCE Common Ground
-J5:1 | C2:1 | "Home" Home Limit Input (NC output)
-J5:2 | C2:2 | "GND" Home Limit Ground
-J5:3 | C2:3 | "AUX" Encoder/Counter Input (unused)
-J5:4 | C2:4 | "GND" Encoder/Counter Ground
+J5:1 | C2:C | "Home" Home Limit Input (NC output)
+ | C2:B | Short to C2:D
+J5:2 | C2:A | "GND" Home Limit Ground
+ | C2:D | Short to C2:B
+J5:3 |  | "AUX" Encoder/Counter Input (unused)
+J5:4 |  | "GND" Encoder/Counter Ground
 J6:1 | M1:7 | "PWR" Controller power (pink)
 J6:2 | M:6,20 | "GND" Controller ground (black)
 J6:3 | M:3 | "Throttle" Controller speed (dark green)
@@ -131,18 +137,34 @@ J6:8 | M:Gnd | "GND" Controller ground (black)
 Notes:
 
    - J6:4 "FWD" and J6:5 "REV" may need to be swapped
-     to match motor wiring.
+     to match spool rotation.
+
 
 ## Remootio Preparation
 
-Remove DC socket and screw terminal blocks,
-then fit module to adapter board as indicated
-on the silkscreen.
+![Remove Enclosure](pcb/rio-step1.jpg "Remove Enclosure")
+
+Remove remootio from plastic enclosure.
+
+![De-solder Connectors](pcb/rio-step2.jpg "De-solder Connectors")
+
+De-solder DC socket and screw terminal blocks.
+
+If DC connector is through-hole type, place a strip of capton tape
+over bottom-side pads, and solder 12V link wire to adapter board.
+For SMT DC connector version, leave pcb as-is after removal.
+
+![Capton Pads](pcb/rio-step3.jpg "Capton Pads")
+
+Fit module to adapter board and solder pin headers. Add 12V and
+GND power supply links. Power on and pair with application.
 
 In the Remootio application:
 
    - Select output configuration 4: "Output 1 to open, Output 2 to close"
    - Configure both "open" and "close" impulse length to 50ms.
+   - Disable background display option
+   - Under power settings enable "Low Power Mode" and "Dark Mode"
    - Enable sensor add-on: Input 1
 
 Application interface displays "open" when the hay hoist is
@@ -217,6 +239,7 @@ Kelly Controller software:
 	State machine logic:	src/main.c:	update_state()
 	Reset/initialisation:	src/system.c:	system_init()
 	Serial console logic:	src/console.c:	read_input()
+	SPM controller setting:	src/spmcheck.c	spm_check()
 
 
 ## Build
@@ -231,6 +254,18 @@ the random seed book, then build and upload firmware to MCU:
 Note: randbook will overwrite any stored configuration, so it should
 only be run once when initialising a new unit. Uploading a new
 firmware will not overwrite stored configuration.
+
+On boot, the SPM controller will be updated if required. Updates are
+reported to the console output:
+
+	Info: Boot v24011
+	SPM: Config updated
+	Info: Boot v24011
+	SPM: 23014810
+	Trigger: reset
+	State: [STOP] Batt: 0.0V
+	Trigger: home
+	[...]
 
 
 ## Build Requirements
