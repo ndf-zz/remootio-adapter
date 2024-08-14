@@ -64,7 +64,9 @@
 #define ONEMINUTE	6000U
 
 // Motor enable/disable delay time
-#define MOTOR_DELAY	0x1680
+#define MOTOR_DELAY	0x3a90	// ~ 30ms
+#define MOTOR_OFFTIME	0xc350	// ~ 0.1s
+#define MOTOR_OFFCOUNT	4U
 
 // Output function labels
 #define FWD		R1

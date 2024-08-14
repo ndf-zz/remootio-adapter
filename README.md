@@ -106,8 +106,8 @@ J1:1 |  | "S5" Auxiliary I/O (unused)
 J1:2 |  | "GND"
 J1:3 |  | "S6" Auxiliary I/O (unused)
 J1:4 |  | "GND"
- | C3:B | Motor + (blue)
- | C3:C | Motor - (yellow)
+     | C3:B | Motor + (blue)
+     | C3:C | Motor - (yellow)
 J2:1 | C4:D | "+12V" Battery + (red)
 J2:2 | C4:A | "0V" Battery - (black)
 J3:1 |  | ICSP MISO
@@ -190,7 +190,7 @@ Kelly Controller software:
    - Throttle Sensor Type: 0-5V
    - Throttle Effective Starting: 4%
    - Throttle Effective Ending: 96%
-   - Max Motor Current: 100%
+   - Max Motor Current: 85%
    - Max Battery Current: 40%
 
 ### Step 2: General Setting

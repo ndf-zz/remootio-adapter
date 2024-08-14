@@ -51,6 +51,13 @@ static void motor_stop(void)
 	PORTD &= (uint8_t) ~ _BV(THROTTLE);	// lower throttle CV
 	_delay_loop_2(MOTOR_DELAY);	// pause to allow CV to settle
 	PORTD &= (uint8_t) ~ (_BV(PWR) | _BV(FWD) | _BV(REV));	// disable
+	// busy wait to allow motor roll down
+	uint8_t count = 0;
+	while (count < MOTOR_OFFCOUNT) {
+		wdt_reset();
+		_delay_loop_2(MOTOR_OFFTIME);
+		++count;
+	}
 }
 
 static void motor_reverse(void)
