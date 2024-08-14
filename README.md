@@ -106,8 +106,8 @@ J1:1 |  | "S5" Auxiliary I/O (unused)
 J1:2 |  | "GND"
 J1:3 |  | "S6" Auxiliary I/O (unused)
 J1:4 |  | "GND"
-     | C3:B | Motor + (blue)
-     | C3:C | Motor - (yellow)
+N/C | C3:B | Motor + (blue)
+N/C | C3:C | Motor - (yellow)
 J2:1 | C4:D | "+12V" Battery + (red)
 J2:2 | C4:A | "0V" Battery - (black)
 J3:1 |  | ICSP MISO
@@ -120,9 +120,9 @@ J4:1 | C1:2 | "RxD" Console DCE Received Data
 J4:2 | C1:3 | "TxD" Console DCE Transmitted Data
 J4:3 | C1:5 | "GND" Console DCE Common Ground
 J5:1 | C2:C | "Home" Home Limit Input (NC output)
- | C2:B | Short to C2:D
+N/C | C2:B | Short to C2:D
 J5:2 | C2:A | "GND" Home Limit Ground
- | C2:D | Short to C2:B
+N/C | C2:D | Short to C2:B
 J5:3 |  | "AUX" Encoder/Counter Input (unused)
 J5:4 |  | "GND" Encoder/Counter Ground
 J6:1 | M1:7 | "PWR" Controller power (pink)
