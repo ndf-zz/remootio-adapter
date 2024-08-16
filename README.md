@@ -94,8 +94,7 @@ Configuration parameters are adjusted
 by entering the command key followed by
 an updated value and then enter.
 Time values 1,2,m and h are set in units of 0.01s.
-Feeding time is in minutes. Throttle
-CV is roughly 5.0 * val / 255 Volts.
+Feeding time is in minutes.
 
 
 ## Connectors
@@ -116,12 +115,12 @@ J3:3 |  | ICSP SCK
 J3:4 |  | ICSP MOSI
 J3:5 |  | ICSP RST
 J3:6 |  | ICSP GND
-J4:1 | C1:2 | "RxD" Console DCE Received Data
-J4:2 | C1:3 | "TxD" Console DCE Transmitted Data
-J4:3 | C1:5 | "GND" Console DCE Common Ground
-J5:1 | C2:C | "Home" Home Limit Input (NC output)
+J4:1 | C1:2 | "RxD" Console DCE Received Data (brown)
+J4:2 | C1:3 | "TxD" Console DCE Transmitted Data (yellow)
+J4:3 | C1:5 | "GND" Console DCE Common Ground (white)
+J5:1 | C2:C | "Home" Home Limit Input (NC output orange)
 N/C | C2:B | Short to C2:D
-J5:2 | C2:A | "GND" Home Limit Ground
+J5:2 | C2:A | "GND" Home Limit Ground (green)
 N/C | C2:D | Short to C2:B
 J5:3 |  | "AUX" Encoder/Counter Input (unused)
 J5:4 |  | "GND" Encoder/Counter Ground

@@ -120,7 +120,6 @@ static void move_up(uint8_t newstate)
 {
 	if ((feed.bstate & TRIGGER_HOME) == 0) {
 		set_state(newstate);
-		motor_stop();
 		motor_reverse();
 		motor_start();
 	} else {

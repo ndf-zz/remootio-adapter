@@ -15,13 +15,13 @@
 #endif // PORTE
 
 // Default user settings
-#define DEFAULT_P1	800U	// 8s H -> P1
+#define DEFAULT_P1	1250U	// 12.5s H -> P1
 #define DEFAULT_P2	1500U	// 15s P1 -> P2
 #define DEFAULT_F	30U	// 30 minutes, triggers P1->M_H
-#define DEFAULT_NF	3	// 3 feeds per day (~4-12h gaps)
-#define DEFAULT_MAN	250U	// 2.5s MAN Adjustment
+#define DEFAULT_NF	0	// Feeds/day disabled
+#define DEFAULT_MAN	250U	// 2.5s MAN adjustment
 #define DEFAULT_H	4000U	// 40s Max return home time
-#define DEFAULT_S	30U	// 30 minutes safe time
+#define DEFAULT_S	45U	// 45 minutes safe time, triggers M_H
 
 // Fixed voltage threshold
 #define LOWVOLTS	0x4a	// ~11.8V
@@ -64,9 +64,9 @@
 #define ONEMINUTE	6000U
 
 // Motor enable/disable delay time
-#define MOTOR_DELAY	0x3a90	// ~ 30ms
+#define MOTOR_DELAY	0x2710	// ~ 20ms
 #define MOTOR_OFFTIME	0xc350	// ~ 0.1s
-#define MOTOR_OFFCOUNT	4U
+#define MOTOR_OFFCOUNT	2U
 
 // Output function labels
 #define FWD		R1
