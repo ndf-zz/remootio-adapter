@@ -118,9 +118,9 @@ J3:6 |  | ICSP GND
 J4:1 | C1:2 | "RxD" Console DCE Received Data (brown)
 J4:2 | C1:3 | "TxD" Console DCE Transmitted Data (yellow)
 J4:3 | C1:5 | "GND" Console DCE Common Ground (white)
-J5:1 | C2:C | "Home" Home Limit Input (NC output orange)
-N/C | C2:B | Short to C2:D
-J5:2 | C2:A | "GND" Home Limit Ground (green)
+J5:1 | C2:C | "Home" Home Limit Input (NC output green)
+N/C | C2:B | Short to C2:D (green)
+J5:2 | C2:A | "GND" Home Limit Ground (blue)
 N/C | C2:D | Short to C2:B
 J5:3 |  | "AUX" Encoder/Counter Input (unused)
 J5:4 |  | "GND" Encoder/Counter Ground
@@ -138,99 +138,6 @@ Notes:
    - J6:4 "FWD" and J6:5 "REV" may need to be swapped
      to match spool rotation.
 
-
-## Remootio Preparation
-
-![Remove Enclosure](pcb/rio-step1.jpg "Remove Enclosure")
-
-Remove remootio from plastic enclosure.
-
-![De-solder Connectors](pcb/rio-step2.jpg "De-solder Connectors")
-
-De-solder DC socket and screw terminal blocks.
-
-If DC connector is through-hole type, place a strip of capton tape
-over bottom-side pads, and solder 12V link wire to adapter board.
-For SMT DC connector version, leave pcb as-is after removal.
-
-![Capton Pads](pcb/rio-step3.jpg "Capton Pads")
-
-Fit module to adapter board and solder pin headers. Add 12V and
-GND power supply links. Power on and pair with application.
-
-In the Remootio application:
-
-   - Select output configuration 4: "Output 1 to open, Output 2 to close"
-   - Configure both "open" and "close" impulse length to 50ms.
-   - Disable background display option
-   - Under power settings enable "Low Power Mode" and "Dark Mode"
-   - Enable sensor add-on: Input 1
-
-Application interface displays "open" when the hay hoist is
-retracted to the home position. The display will show "closed"
-when the hoist has been lowered to the feeding position (P1).
-
-
-## Motor Controller Preparation
-
-Motor controller is configured by firmware at boot time
-as necessary according to
-[spm_config.bin](reference/spm_config.bin)
-and [spm_config.txt](reference/spm_config.txt).
-
-Use [spmtool](https://github.com/ndf-zz/spmtool) to create
-a new config if required. Settings match the following in
-Kelly Controller software:
-
-### Step 1: General Setting
-
-   - Forward Switch: Enable
-   - Foot Switch: Disable
-   - Throttle Sensor Type: 0-5V
-   - Throttle Effective Starting: 4%
-   - Throttle Effective Ending: 96%
-   - Max Motor Current: 85%
-   - Max Battery Current: 40%
-
-### Step 2: General Setting
-
-   - Start-up Delay: 0 sec
-   - Control Mode: Balanced
-   - Under voltage: 10V
-   - Over Voltage: 20V
-   - Throttle Up/Down Rate: 1 (Fast)
-   - Power On High Pedal Disable: Disable
-   - Releasing Brake High Pedal Disable: Disable
-
-### Step 3: General Setting
-
-   - Motor Top Speed: 100%
-   - Boost Function: Disable
-   - Economy Function: Disable
-   - Half Current in Reverse: Disable
-   - ABS: Disable
-   - 12V Output: Disable
-   - Motor Top Speed in Reverse: 100%
-   - Joysticker[sic] Throttle: Disable
-
-### Step 4: Regeneration Setting
-
-   - Regeneration: Disable
-   - Brake Switch: Disable
-   - Releasing Throttle Starts Regen: Disable
-   - Regen Current By Brake Switch On: 5% [unused]
-   - Max Regen Current: 20% [unused]
-   - Brake Sensor Type: No
-   - Brake Sensor Starting Point: 0% [unused]
-   - Brake Sensor Ending Point: 100% [unused]
-
-### Step 5: Sensor, CAN, Smooth Setting
-
-   - Motor Temperature Sensor: Disable
-   - Controller Stop Output Temperature: 125C
-   - Controller Resume Output 90C
-   - CAN [empty]
-   - Smooth: Disable
 
 ## Firmware layout
 
@@ -279,6 +186,12 @@ reported to the console output:
 On a Debian system, use make to install required packages:
 
 	$ make requires
+
+
+## Production Unit Assembly
+
+   - [assembly/](assembly/ "Assembly instruction")
+
 
 ## Prototype Unit Reference
 

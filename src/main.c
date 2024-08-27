@@ -452,12 +452,12 @@ static void show_values(void)
 {
 	console_write("Current Values:\r\n");
 	console_showval("\tFirmware = v", sw_version);
-	console_showval("\tH-P1 time(0.01s) = ", feed.p1_timeout);
-	console_showval("\tP1-P2 time = ", feed.p2_timeout);
-	console_showval("\tMan time = ", feed.man_timeout);
-	console_showval("\tH time = ", feed.h_timeout);
-	console_showval("\tFeed time(min) = ", feed.f_timeout);
-	console_showval("\tFeeds/day(0=off) = ", feed.nf);
+	console_showval("\tH-P1 = ", feed.p1_timeout);
+	console_showval("\tP1-P2 = ", feed.p2_timeout);
+	console_showval("\tMan = ", feed.man_timeout);
+	console_showval("\tH = ", feed.h_timeout);
+	console_showval("\tFeed min = ", feed.f_timeout);
+	console_showval("\tFeeds/day = ", feed.nf);
 	console_showval("\tState counter = ", feed.count);
 	console_showval("\tState minutes = ", feed.minutes);
 	console_write("\r\n");
