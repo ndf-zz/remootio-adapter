@@ -10,7 +10,7 @@
 
 ## Remootio Module
 
-Power on remootio using supplied DC adapter, pair with
+Power on Remootio using supplied DC adapter, pair with
 application and then setup as follows:
 
    - Select output configuration 4: "Output 1 to open, Output 2 to close"
@@ -24,7 +24,7 @@ adapter:
 
 ![Remove Enclosure](rio-step1.jpg "Remove Enclosure")
 
-Remove remootio from plastic enclosure.
+Remove Remootio from plastic enclosure.
 
 ![SMT Variant](rio-01_atype.jpg "SMT DC Variant")
 
@@ -81,8 +81,8 @@ Perform the following tests:
 
 ![RIO Mounting](pcb-04_pinswasher.jpg "Remootio Pins")
 
-Insert Remootio module mounting pins (do not solder). If remootio
-is THT type, inset a short bodge wire as pictured and
+Insert Remootio module mounting pins (do not solder). If Remootio
+is THT type, insert a short bodge wire as pictured and
 cover with capton tape. Position 2x spacing washers over mounting
 hole, then lower module into place and fix with screw.
 
@@ -93,12 +93,46 @@ hole, then lower module into place and fix with screw.
 Solder mounting pins and power links from top side, then flip
 board and solder bottom side.
 
-Power on unit and check operation of remootio on adapter.
+Power on unit and check operation of Remootio on adapter.
 
 
 ## Motor Controller Preparation
 
-[tbc]
+![Motor Controller](spm-01_prep.jpg "Motor Controller")
+
+On serial connector, cut the red (V+) wire short
+Cut the following unused wires short:
+
+   - 1 Raddle[sic] (BRK2)
+   - 2 Dark Gray (Brake AN)
+   - 4 Purple (5V)
+   - 8 Dark Blue (Meter)
+   - 9 Blue (Relay)
+   - 10 Yellow (Alarm)
+   - 12 Red (12V)
+   - 13 Brown (BRK_SW)
+   - 16 Gray (Micro SW)
+   - 22 Blue/Green (undocumented)
+
+Terminate the required wires with crimp ferrules:
+
+   - 7 Pink J6:1 (PWR)
+   - 6 & 20 Black J6:2 (GND, terminate together)
+   - 3 Dark Green J6:3 (Throttle)
+   - 12 White J6:4 (FWD)
+   - 14 Orange J6:5 (REV_SW)
+   - Serial Light Blue J6:6 (Rx)
+   - Serial Light Green J6:7 (Tx)
+   - Serial Black J6:8 (GND)
+
+Terminate blue and yellow motor leads with female
+crimp terminals (SS12A1F).
+
+Twist ~20mm length of red and black hookup wire on to
+corresponding battery leads, then terminate with male
+crimp terminals (SP12A1F).
+
+Terminate loose ends of red/black hookup wires with crimp ferrule.
 
 Motor controller is configured by firmware at boot time
 as necessary according to
@@ -106,7 +140,7 @@ as necessary according to
 and [spm_config.txt](reference/spm_config.txt).
 
 Use [spmtool](https://github.com/ndf-zz/spmtool) to create
-a new config if required. Settings match the following in
+a new configuration if required. Settings match the following in
 Kelly Controller software:
 
 ### Step 1: General Setting
