@@ -1,12 +1,17 @@
 # Assembly Instruction
 
+![Enclosure](encl-complete.jpg "Enclosure")
+
 ## Components
 
    - Remootio Module
    - Main PCB
    - Motor Controller
    - Connectors
+   - Mounting Plate
+   - Enclosure
    - AC Power Supply
+
 
 ## Remootio Module
 
@@ -100,29 +105,32 @@ Power on unit and check operation of Remootio on adapter.
 
 ![Motor Controller](spm-01_prep.jpg "Motor Controller")
 
-On serial connector, cut the red (V+) wire short
-Cut the following unused wires short:
+Shorten cable sleeve 15-20mm. At the serial connector,
+cut the red (V+) wire. At the other connectors,
+cut the following unused wires:
 
    - 1 Raddle[sic] (BRK2)
    - 2 Dark Gray (Brake AN)
    - 4 Purple (5V)
-   - 8 Dark Blue (Meter)
-   - 9 Blue (Relay)
+   - 8 Blue (Meter)
+   - 9 Light Blue (Relay)
    - 10 Yellow (Alarm)
-   - 12 Red (12V)
+   - 11 Red (12V)
    - 13 Brown (BRK_SW)
-   - 16 Gray (Micro SW)
+   - 15 Gray (Micro SW)
    - 22 Blue/Green (undocumented)
 
-Terminate the required wires with crimp ferrules:
+Thread unused wires under heat-shrink, check required
+wires are still attached, then cut short.
+Terminate required wires with crimp ferrules:
 
    - 7 Pink J6:1 (PWR)
    - 6 & 20 Black J6:2 (GND, terminate together)
-   - 3 Dark Green J6:3 (Throttle)
+   - 3 Dark Green J6:3 (Throttle, may be light green)
    - 12 White J6:4 (FWD)
-   - 14 Orange J6:5 (REV_SW)
-   - Serial Light Blue J6:6 (Rx)
-   - Serial Light Green J6:7 (Tx)
+   - 14 Orange J6:5 (REV_SW, may be yellow)
+   - Serial Blue J6:6 (Rx)
+   - Serial Green J6:7 (Tx)
    - Serial Black J6:8 (GND)
 
 Terminate blue and yellow motor leads with female
@@ -136,8 +144,8 @@ Terminate loose ends of red/black hookup wires with crimp ferrule.
 
 Motor controller is configured by firmware at boot time
 as necessary according to
-[spm_config.bin](reference/spm_config.bin)
-and [spm_config.txt](reference/spm_config.txt).
+[spm_config.bin](../reference/spm_config.bin)
+and [spm_config.txt](../reference/spm_config.txt).
 
 Use [spmtool](https://github.com/ndf-zz/spmtool) to create
 a new configuration if required. Settings match the following in
@@ -224,7 +232,29 @@ J5 ends with crimp ferrule.
 
 ## Enclosure
 
-[tbc]
+
+![Enclosure](encl-fit.jpg "Enclosure")
+
+   - Drill 2.9mm LED hole and D-SUB corners
+   - Drill 3.2mm mounting holes and connector centres
+   - Drill 5.5mm D-SUB corners
+   - Enlarge connector holes to 21.0mm
+   - Route D-SUB edges
+   - Remove Burrs
+   - Mount connectors to outside of case, add screws and fix
+     with a small amount of thread lock on the nuts
+   - Assemble PCB and motor controller on mounting plate
+   - Connect wiring sub-assemblies to PCB
+   - Lower complete mounting plate into box, fix with 4x M3
+     screws with a small amount of thread locker
+   - Insert sensor wires into connector
+   - Mount D-SUB connector and tie leads to sensor wires
+   - Thread LED pipe from outside box
+   - Place 25mm length of heat-shrink over LED, insert LED pipe
+     and shrink
+   - Insert power cables and motor cables
+   - Check operation in test harness
+   - Fit lid and tighten
 
 
 ## AC Power Supply (indoor units)

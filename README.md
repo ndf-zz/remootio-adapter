@@ -105,8 +105,8 @@ J1:1 |  | "S5" Auxiliary I/O (unused)
 J1:2 |  | "GND"
 J1:3 |  | "S6" Auxiliary I/O (unused)
 J1:4 |  | "GND"
-N/C | C3:B | Motor + (blue)
-N/C | C3:C | Motor - (yellow)
+N/C | C3:B | Motor + (blue/red)
+N/C | C3:C | Motor - (yellow/black)
 J2:1 | C4:D | "+12V" Battery + (red)
 J2:2 | C4:A | "0V" Battery - (black)
 J3:1 |  | ICSP MISO
@@ -126,17 +126,12 @@ J5:3 |  | "AUX" Encoder/Counter Input (unused)
 J5:4 |  | "GND" Encoder/Counter Ground
 J6:1 | M1:7 | "PWR" Controller power (pink)
 J6:2 | M:6,20 | "GND" Controller ground (black)
-J6:3 | M:3 | "Throttle" Controller speed (dark green)
+J6:3 | M:3 | "Throttle" Controller speed (green)
 J6:4 | M:12 | "FWD" Controller forward (white)
 J6:5 | M:14 | "REV" Controller reverse (orange)
-J6:6 | M:Rx | "Rx" Controller serial receive (light blue)
-J6:7 | M:Tx | "Tx" Controller serial transmit (light green)
+J6:6 | M:Rx | "Rx" Controller serial receive (blue)
+J6:7 | M:Tx | "Tx" Controller serial transmit (green)
 J6:8 | M:Gnd | "GND" Controller ground (black)
-
-Notes:
-
-   - J6:4 "FWD" and J6:5 "REV" may need to be swapped
-     to match spool rotation.
 
 
 ## Firmware layout
