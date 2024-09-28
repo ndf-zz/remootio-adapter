@@ -18,13 +18,16 @@
 #define DEFAULT_P1	1250U	// 12.5s H -> P1
 #define DEFAULT_P2	1500U	// 15s P1 -> P2
 #define DEFAULT_F	30U	// 30 minutes, triggers P1->M_H
-#define DEFAULT_NF	0	// Feeds/day disabled
+#define DEFAULT_NF	28U	// Feeds/week ~4/day
 #define DEFAULT_MAN	250U	// 2.5s MAN adjustment
 #define DEFAULT_H	4000U	// 40s Max return home time
 #define DEFAULT_S	45U	// 45 minutes safe time, triggers M_H
 
 // Fixed voltage threshold
 #define LOWVOLTS	0x4a	// ~11.8V
+
+// Auto lowering voltage threshold
+#define NIGHTVOLTS	0x53	// ~13.2V
 
 // Define I/O aliases, Refer: pcb/m328pb_portpins.pdf
 #define S1	0		// PORTC.0
@@ -62,6 +65,9 @@
 
 // Timing estimator (for 7812.5 Hz / 78 timer)
 #define ONEMINUTE	6000U
+
+// One week of minutes
+#define ONEWEEK		10080U
 
 // Motor enable/disable delay time
 #define MOTOR_DELAY	0x2710	// ~ 20ms

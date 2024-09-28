@@ -24,7 +24,7 @@ Commands:\r\n\
 \tm\tMan time\r\n\
 \th\tH time\r\n\
 \tf\tFeed time (min)\r\n\
-\tn\tFeeds/day (0=off)\r\n\
+\tn\tFeeds/week (0=off)\r\n\
 \tv\tShow current values\r\n\
 \ts\tStatus\r\n\
 \td\tLower\r\n\
@@ -176,7 +176,7 @@ static uint8_t get_cmd(uint8_t ch)
 		break;
 	case 0x6e:
 	case 0x4e:
-		console_write("Feeds/day? ");
+		console_write("Feeds/week? ");
 		return 0x6e;
 		break;
 	case 0x6d:

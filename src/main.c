@@ -36,7 +36,12 @@ static void read_voltage(void)
 
 static uint8_t check_voltage(uint8_t override)
 {
-	return (override || ADCH >= LOWVOLTS);
+	uint8_t curvolts = ADCH;
+	if (curvolts < LOWVOLTS) {
+		return 0;
+	} else {
+		return (override || curvolts >= NIGHTVOLTS);
+	}
 }
 
 static void motor_start(void)
@@ -88,13 +93,14 @@ static void stop_at(uint8_t newstate)
 static void set_randfeed(void)
 {
 	if (feed.nf) {
-		uint16_t period = 1440 / feed.nf;
+		uint16_t period = ONEWEEK / feed.nf;
 		if (period) {
 			uint16_t oft = period >> 1;
+			// randval has range 0 to 0x7fffffff inclusive
 			uint32_t randval = (uint32_t) random();
 			uint32_t tmp =
-			    ((uint32_t) (period) * (randval >> 12) +
-			     (1UL << 18)) >> 19;
+			    ((uint32_t) (period) * (randval >> 13) +
+			     (1UL << 17)) >> 18;
 			feed.nf_timeout = oft + (uint16_t) (tmp);
 		} else {
 			feed.nf_timeout = 0;
@@ -267,8 +273,15 @@ static void trigger_home(void)
 		stop_at_home();
 		break;
 	case state_at_h:
-	case state_move_h_p1:
 		// ignore - possible noise problem
+		break;
+	case state_move_h_p1:
+		// after 0.5s, might be tangled cord - flag error and stop
+		if (feed.count > 50) {
+			console_write("Home trigger/tangle\r\n");
+			flag_error();
+			stop_at(state_stop);
+		}
 		break;
 	default:
 		// spurious home sense - flag error and stop
@@ -387,7 +400,7 @@ static void show_value(struct console_event *event)
 		console_showval("Feed time = ", feed.f_timeout);
 		break;
 	case 0x6e:
-		console_showval("Feeds/day = ", feed.nf);
+		console_showval("Feeds/week = ", feed.nf);
 		break;
 	case 0x6d:
 		console_showval("Man time = ", feed.man_timeout);
@@ -422,7 +435,7 @@ static void update_value(struct console_event *event)
 		break;
 	case 0x6e:
 		feed.nf = event->value;
-		console_showval("Feeds/day = ", feed.nf);
+		console_showval("Feeds/week = ", feed.nf);
 		save_config(NVM_NF, feed.nf);
 		if (feed.state == state_at_h) {
 			set_randfeed();
@@ -457,7 +470,7 @@ static void show_values(void)
 	console_showval("\tMan = ", feed.man_timeout);
 	console_showval("\tH = ", feed.h_timeout);
 	console_showval("\tFeed min = ", feed.f_timeout);
-	console_showval("\tFeeds/day = ", feed.nf);
+	console_showval("\tFeeds/week = ", feed.nf);
 	console_showval("\tState counter = ", feed.count);
 	console_showval("\tState minutes = ", feed.minutes);
 	console_write("\r\n");
