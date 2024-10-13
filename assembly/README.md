@@ -136,7 +136,7 @@ Terminate required wires with crimp ferrules:
 Terminate blue and yellow motor leads with female
 crimp terminals (SS12A1F).
 
-Twist ~20mm length of red and black hookup wire on to
+Twist ~200mm length of red and black hookup wire on to
 corresponding battery leads, then terminate with male
 crimp terminals (SP12A1F).
 

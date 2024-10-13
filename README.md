@@ -134,7 +134,9 @@ J6:7 | M:Tx | "Tx" Controller serial transmit (green)
 J6:8 | M:Gnd | "GND" Controller ground (black)
 
 
-## Firmware layout
+## Firmware
+
+### Source Layout
 
 	Main event loop:	src/main.c: 	main()
 	State machine logic:	src/main.c:	update_state()
@@ -142,6 +144,11 @@ J6:8 | M:Gnd | "GND" Controller ground (black)
 	Serial console logic:	src/console.c:	read_input()
 	SPM controller setting:	src/spmcheck.c	spm_check()
 
+
+### Version Summaries
+
+   - 24012: Version 1, cosmetic updates for GUI tool, October 2024
+   - 24011: Version 0, initial release September 2024
 
 ## Build
 

@@ -19,11 +19,11 @@ static volatile uint8_t rx_stall;
 static const char help[] = "\
 \r\n\
 Commands:\r\n\
-\t1\tH-P1 time (0.01s)\r\n\
-\t2\tP1-P2 time\r\n\
-\tm\tMan time\r\n\
-\th\tH time\r\n\
-\tf\tFeed time (min)\r\n\
+\t1\tH-P1 (0.01s)\r\n\
+\t2\tP1-P2 (0.01s)\r\n\
+\tm\tMan (0.01s)\r\n\
+\th\tH (0.01s)\r\n\
+\tf\tFeed (minutes)\r\n\
 \tn\tFeeds/week (0=off)\r\n\
 \tv\tShow current values\r\n\
 \ts\tStatus\r\n\
@@ -158,20 +158,20 @@ static uint8_t get_cmd(uint8_t ch)
 	switch (ch) {
 	case 0x68:
 	case 0x48:
-		console_write("H time? ");
+		console_write("H? ");
 		return 0x68;
 		break;
 	case 0x31:
-		console_write("P1 time? ");
+		console_write("H-P1? ");
 		return 0x31;
 		break;
 	case 0x32:
-		console_write("P2 time? ");
+		console_write("P1-P2? ");
 		return 0x32;
 		break;
 	case 0x66:
 	case 0x46:
-		console_write("Feed time? ");
+		console_write("Feed min? ");
 		return 0x66;
 		break;
 	case 0x6e:
@@ -181,7 +181,7 @@ static uint8_t get_cmd(uint8_t ch)
 		break;
 	case 0x6d:
 	case 0x4d:
-		console_write("Man time? ");
+		console_write("Man? ");
 		return 0x6d;
 		break;
 	case 0x3f:

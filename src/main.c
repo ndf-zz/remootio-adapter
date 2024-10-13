@@ -388,22 +388,22 @@ static void show_value(struct console_event *event)
 {
 	switch (event->key) {
 	case 0x68:
-		console_showval("H time = ", feed.h_timeout);
+		console_showval("H = ", feed.h_timeout);
 		break;
 	case 0x31:
-		console_showval("P1 time = ", feed.p1_timeout);
+		console_showval("H-P1 = ", feed.p1_timeout);
 		break;
 	case 0x32:
-		console_showval("P2 time = ", feed.p2_timeout);
+		console_showval("P1-P2 = ", feed.p2_timeout);
 		break;
 	case 0x66:
-		console_showval("Feed time = ", feed.f_timeout);
+		console_showval("Feed = ", feed.f_timeout);
 		break;
 	case 0x6e:
 		console_showval("Feeds/week = ", feed.nf);
 		break;
 	case 0x6d:
-		console_showval("Man time = ", feed.man_timeout);
+		console_showval("Man = ", feed.man_timeout);
 		break;
 	default:
 		console_write("Unknown value\r\n");
@@ -418,19 +418,19 @@ static void update_value(struct console_event *event)
 		if (event->value) {
 			feed.p1_timeout = event->value;
 		}
-		console_showval("P1 time = ", feed.p1_timeout);
+		console_showval("H-P1 = ", feed.p1_timeout);
 		save_config(NVM_P1, feed.p1_timeout);
 		break;
 	case 0x32:
 		if (event->value) {
 			feed.p2_timeout = event->value;
 		}
-		console_showval("P2 time = ", feed.p2_timeout);
+		console_showval("P1-P2 = ", feed.p2_timeout);
 		save_config(NVM_P2, feed.p2_timeout);
 		break;
 	case 0x66:
 		feed.f_timeout = event->value;
-		console_showval("Feed time = ", feed.f_timeout);
+		console_showval("Feed = ", feed.f_timeout);
 		save_config(NVM_F, feed.f_timeout);
 		break;
 	case 0x6e:
@@ -445,14 +445,14 @@ static void update_value(struct console_event *event)
 		if (event->value) {
 			feed.man_timeout = event->value;
 		}
-		console_showval("Man time = ", feed.man_timeout);
+		console_showval("Man = ", feed.man_timeout);
 		save_config(NVM_MAN, feed.man_timeout);
 		break;
 	case 0x68:
 		if (event->value) {
 			feed.h_timeout = event->value;
 		}
-		console_showval("H time = ", feed.h_timeout);
+		console_showval("H = ", feed.h_timeout);
 		save_config(NVM_H, feed.h_timeout);
 		break;
 	default:
@@ -469,7 +469,7 @@ static void show_values(void)
 	console_showval("\tP1-P2 = ", feed.p2_timeout);
 	console_showval("\tMan = ", feed.man_timeout);
 	console_showval("\tH = ", feed.h_timeout);
-	console_showval("\tFeed min = ", feed.f_timeout);
+	console_showval("\tFeed = ", feed.f_timeout);
 	console_showval("\tFeeds/week = ", feed.nf);
 	console_showval("\tState counter = ", feed.count);
 	console_showval("\tState minutes = ", feed.minutes);
