@@ -41,7 +41,7 @@ Install into a venv with pip:
 Windows systems without Python already installed, download
 the self-contained binary (~10MB) and signature:
 
-   - [hhconfig.zip](https://6-v.org/hh/hhconfig.zip) [zip 9.9M]
+   - [hhconfig.zip](https://6-v.org/hh/hhconfig.zip) [zip 10M]
    - [hhconfig.zip.sig](https://6-v.org/hh/hhconfig.zip.sig)
 
 Check signature with gpg (or equivalent) then unzip and run exe.

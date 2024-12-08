@@ -21,12 +21,32 @@ _log.setLevel(logging.WARNING)
 
 # Constants
 _VERSION = '1.0.2'
-_HELP_HP1 = ''
-_HELP_P1P2 = ''
-_HELP_MAN = ''
-_HELP_HOME = ''
-_HELP_FEED = ''
-_HELP_FEEDWEEK = ''
+_HELP_HP1 = 'H-P1: Time in seconds hoist requires to move \
+down from home to position P1 (feed)'
+
+_HELP_P1P2 = 'P1-P2: Time in seconds hoist requires to move \
+down from position P1 (feed) to P2 (ground)'
+
+_HELP_MAN = 'Man: Manual override adjustment time in seconds'
+_HELP_HOME = 'Home: Maximum time in seconds hoist will raise \
+toward home position before flagging error condition'
+
+_HELP_FEED = 'Feed: Return hoist automatically from P1 (feed) to \
+home position after this many minutes (0 = disabled)'
+
+_HELP_FEEDWEEK = 'Feeds/week: Schedule this many randomly spaced \
+feeds per week (0 = disabled)'
+
+_HELP_DOWN = 'Send down command to connected hoist'
+_HELP_UP = 'Send up command to connected hoist'
+_HELP_LOAD = 'Load configuration values from file and update connected device'
+_HELP_SAVE = 'Save current configuration values to file'
+_HELP_TOOL = 'Hyspec Hay Hoist config tool, MIT License.\n\
+Source: https://pypi.org/project/hhconfig/\nSupport: https://hyspec.com.au/'
+
+_HELP_PORT = 'Serial port device, select to re-connect hoist'
+_HELP_STAT = 'Current status of connected hoist'
+_HELP_FIRMWARE = 'Firmware version of connected hoist'
 _SERPOLL = 0.1
 _DEVPOLL = 2000
 _BAUDRATE = 19200
@@ -748,8 +768,16 @@ def _subkey(key):
     return key
 
 
-def _mkopt(parent, prompt, units, row, validator, update):
-    ttk.Label(parent, text=prompt).grid(column=0, row=row, sticky=(E, ))
+def _mkopt(parent,
+           prompt,
+           units,
+           row,
+           validator,
+           update,
+           help=None,
+           helptext=''):
+    prompt = ttk.Label(parent, text=prompt)
+    prompt.grid(column=0, row=row, sticky=(E, ))
     svar = StringVar()
     ent = ttk.Entry(parent,
                     textvariable=svar,
@@ -761,11 +789,15 @@ def _mkopt(parent, prompt, units, row, validator, update):
         E,
         W,
     ))
-    ttk.Label(parent, text=units).grid(column=2,
-                                       row=row,
-                                       sticky=(W, ),
-                                       columnspan=2)
+    lbl = ttk.Label(parent, text=units)
+    lbl.grid(column=2, row=row, sticky=(W, ), columnspan=2)
     ent.bind('<FocusOut>', update, add='+')
+    if help is not None and helptext:
+        prompt.bind('<Enter>',
+                    lambda event, text=helptext: help(text),
+                    add='+')
+        ent.bind('<Enter>', lambda event, text=helptext: help(text), add='+')
+        lbl.bind('<Enter>', lambda event, text=helptext: help(text), add='+')
     return svar
 
 
@@ -1047,7 +1079,7 @@ class HHConfig:
         ret = False
         if newval:
             try:
-                v = int(float(newval) * 100)
+                v = round(float(newval) * 100)
                 if v >= 0 and v < 65536:
                     ret = True
             except Exception:
@@ -1095,15 +1127,16 @@ class HHConfig:
 
     def disconnect(self):
         """Handle device disconnection event"""
-        if self.fwval.get():
-            self.logvar.set('Device disconnected')
-        self.statvar.set('[Not Connected]')
-        self.devval = {}
-        for k in _CFGKEYS:
-            self.devval[k] = None
-        self.dbut.state(['disabled'])
-        self.ubut.state(['disabled'])
-        self.fwval.set('')
+        if not self.devio.connected():
+            if self.fwval.get():
+                self.logvar.set('Device disconnected')
+            self.statvar.set('[Not Connected]')
+            self.devval = {}
+            for k in _CFGKEYS:
+                self.devval[k] = None
+            self.fwval.set('')
+            self.dbut.state(['disabled'])
+            self.ubut.state(['disabled'])
 
     def devevent(self, data=None):
         """Extract and handle any pending events from the attached device"""
@@ -1183,7 +1216,7 @@ class HHConfig:
         nv = self.uival[k].get()
         if nv:
             try:
-                t = max(int(float(nv) * 100), 1)
+                t = max(round(float(nv) * 100), 1)
                 if t > 0 and t < 65536:
                     v = t
                     fv = '%0.2f' % (v / 100.0, )
@@ -1258,17 +1291,18 @@ class HHConfig:
     def loadvalues(self, cfg):
         """Update each value in cfg to device and ui"""
         doupdate = False
-        for k in cfg:
+        for key in cfg:
+            k = _subkey(key)
             if k in _TIMEKEYS:
                 try:
-                    self.uival[k].set('%0.2f' % (cfg[k] / 100.0, ))
+                    self.uival[k].set('%0.2f' % (cfg[key] / 100.0, ))
                     doupdate = True
                 except Exception as e:
                     _log.error('%s loading time key %r: %s',
                                e.__class__.__name__, k, e)
             elif k in _INTKEYS:
                 try:
-                    self.uival[k].set('%d' % (cfg[k], ))
+                    self.uival[k].set('%d' % (cfg[key], ))
                     doupdate = True
                 except Exception as e:
                     _log.error('%s loading int key %r: %s',
@@ -1316,60 +1350,84 @@ class HHConfig:
                 _log.error('loadfile %s: %s', e.__class__.__name__, e)
                 self.logvar.set('Load config: %s' % (e.__class__.__name__, ))
 
+    def setHelp(self, text):
+        """Replace help text area contents"""
+        self.help['state'] = 'normal'
+        self.help.replace('1.0', 'end', text)
+        self.help['state'] = 'disabled'
+
     def __init__(self, window=None, devio=None):
         self.devio = devio
         self.devio.cb = self.devcallback
         window.title('Hay Hoist Config')
-        frame = ttk.Frame(window, padding="5 5 10 10")
-        frame.grid(column=0, row=0, sticky=(
+        row = 0
+        frame = ttk.Frame(window, padding="0 0 0 0")
+        frame.grid(column=0, row=row, sticky=(
             E,
             S,
             W,
             N,
         ))
         frame.columnconfigure(2, weight=1)
-        frame.rowconfigure(9, weight=1)
         window.columnconfigure(0, weight=1)
         window.rowconfigure(0, weight=1)
 
         # header block / status
         self._logo = PhotoImage(data=_LOGODATA)
-        hdr = ttk.Label(frame, text='Hay Hoist')
+        hdr = ttk.Label(frame, text='Hay Hoist', background='White')
         hdr['image'] = self._logo
-        hdr.grid(column=0, row=0, columnspan=2, sticky=(
+        hdr.grid(column=0, row=row, columnspan=4, sticky=(
             E,
             W,
         ))
+        hdr.bind('<Enter>',
+                 lambda event, text=_HELP_TOOL: self.setHelp(text),
+                 add='+')
+        row += 1
 
+        #ttk.Separator(frame, orient=HORIZONTAL).grid(column=0,
+        #row=row,
+        #columnspan=4,
+        #sticky=(
+        #E,
+        #W,
+        #))
+        #row += 1
+
+        # Status indicator
+        ttk.Label(frame, text="Status:").grid(column=0, row=row, sticky=(E, ))
         self.statvar = StringVar(value='[Not Connected]')
-        self.statlbl = ttk.Label(frame, textvariable=self.statvar)
-        self.statlbl.grid(column=2, row=0, sticky=(
+        statlbl = ttk.Label(frame,
+                            textvariable=self.statvar,
+                            font='TkHeadingFont')
+        statlbl.grid(column=1, row=row, sticky=(
             E,
-            S,
-        ), columnspan=2)
-        ttk.Separator(frame, orient=HORIZONTAL).grid(column=0,
-                                                     row=1,
-                                                     columnspan=4,
-                                                     sticky=(
-                                                         E,
-                                                         W,
-                                                     ))
+            W,
+        ), columnspan=3)
+        statlbl.bind('<Enter>',
+                     lambda event, text=_HELP_STAT: self.setHelp(text),
+                     add='+')
+        row += 1
 
         # io port setting
         self._ioports = []
         self._ionames = []
         self.getports()
-        ttk.Label(frame, text="Port:").grid(column=0, row=2, sticky=(E, ))
+        ttk.Label(frame, text="Port:").grid(column=0, row=row, sticky=(E, ))
         self.portsel = ttk.Combobox(frame)
         self.portsel['values'] = self._ionames
         self.portsel.state(['readonly'])
         self.portsel.bind('<<ComboboxSelected>>', self.portchange)
         if self._ionames:
             self.portsel.current(0)
-        self.portsel.grid(column=1, row=2, sticky=(
+        self.portsel.grid(column=1, row=row, sticky=(
             E,
             W,
         ), columnspan=3)
+        self.portsel.bind('<Enter>',
+                          lambda event, text=_HELP_PORT: self.setHelp(text),
+                          add='+')
+        row += 1
 
         # device values
         self.devval = {}
@@ -1384,30 +1442,81 @@ class HHConfig:
 
         # config options
         self.uival = {}
-        self.uival['H-P1'] = _mkopt(frame, "H-P1:", "seconds", 3,
-                                    check_cent_wrapper, self.uiupdate)
-        self.uival['P1-P2'] = _mkopt(frame, "P1-P2:", "seconds", 4,
-                                     check_cent_wrapper, self.uiupdate)
-        self.uival['Man'] = _mkopt(frame, "Man:", "seconds", 5,
-                                   check_cent_wrapper, self.uiupdate)
-        self.uival['H'] = _mkopt(frame, "Home:", "seconds", 6,
-                                 check_cent_wrapper, self.uiupdate)
-        self.uival['Feed'] = _mkopt(frame, "Feed:", "minutes", 7,
-                                    check_int_wrapper, self.uiupdate)
+        self.uival['H-P1'] = _mkopt(frame, "H-P1:", "seconds", row,
+                                    check_cent_wrapper, self.uiupdate,
+                                    self.setHelp, _HELP_HP1)
+        row += 1
+        self.uival['P1-P2'] = _mkopt(frame, "P1-P2:", "seconds", row,
+                                     check_cent_wrapper, self.uiupdate,
+                                     self.setHelp, _HELP_P1P2)
+        row += 1
+        self.uival['Man'] = _mkopt(frame, "Man:", "seconds", row,
+                                   check_cent_wrapper, self.uiupdate,
+                                   self.setHelp, _HELP_MAN)
+        row += 1
+        self.uival['H'] = _mkopt(frame, "Home:", "seconds", row,
+                                 check_cent_wrapper, self.uiupdate,
+                                 self.setHelp, _HELP_HOME)
+        row += 1
+        self.uival['Feed'] = _mkopt(frame, "Feed:", "minutes", row,
+                                    check_int_wrapper, self.uiupdate,
+                                    self.setHelp, _HELP_FEED)
+        row += 1
         self.uival['Feeds/week'] = _mkopt(frame, "Feeds/week:", "(max 5000)",
-                                          8, check_int_wrapper, self.uiupdate)
+                                          row, check_int_wrapper,
+                                          self.uiupdate, self.setHelp,
+                                          _HELP_FEEDWEEK)
+        row += 1
 
         # firmware version label
-        ttk.Label(frame, text='Version:').grid(column=0, row=9, sticky=(E, ))
+        ttk.Label(frame, text='Firmware:').grid(column=0,
+                                                row=row,
+                                                sticky=(E, ))
         self.fwval = StringVar()
-        ttk.Label(frame, textvariable=self.fwval).grid(column=1,
-                                                       row=9,
-                                                       sticky=(W, ),
-                                                       columnspan=3)
+        fwlbl = ttk.Label(frame, textvariable=self.fwval)
+        fwlbl.grid(column=1, row=row, sticky=(W, ), columnspan=3)
+        fwlbl.bind('<Enter>',
+                   lambda event, text=_HELP_FIRMWARE: self.setHelp(text),
+                   add='+')
+        row += 1
+
+        # tool version
+        ttk.Label(frame, text="Tool Version:").grid(column=0,
+                                                    row=row,
+                                                    sticky=(E, ))
+        lbl = ttk.Label(frame, text=_VERSION)
+        lbl.grid(column=1, row=row, sticky=(
+            E,
+            W,
+        ), columnspan=3)
+        lbl.bind('<Enter>',
+                 lambda event, text=_HELP_TOOL: self.setHelp(text),
+                 add='+')
+        row += 1
+
+        # help text area
+        obg = frame._root().cget('bg')
+        self.help = Text(frame,
+                         width=40,
+                         height=3,
+                         padx=6,
+                         pady=3,
+                         bg=obg,
+                         font='TkTooltipFont',
+                         wrap="word",
+                         state="disabled")
+        self.help.grid(column=0, row=row, sticky=(
+            N,
+            S,
+            E,
+            W,
+        ), columnspan=4)
+        frame.rowconfigure(row, weight=1)
+        row += 1
 
         # action buttons
         aframe = ttk.Frame(frame)
-        aframe.grid(column=0, row=10, sticky=(
+        aframe.grid(column=0, row=row, sticky=(
             E,
             W,
             S,
@@ -1416,33 +1525,49 @@ class HHConfig:
         self.dbut = ttk.Button(aframe, text='Down', command=self.triggerdown)
         self.dbut.grid(column=1, row=0, sticky=(E, ))
         self.dbut.state(['disabled'])
+        self.dbut.bind('<Enter>',
+                       lambda event, text=_HELP_DOWN: self.setHelp(text),
+                       add='+')
         self.ubut = ttk.Button(aframe, text='Up', command=self.triggerup)
         self.ubut.grid(column=2, row=0, sticky=(E, ))
         self.ubut.state(['disabled'])
+        self.ubut.bind('<Enter>',
+                       lambda event, text=_HELP_UP: self.setHelp(text),
+                       add='+')
         lbut = ttk.Button(aframe, text='Load', command=self.loadfile)
         lbut.grid(column=3, row=0, sticky=(E, ))
         lbut.focus()
+        lbut.bind('<Enter>',
+                  lambda event, text=_HELP_LOAD: self.setHelp(text),
+                  add='+')
         sbut = ttk.Button(aframe, text='Save', command=self.savefile)
         sbut.grid(column=4, row=0, sticky=(E, ))
+        sbut.bind('<Enter>',
+                  lambda event, text=_HELP_SAVE: self.setHelp(text),
+                  add='+')
+        row += 1
 
-        ttk.Separator(frame, orient=HORIZONTAL).grid(column=0,
-                                                     row=11,
-                                                     columnspan=4,
-                                                     sticky=(
-                                                         E,
-                                                         W,
-                                                     ))
+        #ttk.Separator(frame, orient=HORIZONTAL).grid(column=0,
+        #row=row,
+        #columnspan=4,
+        #sticky=(
+        #E,
+        #W,
+        #))
+        #row += 1
 
         # status label
         self.logvar = StringVar(value='Waiting for device...')
         self.loglbl = ttk.Label(frame, textvariable=self.logvar)
-        self.loglbl.grid(column=0, row=12, sticky=(
+        self.loglbl.grid(column=0, row=row, sticky=(
             W,
             E,
         ), columnspan=4)
+        row += 1
 
         for child in frame.winfo_children():
-            child.grid_configure(padx=2, pady=2)
+            if child is not hdr:
+                child.grid_configure(padx=6, pady=4)
 
         # connect event handlers
         window.bind('<Return>', self.uiupdate)
