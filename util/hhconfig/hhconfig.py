@@ -871,8 +871,7 @@ class SerialConsole(threading.Thread):
 
     def _update(self, cfg):
         for k in cfg:
-            kv = _subkey(k)
-            cmd = _CFGKEYS[kv] + str(cfg[k]) + '\r\n'
+            cmd = _CFGKEYS[k] + str(cfg[k]) + '\r\n'
             self._send(cmd.encode('ascii', 'ignore'))
             self._readresponse()
 
@@ -886,9 +885,8 @@ class SerialConsole(threading.Thread):
     def _setvalue(self, key, value):
         if self.cfg is None:
             self.cfg = {}
-        k = _subkey(key)
-        if k == 'Firmware':
-            self.cfg[k] = value
+        if key == 'Firmware':
+            self.cfg[key] = value
             self._equeue.put(('firmware', value))
         else:
             try:
@@ -924,7 +922,8 @@ class SerialConsole(threading.Thread):
             elif '=' in l:
                 lv = l.split(' = ', maxsplit=1)
                 if len(lv) == 2:
-                    self._setvalue(lv[0].strip(), lv[1].strip())
+                    key = _subkey(lv[0].strip())
+                    self._setvalue(key, lv[1].strip())
                     docb = True
                 else:
                     _log.debug('Ignored unexpected response %r', l)
@@ -1118,11 +1117,13 @@ class HHConfig:
                 self.statvar.set(evt[1])
                 _log.debug('Received status: %s', evt[1])
             elif evt[0] == 'set':
-                key = _subkey(evt[1])
+                key = evt[1]
                 val = evt[2]
                 if key in _CFGKEYS:
                     self.devval[key] = val
                     self.logvar.set('Updated option ' + key)
+                else:
+                    _log.debug('Ignored config key: %r', key)
             elif evt[0] == 'firmware':
                 self.fwval.set(evt[1])
             elif evt[0] == 'connect':
@@ -1258,19 +1259,20 @@ class HHConfig:
         """Update each value in cfg to device and ui"""
         doupdate = False
         for k in cfg:
-            kv = _subkey(k)
-            if kv in _TIMEKEYS:
+            if k in _TIMEKEYS:
                 try:
-                    self.uival[kv].set('%0.2f' % (cfg[k] / 100.0, ))
+                    self.uival[k].set('%0.2f' % (cfg[k] / 100.0, ))
                     doupdate = True
-                except Exception:
-                    pass
-            elif kv in _INTKEYS:
+                except Exception as e:
+                    _log.error('%s loading time key %r: %s',
+                               e.__class__.__name__, k, e)
+            elif k in _INTKEYS:
                 try:
-                    self.uival[kv].set('%d' % (cfg[k], ))
+                    self.uival[k].set('%d' % (cfg[k], ))
                     doupdate = True
-                except Exception:
-                    pass
+                except Exception as e:
+                    _log.error('%s loading int key %r: %s',
+                               e.__class__.__name__, k, e)
             else:
                 _log.debug('Ignored invalid config key %r', k)
         if doupdate:
