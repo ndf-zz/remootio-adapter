@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Creator: fig2dev Version 3.2.8b -->
-<!-- CreationDate: 2024-07-03 16:20:32 -->
+<!-- CreationDate: 2025-04-10 17:22:55 -->
 <!-- Magnification: 1.05 -->
 <svg	xmlns="http://www.w3.org/2000/svg"
 	xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -231,200 +231,219 @@
 <defs>
 <clipPath id="cp13">
 	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
-		M 3870,1789 3872,1729 3728,1748 3728,1762z
-		M 1741,3978 1684,3957 1656,4099 1669,4104z"/>
-</clipPath>
-</defs>
-<path d="M 6075,3195 A 2631 2631 0 0 0 3735 1755" clip-path="url(#cp13)"
-	stroke="#000000" stroke-width="8px"/>
-<!-- Forward arrow to point 3735,1755 -->
-<polygon points=" 3872,1729 3751,1755 3870,1789 3872,1729"
-	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
-<!-- Arc -->
-<defs>
-<clipPath id="cp14">
-	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
 		M 8377,3746 8413,3795 8514,3691 8506,3681z
 		M 1741,3978 1684,3957 1656,4099 1669,4104z"/>
 </clipPath>
 </defs>
-<path d="M 3735,5130 A 7268 7268 0 0 0 8505 3690" clip-path="url(#cp14)"
+<path d="M 3735,5130 A 7268 7268 0 0 0 8505 3690" clip-path="url(#cp13)"
 	stroke="#000000" stroke-width="8px"/>
 <!-- Forward arrow to point 8505,3690 -->
 <polygon points=" 8413,3795 8492,3700 8377,3746 8413,3795"
 	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
 <!-- Arc -->
 <defs>
-<clipPath id="cp15">
+<clipPath id="cp14">
 	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
 		M 7601,5350 7611,5409 7748,5360 7745,5347z
 		M 1741,3978 1684,3957 1656,4099 1669,4104z"/>
 </clipPath>
 </defs>
-<path d="M 3735,5355 A 11117 11117 0 0 0 7740 5355" clip-path="url(#cp15)"
+<path d="M 3735,5355 A 11117 11117 0 0 0 7740 5355" clip-path="url(#cp14)"
 	stroke="#000000" stroke-width="8px"/>
 <!-- Forward arrow to point 7740,5355 -->
 <polygon points=" 7611,5409 7724,5358 7601,5350 7611,5409"
 	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
 <!-- Arc -->
 <defs>
-<clipPath id="cp16">
+<clipPath id="cp15">
 	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
 		M 7604,5233 7603,5293 7747,5272 7747,5258z
 		M 1741,3978 1684,3957 1656,4099 1669,4104z"/>
 </clipPath>
 </defs>
-<path d="M 5850,3690 A 1879 1879 0 0 0 7740 5265" clip-path="url(#cp16)"
+<path d="M 5850,3690 A 1879 1879 0 0 0 7740 5265" clip-path="url(#cp15)"
 	stroke="#000000" stroke-width="8px"/>
 <!-- Forward arrow to point 7740,5265 -->
 <polygon points=" 7603,5293 7724,5265 7604,5233 7603,5293"
 	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
 <!-- Arc -->
 <defs>
-<clipPath id="cp17">
+<clipPath id="cp16">
 	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
 		M 6313,3829 6370,3811 6304,3682 6292,3686z
 		M 1741,3978 1684,3957 1656,4099 1669,4104z"/>
 </clipPath>
 </defs>
-<path d="M 7740,5130 A 2101 2101 0 0 1 6300 3690" clip-path="url(#cp17)"
+<path d="M 7740,5130 A 2101 2101 0 0 1 6300 3690" clip-path="url(#cp16)"
 	stroke="#000000" stroke-width="8px"/>
 <!-- Forward arrow to point 6300,3690 -->
 <polygon points=" 6370,3811 6305,3705 6313,3829 6370,3811"
 	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
 <!-- Arc -->
 <defs>
-<clipPath id="cp18">
+<clipPath id="cp17">
 	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
 		M 8013,3736 8045,3787 8154,3692 8147,3681z
 		M 1741,3978 1684,3957 1656,4099 1669,4104z"/>
 </clipPath>
 </defs>
-<path d="M 4905,4365 A 4681 4681 0 0 0 8145 3690" clip-path="url(#cp18)"
+<path d="M 4905,4365 A 4681 4681 0 0 0 8145 3690" clip-path="url(#cp17)"
 	stroke="#000000" stroke-width="8px"/>
 <!-- Forward arrow to point 8145,3690 -->
 <polygon points=" 8045,3787 8131,3699 8013,3736 8045,3787"
 	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
 <!-- Arc -->
 <defs>
-<clipPath id="cp19">
+<clipPath id="cp18">
 	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
 		M 2738,1256 2680,1272 2740,1403 2753,1400z
 		M 1741,3978 1684,3957 1656,4099 1669,4104z"/>
 </clipPath>
 </defs>
-<path d="M 3285,1395 A 306 306 0 1 0 2745 1395" clip-path="url(#cp19)"
+<path d="M 3285,1395 A 306 306 0 1 0 2745 1395" clip-path="url(#cp18)"
 	stroke="#000000" stroke-width="8px"/>
 <!-- Forward arrow to point 2745,1395 -->
 <polygon points=" 2680,1272 2741,1379 2738,1256 2680,1272"
 	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
 <!-- Arc -->
 <defs>
-<clipPath id="cp20">
+<clipPath id="cp19">
 	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
-		M 3866,1622 3874,1562 3729,1567 3727,1581z
+		M 3872,1828 3871,1768 3728,1793 3728,1807z
 		M 1741,3978 1684,3957 1656,4099 1669,4104z"/>
 </clipPath>
 </defs>
-<path d="M 8955,3195 A 15578 15578 0 0 0 3735 1575" clip-path="url(#cp20)"
+<path d="M 6075,3195 A 2500 2500 0 0 0 3735 1800" clip-path="url(#cp19)"
 	stroke="#000000" stroke-width="8px"/>
-<!-- Forward arrow to point 3735,1575 -->
-<polygon points=" 3874,1562 3751,1577 3866,1622 3874,1562"
+<!-- Forward arrow to point 3735,1800 -->
+<polygon points=" 3871,1768 3751,1800 3872,1828 3871,1768"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Arc -->
+<defs>
+<clipPath id="cp20">
+	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
+		M 3872,1828 3871,1768 3728,1793 3728,1807z
+		M 8955,3088 8919,3136 9046,3204 9054,3194z"/>
+</clipPath>
+</defs>
+<path d="M 9045,3195 A 8065 8065 0 0 0 3735 1485" clip-path="url(#cp20)"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Backward arrow to point 9045,3195 -->
+<polygon points=" 8919,3136 9032,3185 8955,3088 8919,3136"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Arc -->
+<defs>
+<clipPath id="cp21">
+	<path clip-rule="evenodd" d="M 584,89 H 9676 V 5851 H 584 z
+		M 3871,1649 3871,1589 3728,1613 3728,1627z
+		M 8955,3088 8919,3136 9046,3204 9054,3194z"/>
+</clipPath>
+</defs>
+<path d="M 8820,3195 A 8534 8534 0 0 0 3735 1620" clip-path="url(#cp21)"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Forward arrow to point 3735,1620 -->
+<polygon points=" 3871,1589 3751,1620 3871,1649 3871,1589"
 	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
 <!-- Line -->
 <polyline points=" 2115,1485"
 	stroke="#000000" stroke-width="8px"/>
 <!-- Text -->
-<text xml:space="preserve" x="1530" y="1755" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">down/randfeed</text>
-<!-- Text -->
-<text xml:space="preserve" x="3015" y="2250" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">up/down</text>
-<!-- Text -->
-<text xml:space="preserve" x="1800" y="3600" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">down</text>
-<!-- Text -->
-<text xml:space="preserve" x="1575" y="3105" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">p1</text>
-<!-- Text -->
-<text xml:space="preserve" x="1575" y="4860" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">p2</text>
-<!-- Text -->
-<text xml:space="preserve" x="3015" y="4050" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">up/down</text>
-<!-- Text -->
-<text xml:space="preserve" x="3015" y="4770" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">down</text>
-<!-- Text -->
-<text xml:space="preserve" x="3015" y="2970" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">down</text>
-<!-- Text -->
-<text xml:space="preserve" x="4770" y="3510" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">reset</text>
-<!-- Text -->
-<text xml:space="preserve" x="6300" y="3105" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">home</text>
-<!-- Text -->
-<text xml:space="preserve" x="9090" y="3060" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">home</text>
-<!-- Text -->
-<text xml:space="preserve" x="3870" y="3060" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">up/feedtime</text>
-<!-- Text -->
-<text xml:space="preserve" x="5040" y="2385" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">up</text>
-<!-- Text -->
-<text xml:space="preserve" x="5625" y="3960" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">down</text>
-<!-- Text -->
-<text xml:space="preserve" x="4005" y="5625" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">down</text>
-<!-- Text -->
-<text xml:space="preserve" x="7875" y="4860" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">up/down/man</text>
-<!-- Text -->
-<text xml:space="preserve" x="7335" y="3825" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">up/down/max</text>
-<!-- Text -->
 <text xml:space="preserve" x="945" y="405" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="120" text-anchor="start">Remootio Hay Hoist - State Diagram</text>
 <!-- Text -->
-<text xml:space="preserve" x="3465" y="1215" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">up</text>
+<text xml:space="preserve" x="4050" y="360" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Triggers:</text>
 <!-- Text -->
-<text xml:space="preserve" x="6840" y="405" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">up</text>
+<text xml:space="preserve" x="5445" y="360" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Raise hoist</text>
 <!-- Text -->
-<text xml:space="preserve" x="6030" y="405" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Triggers:</text>
+<text xml:space="preserve" x="5445" y="720" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Home limit switch</text>
 <!-- Text -->
-<text xml:space="preserve" x="6840" y="585" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">down</text>
+<text xml:space="preserve" x="5445" y="900" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">P1 elapsed</text>
 <!-- Text -->
-<text xml:space="preserve" x="6840" y="765" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">home</text>
+<text xml:space="preserve" x="5445" y="1080" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">P2 elapsed</text>
 <!-- Text -->
-<text xml:space="preserve" x="6840" y="945" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">p1</text>
+<text xml:space="preserve" x="5445" y="1260" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Max H time elapsed</text>
 <!-- Text -->
-<text xml:space="preserve" x="6840" y="1125" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">p2</text>
+<text xml:space="preserve" x="7740" y="540" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">System reset</text>
 <!-- Text -->
-<text xml:space="preserve" x="6840" y="1305" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">max</text>
+<text xml:space="preserve" x="7740" y="360" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Man time elapsed</text>
 <!-- Text -->
-<text xml:space="preserve" x="6840" y="1485" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">man</text>
+<text xml:space="preserve" x="7740" y="720" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Feedtime minutes elapsed</text>
 <!-- Text -->
-<text xml:space="preserve" x="6840" y="1665" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">reset</text>
+<text xml:space="preserve" x="7740" y="900" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Randfeed minutes elapsed</text>
 <!-- Text -->
-<text xml:space="preserve" x="6840" y="1845" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">feedtime</text>
+<text xml:space="preserve" x="7740" y="1080" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Safetime minutes elapsed</text>
 <!-- Text -->
-<text xml:space="preserve" x="6840" y="2025" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">randfeed</text>
+<text xml:space="preserve" x="5445" y="540" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Lower hoist</text>
 <!-- Text -->
-<text xml:space="preserve" x="7560" y="405" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Raise hoist</text>
+<text xml:space="preserve" x="7740" y="1260" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Not at limit switch</text>
 <!-- Text -->
-<text xml:space="preserve" x="7560" y="585" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Lower Hoist</text>
+<text xml:space="preserve" x="1530" y="1755" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="middle">down/randfeed</text>
 <!-- Text -->
-<text xml:space="preserve" x="7560" y="945" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">P1 elapsed</text>
+<text xml:space="preserve" x="4230" y="1395" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="middle">nothome</text>
 <!-- Text -->
-<text xml:space="preserve" x="7560" y="1125" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">P2 elapsed</text>
+<text xml:space="preserve" x="3465" y="1215" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="middle">up</text>
 <!-- Text -->
-<text xml:space="preserve" x="7560" y="1305" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Max H time elapsed</text>
+<text xml:space="preserve" x="5040" y="2385" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="middle">up</text>
 <!-- Text -->
-<text xml:space="preserve" x="7560" y="1485" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Man time elapsed</text>
+<text xml:space="preserve" x="3015" y="2250" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="middle">up/down</text>
 <!-- Text -->
-<text xml:space="preserve" x="7560" y="1665" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">System reset</text>
+<text xml:space="preserve" x="3015" y="2970" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="middle">down</text>
 <!-- Text -->
-<text xml:space="preserve" x="7560" y="1845" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Feedtime minutes elapsed</text>
+<text xml:space="preserve" x="3870" y="3060" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="middle">up/feedtime</text>
 <!-- Text -->
-<text xml:space="preserve" x="7560" y="2025" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Randfeed minutes elapsed</text>
+<text xml:space="preserve" x="6075" y="2115" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="middle">home</text>
 <!-- Text -->
-<text xml:space="preserve" x="7560" y="765" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Home limit switch</text>
+<text xml:space="preserve" x="4770" y="3510" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="middle">reset</text>
 <!-- Text -->
-<text xml:space="preserve" x="6840" y="2205" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">safetime</text>
+<text xml:space="preserve" x="1575" y="3105" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="middle">p1</text>
 <!-- Text -->
-<text xml:space="preserve" x="7560" y="2205" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Safetime minutes elapsed</text>
+<text xml:space="preserve" x="1800" y="3600" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="middle">down</text>
 <!-- Text -->
-<text xml:space="preserve" x="7200" y="3150" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">up/safetime</text>
+<text xml:space="preserve" x="1575" y="4860" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="middle">p2</text>
 <!-- Text -->
-<text xml:space="preserve" x="5355" y="4590" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">up/safetime</text>
+<text xml:space="preserve" x="3015" y="4770" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="middle">down</text>
 <!-- Text -->
-<text xml:space="preserve" x="4185" y="5040" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="middle">up/safetime</text>
+<text xml:space="preserve" x="3015" y="4050" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="middle">up/down</text>
 <!-- Text -->
-<text xml:space="preserve" x="945" y="630" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">Prototype 2024-07-03</text>
+<text xml:space="preserve" x="4185" y="5040" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="middle">up/safetime</text>
+<!-- Text -->
+<text xml:space="preserve" x="5355" y="4590" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="middle">up/safetime</text>
+<!-- Text -->
+<text xml:space="preserve" x="5625" y="3960" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="middle">down</text>
+<!-- Text -->
+<text xml:space="preserve" x="4005" y="5625" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="middle">down</text>
+<!-- Text -->
+<text xml:space="preserve" x="7875" y="4860" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="middle">up/down/man</text>
+<!-- Text -->
+<text xml:space="preserve" x="7335" y="3825" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="middle">up/down/max</text>
+<!-- Text -->
+<text xml:space="preserve" x="6300" y="3105" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="middle">home</text>
+<!-- Text -->
+<text xml:space="preserve" x="7200" y="3150" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="middle">up/safetime</text>
+<!-- Text -->
+<text xml:space="preserve" x="4950" y="360" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="start">up</text>
+<!-- Text -->
+<text xml:space="preserve" x="4950" y="540" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="start">down</text>
+<!-- Text -->
+<text xml:space="preserve" x="4950" y="720" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="start">home</text>
+<!-- Text -->
+<text xml:space="preserve" x="4950" y="900" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="start">p1</text>
+<!-- Text -->
+<text xml:space="preserve" x="4950" y="1080" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="start">p2</text>
+<!-- Text -->
+<text xml:space="preserve" x="4950" y="1260" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="start">max</text>
+<!-- Text -->
+<text xml:space="preserve" x="7065" y="1260" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="start">nothome</text>
+<!-- Text -->
+<text xml:space="preserve" x="7065" y="1080" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="start">safetime</text>
+<!-- Text -->
+<text xml:space="preserve" x="7065" y="900" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="start">randfeed</text>
+<!-- Text -->
+<text xml:space="preserve" x="7065" y="720" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="start">feedtime</text>
+<!-- Text -->
+<text xml:space="preserve" x="7065" y="540" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="start">reset</text>
+<!-- Text -->
+<text xml:space="preserve" x="7065" y="360" fill="#000000" font-family="Helvetica" font-style="italic" font-weight="normal" font-size="108" text-anchor="start">man</text>
+<!-- Text -->
+<text xml:space="preserve" x="945" y="630" fill="#000000" font-family="Helvetica" font-style="normal" font-weight="normal" font-size="108" text-anchor="start">v25001: Updated 2025-04-10</text>
 </g>
 </svg>
