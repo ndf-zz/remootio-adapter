@@ -4,7 +4,7 @@
 #
 
 PROJECT = remootio-adapter
-VERSION = 24012
+VERSION = 25001
 
 # Build objects
 OBJECTS = src/main.o
@@ -111,7 +111,10 @@ $(TARGET): $(OBJECTS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS) -o $(TARGET) $(OBJECTS)
 
 $(RANDBOOK):
+	# Initialise random data
 	dd if=/dev/random bs=1K count=1 of=$(RANDBOOK)
+	# Zero out configuration space
+	dd if=/dev/zero seek=992 bs=1 count=32 of=$(RANDBOOK)
 
 %.o: %.s
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
@@ -143,6 +146,20 @@ upload: $(TARGET)
 
 .PHONY: randbook
 randbook: $(RANDBOOK)
+	$(DUDECMD) -U eeprom:w:$(RANDBOOK):r
+
+# Clear NVR space for FW > v24012
+.PHONY: eepatch
+eepatch:
+	$(DUDECMD) -U eeprom:r:$(RANDBOOK):r
+	dd if=/dev/zero seek=1012 bs=1 count=12 of=$(RANDBOOK)
+	$(DUDECMD) -U eeprom:w:$(RANDBOOK):r
+
+# Clear console PIN
+.PHONY: clrpin
+clrpin:
+	$(DUDECMD) -U eeprom:r:$(RANDBOOK):r
+	dd if=/dev/zero seek=1014 bs=1 count=2 of=$(RANDBOOK)
 	$(DUDECMD) -U eeprom:w:$(RANDBOOK):r
 
 .PHONY: fuse

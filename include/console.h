@@ -16,6 +16,7 @@ enum event_type {
 	event_status,		// Request for display of state
 	event_down,		// Request to lower
 	event_up,		// Request to raise
+	event_auth,		// PIN OK
 };
 
 // Console event structure
@@ -24,6 +25,9 @@ struct console_event {
 	uint8_t key;
 	uint16_t value;
 };
+
+// Clear the read buffer
+void console_flush(void);
 
 // Poll for new console event
 void console_read(struct console_event *event);

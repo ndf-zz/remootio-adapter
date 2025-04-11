@@ -119,6 +119,8 @@ static void load_parameters(void)
 		feed.h_timeout = read_word(NVM_H);
 		feed.f_timeout = read_word(NVM_F);
 		feed.nf = read_word(NVM_NF);
+		feed.hr_timeout = read_word(NVM_HR);
+		feed.pk = read_word(NVM_PK);
 		seedoft = read_word(NVM_SEEDOFT) + 4U;
 		if (seedoft >= SEEDOFT_LEN) {
 			seedoft = 0;
@@ -140,6 +142,10 @@ static void load_parameters(void)
 		write_word(NVM_SPMOFT, 1U);
 		write_word(NVM_SEEDOFT, seedoft);
 		write_word(NVM_KEY, NVM_KEYVAL);
+		feed.hr_timeout = DEFAULT_HR;
+		write_word(NVM_HR, feed.hr_timeout);
+		feed.pk = DEFAULT_PK;
+		write_word(NVM_PK, feed.pk);
 	}
 
 	// Initialise PRNG using next value from eeprom

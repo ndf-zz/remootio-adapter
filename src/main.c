@@ -11,8 +11,6 @@
 #include "system.h"
 #include "console.h"
 
-struct state_machine feed;
-
 static void flag_error(void)
 {
 	feed.error = 1U;
@@ -150,7 +148,7 @@ static void trigger_p1(void)
 		// Signal AT P1 state to Remootio
 		PORTD |= _BV(ATP1);
 	} else {
-		console_write("Spurious P1 trigger ignored\r\n");
+		console_write("Spurious P1 trigger\r\n");
 	}
 }
 
@@ -166,7 +164,7 @@ static void trigger_p2(void)
 		console_write("Trigger: p2\r\n");
 		stop_at(state_at_p2);
 	} else {
-		console_write("Spurious P2 trigger ignored\r\n");
+		console_write("Spurious P2 trigger\r\n");
 	}
 }
 
@@ -176,7 +174,7 @@ static void trigger_man(void)
 		console_write("Trigger: man\r\n");
 		stop_at(state_stop);
 	} else {
-		console_write("Spurious Man trigger ignored\r\n");
+		console_write("Spurious Man trigger\r\n");
 	}
 }
 
@@ -187,7 +185,7 @@ static void trigger_max(void)
 		flag_error();	// failed to reach home
 		stop_at(state_stop);
 	} else {
-		console_write("Spurious Max trigger ignored\r\n");
+		console_write("Spurious Max trigger\r\n");
 	}
 }
 
@@ -214,7 +212,7 @@ static void trigger_up(void)
 		break;
 	case state_at_h:
 	default:
-		console_write("Ignored spurious UP trigger\r\n");
+		console_write("Spurious UP trigger\r\n");
 		break;
 	}
 }
@@ -237,7 +235,7 @@ static void trigger_down(uint8_t override)
 			move_down(state_move_h_p1);
 			feed.p1 = 0;
 		} else {
-			console_write("Ignore trigger due to low voltage\r\n");
+			console_write("Trigger low voltage\r\n");
 			stop_at_home();
 		}
 		break;
@@ -259,7 +257,7 @@ static void trigger_down(uint8_t override)
 		stop_at(state_stop);
 		break;
 	default:
-		console_write("Ignored spurious DOWN trigger\r\n");
+		console_write("Spurious DOWN trigger\r\n");
 		break;
 	}
 }
@@ -273,7 +271,8 @@ static void trigger_home(void)
 		stop_at_home();
 		break;
 	case state_at_h:
-		// ignore - possible noise problem
+		// reset state counter for home-retry timeout
+		feed.count = 0;
 		break;
 	case state_move_h_p1:
 		// after 0.5s, might be tangled cord - flag error and stop
@@ -352,9 +351,14 @@ static void read_timers(void)
 		}
 		break;
 	case state_at_h:
-		if (feed.nf_timeout > 0) {
-			if (feed.minutes >= feed.nf_timeout) {
-				trigger_down(0);
+		if (feed.nf_timeout > 0 && feed.minutes >= feed.nf_timeout) {
+			trigger_down(0);
+		} else if (feed.hr_timeout > 0 && feed.count > feed.hr_timeout) {
+			if ((feed.bstate & TRIGGER_HOME) == 0) {
+				console_write("Trigger: notathome\r\n");
+				move_up(state_move_h);
+			} else {
+				feed.count = 0;
 			}
 		}
 		break;
@@ -387,8 +391,9 @@ static void update_state(uint8_t clock)
 static void show_value(struct console_event *event)
 {
 	switch (event->key) {
-	case 0x68:
-		console_showval("H = ", feed.h_timeout);
+	case 0x10:
+		// double auth
+		console_write("OK\r\n");
 		break;
 	case 0x31:
 		console_showval("H-P1 = ", feed.p1_timeout);
@@ -399,11 +404,20 @@ static void show_value(struct console_event *event)
 	case 0x66:
 		console_showval("Feed = ", feed.f_timeout);
 		break;
+	case 0x68:
+		console_showval("H = ", feed.h_timeout);
+		break;
 	case 0x6e:
 		console_showval("Feeds/week = ", feed.nf);
 		break;
 	case 0x6d:
 		console_showval("Man = ", feed.man_timeout);
+		break;
+	case 0x70:
+		console_showval("PIN = ", feed.pk);
+		break;
+	case 0x72:
+		console_showval("H-Retry = ", feed.hr_timeout);
 		break;
 	default:
 		console_write("Unknown value\r\n");
@@ -414,6 +428,10 @@ static void show_value(struct console_event *event)
 static void update_value(struct console_event *event)
 {
 	switch (event->key) {
+	case 0x10:
+		// double auth
+		console_write("OK\r\n");
+		break;
 	case 0x31:
 		if (event->value) {
 			feed.p1_timeout = event->value;
@@ -455,6 +473,16 @@ static void update_value(struct console_event *event)
 		console_showval("H = ", feed.h_timeout);
 		save_config(NVM_H, feed.h_timeout);
 		break;
+	case 0x70:
+		feed.pk = event->value;
+		console_showval("PIN = ", feed.pk);
+		save_config(NVM_PK, feed.pk);
+		break;
+	case 0x72:
+		feed.hr_timeout = event->value;
+		console_showval("H-Retry = ", feed.hr_timeout);
+		save_config(NVM_HR, feed.hr_timeout);
+		break;
 	default:
 		console_write("Unknown value\r\n");
 		break;
@@ -463,16 +491,16 @@ static void update_value(struct console_event *event)
 
 static void show_values(void)
 {
-	console_write("Current Values:\r\n");
+	console_write("Values:\r\n");
 	console_showval("\tFirmware = v", sw_version);
 	console_showval("\tH-P1 = ", feed.p1_timeout);
 	console_showval("\tP1-P2 = ", feed.p2_timeout);
 	console_showval("\tMan = ", feed.man_timeout);
 	console_showval("\tH = ", feed.h_timeout);
+	console_showval("\tH-Retry = ", feed.hr_timeout);
 	console_showval("\tFeed = ", feed.f_timeout);
 	console_showval("\tFeeds/week = ", feed.nf);
-	console_showval("\tState counter = ", feed.count);
-	console_showval("\tState minutes = ", feed.minutes);
+	console_showval("\tMin = ", feed.minutes);
 	console_write("\r\n");
 }
 
@@ -514,7 +542,7 @@ void main(void)
 	struct console_event event;
 	system_init();
 	trigger_reset();
-
+	console_flush();
 	do {
 		sleep_mode();
 		nt = SYSTICK;

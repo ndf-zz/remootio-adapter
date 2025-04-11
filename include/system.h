@@ -18,10 +18,12 @@
 #define DEFAULT_P1	1250U	// 12.5s H -> P1
 #define DEFAULT_P2	1500U	// 15s P1 -> P2
 #define DEFAULT_F	30U	// 30 minutes, triggers P1->M_H
-#define DEFAULT_NF	28U	// Feeds/week ~4/day
-#define DEFAULT_MAN	250U	// 2.5s MAN adjustment
+#define DEFAULT_NF	0U	// Feeds/week disabled
+#define DEFAULT_MAN	400U	// 4s MAN adjustment
 #define DEFAULT_H	4000U	// 40s Max return home time
+#define DEFAULT_HR	250U	// 2.5s Home retry timeout
 #define DEFAULT_S	45U	// 45 minutes safe time, triggers M_H
+#define DEFAULT_PK	0U	// Default Console PIN
 
 // Fixed voltage threshold
 #define LOWVOLTS	0x4a	// ~11.8V
@@ -56,9 +58,16 @@
 #define NVM_F		(NVM_BASE + 0x8)
 #define NVM_NF		(NVM_BASE + 0xa)
 #define NVM_SPMOFT	(NVM_BASE + 0xc)
+#define NVM_RSV0E	(NVM_BASE + 0xe)
 #define NVM_SEEDOFT	(NVM_BASE + 0x10)
 #define NVM_KEY		(NVM_BASE + 0x12)
 #define NVM_KEYVAL	0x55aa
+#define NVM_HR		(NVM_BASE + 0x14)
+#define NVM_PK		(NVM_BASE + 0x16)
+#define NVM_RSV18	(NVM_BASE + 0x18)
+#define NVM_RSV1A	(NVM_BASE + 0x1a)
+#define NVM_RSV1C	(NVM_BASE + 0x1c)
+#define NVM_RSV1E	(NVM_BASE + 0x1e)
 
 // Random seed area
 #define SEEDOFT_LEN	NVM_BASE
@@ -120,6 +129,8 @@ struct state_machine {
 	uint16_t count;		// 0.01s state counter
 	uint16_t mincount;	// 0.01s state counter for determining minutes
 	uint16_t minutes;	// minute state counter
+	uint16_t hr_timeout;	// home retry timeout
+	uint16_t pk;		// serial console passkey
 };
 
 // global system variable

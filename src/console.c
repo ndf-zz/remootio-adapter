@@ -10,11 +10,16 @@
 #define BUFMASK (BUFLEN-1)
 #define RXWI GPIOR1
 #define RXRI GPIOR2
+#define IDLE_TIMEOUT	700U	// Disable console after 7s idle
+
 static uint8_t rxbuf[BUFLEN];
 static uint8_t txbuf[BUFLEN];
 static volatile uint8_t TXRI;
 static volatile uint8_t TXWI;
 static volatile uint8_t rx_stall;
+static uint8_t wrenabled = 1;
+static uint8_t rdenabled = 0;
+static uint8_t command;
 
 static const char help[] = "\
 \r\n\
@@ -23,9 +28,10 @@ Commands:\r\n\
 \t2\tP1-P2 (0.01s)\r\n\
 \tm\tMan (0.01s)\r\n\
 \th\tH (0.01s)\r\n\
+\tr\tH-Retry (0.01s)\r\n\
 \tf\tFeed (minutes)\r\n\
 \tn\tFeeds/week (0=off)\r\n\
-\tv\tShow current values\r\n\
+\tv\tShow values\r\n\
 \ts\tStatus\r\n\
 \td\tLower\r\n\
 \tu\tRaise\r\n\
@@ -68,14 +74,15 @@ static void enable_transfer(void)
 // Write byte to tx buffer
 static void write_serial(uint8_t ch)
 {
-	uint8_t look = (uint8_t) ((TXWI + 1) & BUFMASK);
-
-	if (look != TXRI) {
-		txbuf[look] = ch;
-		TXWI = look;
-	} else {
-		rx_stall = 1U;
-		// drop output
+	if (wrenabled) {
+		uint8_t look = (uint8_t) ((TXWI + 1) & BUFMASK);
+		if (look != TXRI) {
+			txbuf[look] = ch;
+			TXWI = look;
+		} else {
+			rx_stall = 1U;
+			// drop output
+		}
 	}
 }
 
@@ -156,10 +163,23 @@ static void newline(void)
 static uint8_t get_cmd(uint8_t ch)
 {
 	switch (ch) {
+	case 0x10:
+		return 0x10;
+		break;
 	case 0x68:
 	case 0x48:
 		console_write("H? ");
 		return 0x68;
+		break;
+	case 0x70:
+	case 0x50:
+		console_write("P? ");
+		return 0x70;
+		break;
+	case 0x72:
+	case 0x52:
+		console_write("H-Retry? ");
+		return 0x72;
 		break;
 	case 0x31:
 		console_write("H-P1? ");
@@ -238,68 +258,100 @@ static uint16_t read_val(uint8_t ch, uint16_t val)
 // Read next input byte and update event as required
 static void read_input(uint8_t ch, struct console_event *event)
 {
-	static uint8_t cmd = 0;
 	static uint16_t val = 0xffff;
 
 	event->type = event_none;
-	if (cmd == 0) {
-		cmd = get_cmd(ch);
-		if (cmd == 0x73) {
-			event->type = event_status;
-			event->key = 0;
-			event->value = 0;
-			newline();
-			cmd = 0;
-		} else if (cmd == 0x76) {
-			event->type = event_values;
-			event->key = 0;
-			event->value = 0;
-			newline();
-			cmd = 0;
-		} else if (cmd == 0x75) {
-			event->type = event_up;
-			event->key = 0;
-			event->value = 0;
-			newline();
-			cmd = 0;
-		} else if (cmd == 0x64) {
-			event->type = event_down;
-			event->key = 0;
-			event->value = 0;
-			newline();
-			cmd = 0;
-		}
-		val = 0xffff;
-	} else {
-		switch (ch) {
-		case 0x1b:
-		case 0x08:
-			// escape
-			newline();
-			cmd = 0;
-			break;
-		case 0x20:
-			break;
-		case 0x0d:
-		case 0x0a:
-			if (val != 0xffff) {
-				event->type = event_setvalue;
-				event->key = cmd;
-				event->value = val;
-				newline();
-			} else {
-				event->type = event_getvalue;
-				event->key = cmd;
+
+	if (rdenabled) {
+		if (command == 0) {
+			command = get_cmd(ch);
+			if (command == 0x73) {
+				event->type = event_status;
+				event->key = 0;
 				event->value = 0;
 				newline();
+				command = 0;
+			} else if (command == 0x76) {
+				event->type = event_values;
+				event->key = 0;
+				event->value = 0;
+				newline();
+				command = 0;
+			} else if (command == 0x75) {
+				event->type = event_up;
+				event->key = 0;
+				event->value = 0;
+				newline();
+				command = 0;
+			} else if (command == 0x64) {
+				event->type = event_down;
+				event->key = 0;
+				event->value = 0;
+				newline();
+				command = 0;
 			}
-			cmd = 0;
-			break;
-		default:
-			val = read_val(ch, val);
-			break;
+			val = 0xffff;
+		} else {
+			switch (ch) {
+			case 0x1b:
+			case 0x08:
+				// escape
+				newline();
+				command = 0;
+				break;
+			case 0x20:
+				break;
+			case 0x0d:
+			case 0x0a:
+				if (val != 0xffff) {
+					event->type = event_setvalue;
+					event->key = command;
+					event->value = val;
+					newline();
+				} else {
+					event->type = event_getvalue;
+					event->key = command;
+					event->value = 0;
+					newline();
+				}
+				command = 0;
+				break;
+			default:
+				val = read_val(ch, val);
+				break;
+			}
+		}
+	} else {
+		if (command == 0) {
+			if (ch == 0x10) {
+				command = 0x10;
+			}
+			val = 0xffff;
+		} else {
+			switch (ch) {
+			case 0x0d:
+			case 0x0a:
+				// check auth key
+				if (val == feed.pk) {
+					newline();
+					event->type = event_auth;
+					event->key = 0;
+					event->value = 0;
+				}
+				command = 0;
+				break;
+			default:
+				val = read_val(ch, val);
+				break;
+			}
 		}
 	}
+}
+
+// Clear the input buffer
+void console_flush(void)
+{
+	RXRI = RXWI;
 }
 
 // Fetch next event from console
@@ -307,14 +359,32 @@ void console_read(struct console_event *event)
 {
 	uint8_t look;
 	uint8_t ch;
+	static uint16_t count = 0;
 	event->type = event_none;
+	++count;
+	if (count >= IDLE_TIMEOUT) {
+		count = 0xfffe;
+		if (rdenabled) {
+			console_write("\r\nIdle Timeout\r\n");
+		}
+		command = 0;
+		rdenabled = 0;
+		wrenabled = 0;
+	}
 	while (RXRI != RXWI) {
+		count = 0;
 		look = (uint8_t) ((RXRI + 1U) & BUFMASK);
 		ch = rxbuf[look];
 		RXRI = look;	// Release FIFO slot
 		read_input(ch, event);
-		if (event->type) {
-			break;
+		if (event->type == event_auth) {
+			rdenabled = 1;
+			wrenabled = 1;
+			console_write("OK\r\n");
+		} else {
+			if (event->type) {
+				break;
+			}
 		}
 	}
 }
