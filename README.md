@@ -26,9 +26,10 @@ after a programmable duration without input.
 
 ### Scheduled Feeding
 
-If a number of feeds per day is specified, the hoist will lower
+If a number of feeds per week is specified, the hoist will lower
 from the home position to P1 after a randomly chosen interval,
-roughly "feeds/day" times a day.
+roughly "feeds/week" times a week and provided there is enough
+charge in the battery to retract.
 
 The hoist will remain at P1 until feed time minutes have elapsed, 
 then retract to the home position. Manual operation "down" or
@@ -55,6 +56,9 @@ Errors and exceptions may be triggered by the following conditions:
    - Spurious Sensor: In the case of a spurious triggering of
      the home sensor, an error condition is flagged and the
      motor is stopped.
+   - Not at Home: If the home sensor is prematurely
+     triggered, the hoist will attempt to continue retraction
+     after Home-Retry seconds.
    - Sensor Failure: If the home sensor fails "open", or if the
      state logic is out of sync, the hoist will not react to
      up (raise) commands. If the sensor fails "closed", and max
@@ -73,19 +77,23 @@ Errors and exceptions may be triggered by the following conditions:
 Connect RS-232 serial adapter to J4 (console)
 and open a terminal at 19200 baud, 8n1.
 
+Enter 'p' followed by pin number and enter to enable
+console.
+
 Triggers, state changes and errors will
 be displayed.
 
 Enter '?' to display available commands:
 
 	Commands:
-	        1       H-P1 time (0.01s)
-	        2       P1-P2 time
-	        m       Man time
-	        h       H time
-	        f       Feed time (min)
-	        n       Feeds/day (0=off)
-	        v       Show current values
+	        1       H-P1 (0.01s)
+	        2       P1-P2 (0.01s)
+	        m       Man (0.01s)
+	        h       H (0.01s)
+	        r       H-Retry (0.01s)
+	        f       Feed (minutes)
+	        n       Feeds/week (0=off)
+	        v       Show values
 	        s       Status
 	        d       Lower
 	        u       Raise
@@ -93,8 +101,8 @@ Enter '?' to display available commands:
 Configuration parameters are adjusted
 by entering the command key followed by
 an updated value and then enter.
-Time values 1,2,m and h are set in units of 0.01s.
-Feeding time is in minutes.
+Time values 1,2,m,h and r are set in units of 0.01s.
+Feeding time f is in minutes.
 
 
 ## Connectors
@@ -105,8 +113,8 @@ J1:1 |  | "S5" Auxiliary I/O (unused)
 J1:2 |  | "GND"
 J1:3 |  | "S6" Auxiliary I/O (unused)
 J1:4 |  | "GND"
-N/C | C3:B | Motor + (blue/red)
-N/C | C3:C | Motor - (yellow/black)
+N/C | C3:B | Motor + (blue/black)
+N/C | C3:C | Motor - (yellow/red)
 J2:1 | C4:D | "+12V" Battery + (red)
 J2:2 | C4:A | "0V" Battery - (black)
 J3:1 |  | ICSP MISO
@@ -147,6 +155,9 @@ J6:8 | M:Gnd | "GND" Controller ground (black)
 
 ### Version Summaries
 
+   - 25001: Version 2
+      - include Home Retry option & logic
+      - add trivial plaintext 'passkey' to protect serial console
    - 24012: Version 1, cosmetic updates for GUI tool, October 2024
    - 24011: Version 0, initial release September 2024
 

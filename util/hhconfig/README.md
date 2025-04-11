@@ -5,7 +5,8 @@
 ## Usage
 
 Connect serial adapter to computer, launch hhconfig
-utility. Select comport if required, then attach serial
+utility. Enter device pin number if applicable,
+select comport if required, then attach serial
 cable to hay hoist console port.
 
 Current status is displayed on the top line. Use
@@ -18,7 +19,7 @@ from/to a JSON text file.
 Multiple units can be programmed using the following
 steps:
 
-   - Open hhconfig utility and attach a serial adapter
+   - Open hhconfig utility, enter pin and attach a serial adapter
    - Read desired settings from a saved configuration file
    - For each unit to be updated:
      - Plug serial cable onto console port

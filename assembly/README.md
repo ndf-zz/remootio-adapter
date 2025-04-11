@@ -298,3 +298,6 @@ Prepare mains extension lead:
       - A position 1
       - N position 2
    - tighten backshell and lock nut
+
+Connect to power and box, then adjust Vo to 13.5V
+Confirm Battery reading in config tool between 13.3 and 13.6V

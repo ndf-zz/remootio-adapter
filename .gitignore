@@ -41,6 +41,7 @@
 *.su
 *.idb
 *.pdb
+.hh.cfg
 
 # Kernel Module Compile Results
 *.mod*
@@ -56,6 +57,26 @@ dspriv/
 
 # stripboard layout - untracked
 prototype/
+
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
 # KiCad
 # Temporary files
