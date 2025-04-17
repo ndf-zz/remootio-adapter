@@ -274,6 +274,10 @@ static void trigger_home(void)
 		// reset state counter for home-retry timeout
 		feed.count = 0;
 		break;
+	case state_at_p1:
+		// do nothing
+		console_write("Ignore home trigger\r\n");
+		break;
 	case state_move_h_p1:
 		// after 0.5s, might be tangled cord - flag error and stop
 		if (feed.count > 50) {

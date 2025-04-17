@@ -155,6 +155,7 @@ J6:8 | M:Gnd | "GND" Controller ground (black)
 
 ### Version Summaries
 
+   - 25002: Version 2.1, ignore home trigger when at P1
    - 25001: Version 2
       - include Home Retry option & logic
       - add trivial plaintext 'passkey' to protect serial console
