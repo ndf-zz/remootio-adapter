@@ -16,6 +16,7 @@ from serial import Serial
 from tkinter import *
 from tkinter import filedialog
 from tkinter import ttk
+from base64 import b64decode
 import threading
 import queue
 import logging
@@ -25,9 +26,9 @@ _log = logging.getLogger('hhconfig')
 _log.setLevel(logging.WARNING)
 
 # Constants
-_VERSION = '1.1.0'
+_VERSION = '1.1.1'
 _CFGFILE = '.hh.cfg'
-_HELP_PIN = 'PIN: Hoist serial console access PIN'
+_HELP_PIN = 'PIN: Hoist serial console access PIN (v25001)'
 _HELP_HP1 = 'H-P1: Time in seconds hoist requires to move \
 down from home to position P1 (feed)'
 
@@ -38,7 +39,7 @@ _HELP_MAN = 'Man: Manual override adjustment time in seconds'
 _HELP_HOME = 'Home: Maximum time in seconds hoist will raise \
 toward home position before flagging error condition'
 
-_HELP_HOMERETRY = 'Home-Retry: Retry return home after this many seconds'
+_HELP_HOMERETRY = 'Home-Retry: Retry return home after this many seconds (v25001)'
 
 _HELP_FEED = 'Feed: Return hoist automatically from P1 (feed) to \
 home position after this many minutes (0 = disabled)'
@@ -56,6 +57,8 @@ Source: https://pypi.org/project/hhconfig/\nSupport: https://hyspec.com.au/'
 _HELP_PORT = 'Hoist device, select to re-connect'
 _HELP_STAT = 'Current status of connected hoist'
 _HELP_FIRMWARE = 'Firmware version of connected hoist'
+_VER_PIN = 25001
+_VER_RETRY = 25001
 _BTC_PKSZ = 20
 _BTC_CONNECT_WAIT = 3  # Pause after connect
 _BTC_DISCONNECT_WAIT = 8  # Pause after disconnect
@@ -114,68 +117,48 @@ _KEYSUBS = {
     'p': 'PIN',
 }
 
-_LOGODATA = bytes.fromhex('\
-89504e470d0a1a0a0000000d4948445200000190000000900403000000d4e6204b000000\
-30504c5445a65623af6537e37126ba7b55c38d6ce98c53eb9b6ad1a68ff0b089d9b6a1f0\
-c0a2e7cdbef5d9c4f1e1d7f0f0f0ffffff46a1595d000000097048597300000b1300000b\
-1301009a9c18000007e94944415478daed9acd6b1b5710c09f58811142d616077a28a920\
-90bb820e398456bae7b06090e93f10e1a38a0b2284c4b7207cd2a1d04328ba06e1822185\
-1c4cab7b904190430f8922077ae92192850d4288d5ebccbcb71f5aad6d9cc4bb9b300f2c\
-6ff6c39adf9befd908f9952cc1200cc2200cc2200cc2200cc2200cc2200cc2200cc2200c\
-c2200cc220490179d9683c92f29f46e3b194bfe1f1b4e1ac2e9ec6f53bde68abe38743fc\
-075ea0fb713d1ac399b9fbd81339738fdbd181d48530e83323a52944561e0b6759f2401f\
-7d0ba2cef571ea093c8517a42cea534657caa9fb584e4edce372742020528a444ac31594\
-220c0429e7eef97610042fc70e724c2299a8171b0e0be12020bc0792590181cbb183e097\
-0e17f8a524aa750ec8ba0f448c57400af1839cc1d77549c8e18cb6361c64cd0fb2bb0292\
-8d1f04a5dfc50fd145a6611024552aa1bc06816c944a4a3c1764add1d821ced841d031ac\
-33dae753924e398d1b0920062c2a9ee1c97fe157de03c9c35d15bc6b4a9af2996be40911\
-f78db6103f8d30103a35d4200bdaf3259096a3917841409ac20939ec09891d0232f18160\
-805b05c924000472e17a9f02539f222b821c1e1efee50339f183ac68646e62504390fbf0\
-9c03f24cff89e84040a65c4ba4e0138fa4e3ec691fc881cf47e6cb3eb29247861a840244\
-a420a0876c5da4411b2dcc072120ff994ed4b2e4a2b51cb556327b7c20f0ad998a582b8a\
-b53a6d7900c415d59747da41909b490081d00b14c092ae90bb86835c92d9bb0900816498\
-36d1ba8c220a740ec825b5562e012090110dd871f07793e26e28c825d5af4e88f1824855\
-f5f59daf0e845fd5830c7d2037fdfd08845f1b7912107ed5be968f1d350412a202913e90\
-420044a599f81322964a10ae26da82822006c667b4260429dbfaa62590d38480b4c8ee4f\
-95cf869428a74a0b2a8f14957a964026090121ef204148ac158dcc3d675799b01d00a93b\
-3e12330819d578e6b40fc7beb64f657693b4a0343251ea71418c52e90e4589a92fe5c4d2\
-8fa81e31457d096de92a48cbcd2316f5612179642d092053e18c50301f06410c15950ada\
-b4a48a6107cec8c2153e012073da51da5e190a32a5a65c83d4893708d24e02882439310a\
-a764a869d9c2ab7e2934942f9c6bc50752c42f474f48878350a6e96a9033c25e06490f93\
-01f2b2d1d875c6bfd237fb6de3b9877ad2dbb5d528177f3dba70f6bb1bcfec975f2b3048\
-f240de9c53860c74a3338c1864e79bbbe0ad3ba552e9892e85f312dbd98a683ba5fc0dd5\
-2ea5a8322b401909e17a6a0a63a88bfbb69ebd520550c4f352be16e25ea420ef55af5454\
-62b820961f0405c70c32c4cf3505820f7c1f02d25255b4ed9c8f72d22852630592f34072\
-4b202955eeb7150e82cc5423b60262ebdb274e5b10150848b281d562516c1441b00a4edc\
-cb1253b90bb2b643a2569ccc6e210818dacf6080f038d824d66836cde5bbd0bdfca21493\
-aeab0c1bd9fb1103200af0b37b063b59a1b128562d5d17240f45d52e55560502c99d526e\
-cfc1e6b7e742f8add480c220037fab0c3fd654880841264a280441a13c90b20f04cfda22\
-8da6022006825480eace7db90452a1a9f03a68038db36b5f737b157c8788ef3fb31ec8bd\
-c32181647c2070117c2083c521168d2fe87e4baad98a9a9ca8c19205d57101eec911c435\
-7bbb0834ba796838329e69b95d870b927d8995fb99c8a1cd2348498338b395a1dba18d49\
-537d919de3b1e936bf11814c20a416c5dd0a39bb024999a2b81cb54e44d94ce1fd903f00\
-c414d6eb52c9f2831ca0c62af038f88906b1e20071c32f69a4eea481033d94eb0bab0822\
-f7c50dca2b20245c29f84130669046e207e9821c77b1f616e27809a48dade12e1a5b5fdc\
-2490a20bd2688c9d2172576a1fc9da3198d63a580d816c3c965ed49a7a2059f207483426\
-280b4a948a0229bf2e128817ff0c4a9bf9789cfdc48b5a2a826a104c1b4ed46a61072954\
-ce0790f708a276beec03a95322c7f08b3f2afc76a3cc2319278f2c83b43c90befb9e2787\
-2033a1734f4b581e88ad5e31e2bd154ab0d60ccd2b3290a930463ab32b1028517e409089\
-07724a03b854e90e982056bf26809c08e39949991d4a94b60abed0db421d267ec59227f2\
-12c5d6559f0b42fbae5e7e3a20e02fe3538038a391760184d4ff6523a51565e9513610c4\
-563492e8865c05916e1ec9635175ac2a5e029938657c761584065fb194f138dff9310ce4\
-c05f3496d181d17b1164468d15bdff0982b4f1b5bbd3587d176d87f867e9bec4d1ce5523\
-ccfc30bc24b4f5f93751bfb1e2e103833008833008833008833008833008833008833008\
-83300883300883300883300883300883300883300883c406b218f45e3d6f369bfbef920b\
-62bfedf57a1d94b2d97c5aa5b5d5dceb0d17781e2fd4aad55bbeb5b5dde91d8d130872eb\
-e3d6ed6ab55623fa66a7d34b00dac7828490d59aa0ab2f1fc40502c3ecec83550e3c7f1a\
-7d180cc85297d6e0aa0ef7f615193aad1a9affb5825c79a150609fbd0bb01680f0a0bafa\
-e8d6ded1c859f183f899b6619f7b8e7d2e408baf3acf9f3ed80c57fdf61f23df4a14882f\
-9254372fbce1a7bdbf47cb2b9120176b6d6fff68b4babe1c90db5bdbe849a3739648903d\
-6de9c454ab516c72fda6b9b7df1b8c2e59e21aa351706d9e1fb642ade54a4b5c871577ce\
-152b984e8e06a3cfb444b3f960f3f3416c6defbf1bc5b284faf5b6735eb8bea56aaa1a1a\
-3064ec819673d0eb6096ddf42be2d3ede3d341464be2294fab62a4bb4cf51fb4adc4c910\
-02f2052f06611006611006611006f99a40fe0745a166751c8047c20000000049454e44ae\
-426082\
+_LOGODATA = b64decode(b'\
+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\
+QmCC\
 ')
 
 
@@ -220,7 +203,7 @@ def _mkopt(parent,
                     add='+')
         ent.bind('<Enter>', lambda event, text=helptext: help(text), add='+')
         lbl.bind('<Enter>', lambda event, text=helptext: help(text), add='+')
-    return svar
+    return svar, ent
 
 
 class BTCSerial():
@@ -788,6 +771,27 @@ class HHConfig:
             self.dbut.state(['disabled'])
             self.ubut.state(['disabled'])
 
+    def checkversion(self, fwver):
+        """Disable unavailable elements based on firmware"""
+        fvno = 0
+        fwver = fwver.lstrip('v')
+        if fwver and fwver.isdigit():
+            fvno = int(fwver)
+        if fvno < _VER_PIN:
+            _log.debug('PIN entry disabled: %d < %d', fvno, _VER_PIN)
+            self.pinentry.state(['disabled'])
+            self.pinenabled = False
+        else:
+            self.pinentry.state(['!disabled'])
+            self.pinenabled = True
+        if fvno < _VER_RETRY:
+            _log.debug('Home-Retry entry disabled: %d < %d', fvno, _VER_RETRY)
+            self.retryentry.state(['disabled'])
+            self.enabled['H-Retry'] = False
+        else:
+            self.retryentry.state(['!disabled'])
+            self.enabled['H-Retry'] = True
+
     def devevent(self, data=None):
         """Extract and handle any pending events from the attached device"""
         while True:
@@ -809,6 +813,7 @@ class HHConfig:
                     _log.debug('Ignored config key: %r', key)
             elif evt[0] == 'firmware':
                 self.fwval.set(evt[1])
+                self.checkversion(evt[1])
             elif evt[0] == 'connect':
                 self.connect()
             elif evt[0] == 'disconnect':
@@ -929,21 +934,24 @@ class HHConfig:
 
     def xferpin(self):
         """Check for an updated console PIN"""
-        newpin = self.pin
-        try:
-            pv = self.pinval.get()
-            if pv and pv.isdigit():
-                newpin = int(pv)
-            else:
-                newpin = 0
-        except Exception as e:
-            pass
-        if newpin != self.pin:
-            if newpin == 0:
-                self.pinval.set('')
-            self.pin = newpin
-            self._savepin()
-            self.devio.updatepin(self.pin)
+        if self.pinenabled:
+            newpin = self.pin
+            try:
+                pv = self.pinval.get()
+                if pv and pv.isdigit():
+                    newpin = int(pv)
+                else:
+                    newpin = 0
+            except Exception as e:
+                pass
+            if newpin != self.pin:
+                if newpin == 0:
+                    self.pinval.set('')
+                self.pin = newpin
+                self._savepin()
+                self.devio.updatepin(self.pin)
+        else:
+            _log.debug('PIN disabled due to firmware')
 
     def uiupdate(self, data=None):
         """Check for required updates and send to attached device"""
@@ -958,9 +966,13 @@ class HHConfig:
         if self.devio.connected():
             cfg = {}
             for k in self.devval:
-                if k in self.uval and self.uval[k] is not None:
-                    if self.uval[k] != self.devval[k]:
-                        cfg[k] = self.uval[k]
+                if self.enabled[k]:
+                    if k in self.uval and self.uval[k] is not None:
+                        if self.uval[k] != self.devval[k]:
+                            cfg[k] = self.uval[k]
+                else:
+                    _log.debug('Config key %s disabled due to firmware level',
+                               k)
             if cfg:
                 _log.debug('Sending %d updated values to hoist', len(cfg))
                 self.logvar.set('Updating hoist...')
@@ -1165,49 +1177,54 @@ class HHConfig:
         check_int_wrapper = (window.register(self.check_int), '%P', '%V')
 
         # PIN entry
-        self.pinval = _mkopt(frame, "PIN:", "", row, check_int_wrapper,
-                             self.uiupdate, self.setHelp, _HELP_PIN)
+        self.pinenabled = True
+        self.pinval, self.pinentry = _mkopt(frame, "PIN:", "", row,
+                                            check_int_wrapper, self.uiupdate,
+                                            self.setHelp, _HELP_PIN)
         if self.pin:  # is nonzero
             self.pinval.set(str(self.pin))
         row += 1
 
         # device values
+        self.enabled = {}
         self.devval = {}
         self.uval = {}
         for k in _CFGKEYS:
             self.devval[k] = None
             self.uval[k] = None
+            self.enabled[k] = True
 
         # config options
         self.uival = {}
-        self.uival['H-P1'] = _mkopt(frame, "H-P1:", "seconds", row,
-                                    check_cent_wrapper, self.uiupdate,
-                                    self.setHelp, _HELP_HP1)
+        self.uival['H-P1'], junk = _mkopt(frame, "H-P1:", "seconds", row,
+                                          check_cent_wrapper, self.uiupdate,
+                                          self.setHelp, _HELP_HP1)
         row += 1
-        self.uival['P1-P2'] = _mkopt(frame, "P1-P2:", "seconds", row,
-                                     check_cent_wrapper, self.uiupdate,
-                                     self.setHelp, _HELP_P1P2)
+        self.uival['P1-P2'], junk = _mkopt(frame, "P1-P2:", "seconds", row,
+                                           check_cent_wrapper, self.uiupdate,
+                                           self.setHelp, _HELP_P1P2)
         row += 1
-        self.uival['Man'] = _mkopt(frame, "Man:", "seconds", row,
-                                   check_cent_wrapper, self.uiupdate,
-                                   self.setHelp, _HELP_MAN)
+        self.uival['Man'], junk = _mkopt(frame, "Man:", "seconds", row,
+                                         check_cent_wrapper, self.uiupdate,
+                                         self.setHelp, _HELP_MAN)
         row += 1
-        self.uival['H'] = _mkopt(frame, "Home:", "seconds", row,
-                                 check_cent_wrapper, self.uiupdate,
-                                 self.setHelp, _HELP_HOME)
-        row += 1
-        self.uival['H-Retry'] = _mkopt(frame, "Home-Retry:", "seconds", row,
+        self.uival['H'], junk = _mkopt(frame, "Home:", "seconds", row,
                                        check_cent_wrapper, self.uiupdate,
-                                       self.setHelp, _HELP_HOMERETRY)
+                                       self.setHelp, _HELP_HOME)
         row += 1
-        self.uival['Feed'] = _mkopt(frame, "Feed:", "minutes", row,
-                                    check_int_wrapper, self.uiupdate,
-                                    self.setHelp, _HELP_FEED)
+        self.uival['H-Retry'], self.retryentry = _mkopt(
+            frame, "Home-Retry:", "seconds", row, check_cent_wrapper,
+            self.uiupdate, self.setHelp, _HELP_HOMERETRY)
         row += 1
-        self.uival['Feeds/week'] = _mkopt(frame, "Feeds/week:", "(max 5000)",
-                                          row, check_int_wrapper,
-                                          self.uiupdate, self.setHelp,
-                                          _HELP_FEEDWEEK)
+        self.uival['Feed'], junk = _mkopt(frame, "Feed:", "minutes", row,
+                                          check_int_wrapper, self.uiupdate,
+                                          self.setHelp, _HELP_FEED)
+        row += 1
+        self.uival['Feeds/week'], junk = _mkopt(frame, "Feeds/week:",
+                                                "(max 5000)", row,
+                                                check_int_wrapper,
+                                                self.uiupdate, self.setHelp,
+                                                _HELP_FEEDWEEK)
         row += 1
 
         # firmware version label
