@@ -5,7 +5,7 @@
 ## Usage
 
 Launch hhconfig utility, enter device console pin
-if applicable, attache console cable if applicable,
+if applicable, attach console cable if applicable,
 then select hoist from devices list.
 
 Current status is displayed on the top line. Use

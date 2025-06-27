@@ -26,7 +26,7 @@ _log = logging.getLogger('hhconfig')
 _log.setLevel(logging.WARNING)
 
 # Constants
-_VERSION = '1.1.1'
+_VERSION = '1.1.2'
 _CFGFILE = '.hh.cfg'
 _HELP_PIN = 'PIN: Hoist serial console access PIN (v25001)'
 _HELP_HP1 = 'H-P1: Time in seconds hoist requires to move \
@@ -87,6 +87,10 @@ _CFGKEYS = {
     'Feed': 'f',
     'Feeds/week': 'n',
 }
+_SPINKEYS = (
+    'H-P1',
+    'P1-P2',
+)
 _TIMEKEYS = (
     'H-P1',
     'P1-P2',
@@ -180,11 +184,22 @@ def _mkopt(parent,
            validator,
            update,
            help=None,
-           helptext=''):
+           helptext='',optionKey=None):
     prompt = ttk.Label(parent, text=prompt)
     prompt.grid(column=0, row=row, sticky=(E, ))
     svar = StringVar()
-    ent = ttk.Entry(parent,
+    ent = None
+    if optionKey in _SPINKEYS:
+        ent = ttk.Spinbox(parent,
+                    textvariable=svar,
+                    width=6,
+                    justify='right',
+                    validate='key',
+                    validatecommand=validator,
+                    command=update,
+                    from_=0.0, to=60.0, increment=0.5)
+    else:
+        ent = ttk.Entry(parent,
                     textvariable=svar,
                     width=6,
                     justify='right',
@@ -955,6 +970,7 @@ class HHConfig:
 
     def uiupdate(self, data=None):
         """Check for required updates and send to attached device"""
+        _log.debug('uiupdate')
         for k in _TIMEKEYS:
             self.xfertimeval(k)
         for k in _INTKEYS:
@@ -1198,11 +1214,11 @@ class HHConfig:
         self.uival = {}
         self.uival['H-P1'], junk = _mkopt(frame, "H-P1:", "seconds", row,
                                           check_cent_wrapper, self.uiupdate,
-                                          self.setHelp, _HELP_HP1)
+                                          self.setHelp, _HELP_HP1,'H-P1')
         row += 1
         self.uival['P1-P2'], junk = _mkopt(frame, "P1-P2:", "seconds", row,
                                            check_cent_wrapper, self.uiupdate,
-                                           self.setHelp, _HELP_P1P2)
+                                           self.setHelp, _HELP_P1P2,'P1-P2')
         row += 1
         self.uival['Man'], junk = _mkopt(frame, "Man:", "seconds", row,
                                          check_cent_wrapper, self.uiupdate,
