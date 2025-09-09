@@ -1,6 +1,6 @@
 {
  "comment": "Default values for firmware v25001",
- "PIN": 0,
+ "ACN": 0,
  "H-P1": 1250,
  "P1-P2": 1500,
  "Man": 400,

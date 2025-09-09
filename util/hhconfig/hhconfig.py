@@ -2,16 +2,15 @@
 # SPDX-License-Identifier: MIT
 """hhconfig
 
-Crude TK Graphical front-end for Hay Hoist console
+Crude TK Graphical front-end for Hay Hoist serial console
 
 """
+__version__ = '1.2.0'
 
 import os
 import re
 import sys
 import json
-import bluetooth  # Classic interface ~ SPP
-from socket import SHUT_RDWR
 from serial import Serial
 from tkinter import *
 from tkinter import filedialog
@@ -26,9 +25,8 @@ _log = logging.getLogger('hhconfig')
 _log.setLevel(logging.WARNING)
 
 # Constants
-_VERSION = '1.1.2'
 _CFGFILE = '.hh.cfg'
-_HELP_PIN = 'PIN: Hoist serial console access PIN (v25001)'
+_HELP_ACN = 'ACN: Hoist serial console access code number (v25001)'
 _HELP_HP1 = 'H-P1: Time in seconds hoist requires to move \
 down from home to position P1 (feed)'
 
@@ -39,7 +37,8 @@ _HELP_MAN = 'Man: Manual override adjustment time in seconds'
 _HELP_HOME = 'Home: Maximum time in seconds hoist will raise \
 toward home position before flagging error condition'
 
-_HELP_HOMERETRY = 'Home-Retry: Retry return home after this many seconds (v25001)'
+_HELP_HOMERETRY = 'Home-Retry: Retry return home after \
+this many seconds (v25001)'
 
 _HELP_FEED = 'Feed: Return hoist automatically from P1 (feed) to \
 home position after this many minutes (0 = disabled)'
@@ -57,24 +56,12 @@ Source: https://pypi.org/project/hhconfig/\nSupport: https://hyspec.com.au/'
 _HELP_PORT = 'Hoist device, select to re-connect'
 _HELP_STAT = 'Current status of connected hoist'
 _HELP_FIRMWARE = 'Firmware version of connected hoist'
-_VER_PIN = 25001
+_VER_ACN = 25001
 _VER_RETRY = 25001
-_BTC_PKSZ = 20
-_BTC_CONNECT_WAIT = 3  # Pause after connect
-_BTC_DISCONNECT_WAIT = 8  # Pause after disconnect
-_BTC_SCANTIME = 8
-_BTC_DEV = '00:1D:4B'  # GBF Address prefix
-_BTC_PORT = 2  # GBF SPP port no
-_BTC_RFCOMM = bluetooth.RFCOMM
-try:
-    _BTC_RFCOMM = bluetooth.bluetooth.Protocols.RFCOMM  # pybluez2/windows
-except Exception as e:
-    pass
 _SERPOLL = 0.2
-_BTCPOLL = 0.2
 _DEVPOLL = 3000
 _ERRCOUNT = 2  # Tolerate two missed status before dropping connection
-_DEVRETRY = 6  # If devpoll gets stuck waiting for status, restart
+_DEVRETRY = 2  # If devpoll gets stuck waiting for status, restart
 _BAUDRATE = 19200
 _READLEN = 512
 _CFG_LEN = 8  # Number of required config elements for full connection
@@ -118,7 +105,7 @@ _KEYSUBS = {
     'Feed min': 'Feed',
     'n': 'Feeds/week',
     'r': 'H-Retry',
-    'p': 'PIN',
+    'p': 'ACN',
 }
 
 _LOGODATA = b64decode(b'\
@@ -166,11 +153,6 @@ QmCC\
 ')
 
 
-def isbtcaddr(addr):
-    """Return true if addr looks like a MAC address"""
-    return re.match('^[\dA-Fa-f]{2}(:[\dA-Fa-f]{2}){5}$', addr) is not None
-
-
 def _subkey(key):
     if key in _KEYSUBS:
         key = _KEYSUBS[key]
@@ -184,27 +166,30 @@ def _mkopt(parent,
            validator,
            update,
            help=None,
-           helptext='',optionKey=None):
+           helptext='',
+           optionKey=None):
     prompt = ttk.Label(parent, text=prompt)
     prompt.grid(column=0, row=row, sticky=(E, ))
     svar = StringVar()
     ent = None
     if optionKey in _SPINKEYS:
         ent = ttk.Spinbox(parent,
-                    textvariable=svar,
-                    width=6,
-                    justify='right',
-                    validate='key',
-                    validatecommand=validator,
-                    command=update,
-                    from_=0.0, to=60.0, increment=0.5)
+                          textvariable=svar,
+                          width=6,
+                          justify='right',
+                          validate='key',
+                          validatecommand=validator,
+                          command=update,
+                          from_=0.0,
+                          to=120.0,
+                          increment=0.5)
     else:
         ent = ttk.Entry(parent,
-                    textvariable=svar,
-                    width=6,
-                    justify='right',
-                    validate='key',
-                    validatecommand=validator)
+                        textvariable=svar,
+                        width=6,
+                        justify='right',
+                        validate='key',
+                        validatecommand=validator)
     ent.grid(column=1, row=row, sticky=(
         E,
         W,
@@ -219,145 +204,6 @@ def _mkopt(parent,
         ent.bind('<Enter>', lambda event, text=helptext: help(text), add='+')
         lbl.bind('<Enter>', lambda event, text=helptext: help(text), add='+')
     return svar, ent
-
-
-class BTCSerial():
-    """Bluetooth Classic RFCOMM Serial (SPP) Wrapper"""
-
-    def __init__(self, addr=None):
-        """Connect to the classic device on addr: (address, port)"""
-        _log.debug('Creating Bluetooth RFCOMM prot=%r', _BTC_RFCOMM)
-        self._sock = bluetooth.BluetoothSocket(_BTC_RFCOMM)
-        if addr is not None:
-            self.open(addr)
-
-    def isopen(self):
-        return self._sock is not None
-
-    def open(self, addr):
-        try:
-            self._sock.connect((addr, _BTC_PORT))
-            _log.debug('Sock Connected - pause')
-            sleep(_BTC_CONNECT_WAIT)
-            _log.debug('Sock Connected - done')
-        except Exception as e:
-            _log.info('%s opening BTC device %r: %s', e.__class__.__name__,
-                      addr, e)
-            self.close()
-        return self.isopen()
-
-    def close(self):
-        try:
-            # release the previous handle
-            osock = self._sock
-            self._sock = None
-            osock.shutdown(SHUT_RDWR)
-            osock.close()
-            del (osock)
-
-            # add pause to allow bluez to clean up
-            sleep(_BTC_CONNECT_WAIT)
-        except Exception as e:
-            _log.info('%s closing BTC device %r: %s', e.__class__.__name__,
-                      addr, e)
-            pass
-        self._sock = None
-
-    def read(self, count):
-        """Read to a timeout"""
-        ret = b''
-        if self._sock is not None:
-            try:
-                self._sock.settimeout(_BTCPOLL)
-                while True:
-                    nb = self._sock.recv(count)
-                    if nb:
-                        ret += nb
-            except Exception as e:
-                if str(e) != 'timed out':
-                    _log.error('%s BTC read error: %s', e.__class__.__name__,
-                               e)
-                    self.close()
-        return ret
-
-    def write(self, buf):
-        so = 0
-        if self._sock is not None:
-            try:
-                self._sock.settimeout(None)
-                bl = len(buf)
-                rem = bl
-                while rem:
-                    eo = min(bl, so + _BTC_PKSZ)
-                    oc = self._sock.send(buf[so:eo])
-                    rem -= oc
-                    so += oc
-            except Exception as e:
-                if str(e) != 'timed out':
-                    _log.error('%s BTC write error: %s', e.__class__.__name__,
-                               e)
-                    self.close()
-        return so
-
-
-class BTCScan(threading.Thread):
-    """Bluetooth Classic Scanner"""
-
-    def exit(self):
-        """Request thread termination"""
-        self._running = False
-        self._cqueue.put_nowait(('_exit', True))
-
-    def trigger(self):
-        """Request a new BTC device scan"""
-        self._cqueue.put_nowait(('_trigger', True))
-
-    def inscan(self):
-        """Return true if a scan is in progress"""
-        return self._inscan
-
-    def __init__(self):
-        threading.Thread.__init__(self, daemon=True)
-        self._running = False
-        self._inscan = False
-        self._cqueue = queue.Queue()
-        self.devs = {}
-
-    def run(self):
-        """Thread main loop, called by object.start()"""
-        self._running = True
-        while self._running:
-            try:
-                c = self._cqueue.get()
-                self._cqueue.task_done()
-                if c[0] == '_exit':
-                    self._running = False
-                elif c[0] == '_trigger':
-                    self._trigger()
-            except queue.Empty:
-                pass
-            except Exception as e:
-                _log.error('BTC scanner %s: %s', e.__class__.__name__, e)
-
-    def _trigger(self):
-        try:
-            self._inscan = True
-            _log.debug('BTC Starting discovery scan')
-            for d in bluetooth.discover_devices(lookup_names=True,
-                                                duration=_BTC_SCANTIME):
-                if d[0].upper().startswith(_BTC_DEV):
-                    devport = d[0]
-                    devstr = '%s - %s' % (d[0], d[1])
-                    if devport not in self.devs:
-                        _log.debug('BTC discovered device %s', devstr)
-                    elif self.devs[devport] != devstr:
-                        _log.debug('BTC update device %s', devstr)
-                    self.devs[devport] = devstr
-        except Exception as e:
-            _log.error('BTC Scan %s: %s', e.__class__.__name__, e)
-        finally:
-            self._inscan = False
-        _log.debug('BTC end discovery scan')
 
 
 class SerialConsole(threading.Thread):
@@ -390,10 +236,10 @@ class SerialConsole(threading.Thread):
         self._flush()
         self._cqueue.put_nowait(('_close', None))
 
-    def updatepin(self, pin):
-        """Update the auth pin on attached device"""
-        self._cqueue.put_nowait(('_updatepin', pin))
-        self._cqueue.put_nowait(('_message', 'Console PIN updated'))
+    def updateacn(self, acn):
+        """Update the auth acn on attached device"""
+        self._cqueue.put_nowait(('_updateacn', acn))
+        self._cqueue.put_nowait(('_message', 'Console ACN updated'))
 
     def update(self, cfg):
         """Update all keys in cfg on attached device"""
@@ -424,12 +270,12 @@ class SerialConsole(threading.Thread):
         self._sreq += 1
         self._cqueue.put_nowait(('_status', data))
 
-    def setpin(self, pin):
-        self._pin = pin
+    def setacn(self, acn):
+        self._acn = acn
 
     def __init__(self):
         threading.Thread.__init__(self, daemon=True)
-        self._pin = 0
+        self._acn = 0
         self._sreq = 0
         self._portdev = None
         self.portdev = None
@@ -481,10 +327,10 @@ class SerialConsole(threading.Thread):
                 self._portinproc = False
         return rb
 
-    def _updatepin(self, pin):
-        self._pin = pin
+    def _updateacn(self, acn):
+        self._acn = acn
         if self.connected() and self.configured():
-            cmd = 'p' + str(pin) + '\r\n'
+            cmd = 'p' + str(acn) + '\r\n'
             self._send(cmd.encode('ascii', 'ignore'))
             self._readresponse()
 
@@ -501,8 +347,8 @@ class SerialConsole(threading.Thread):
         _log.debug('HELLO: %r', rb)
 
     def _auth(self, data=None):
-        """Send console PIN"""
-        cmd = '\x10' + str(self._pin) + '\r\n'
+        """Send console ACN"""
+        cmd = '\x10' + str(self._acn) + '\r\n'
         self._send(cmd.encode('ascii', 'ignore'))
         rb = self._recv(_READLEN)
         _log.debug('AUTH: %r', rb)
@@ -520,7 +366,7 @@ class SerialConsole(threading.Thread):
         if key == 'Firmware':
             self.cfg[key] = value
             self._equeue.put(('firmware', value))
-        elif key == 'PIN':
+        elif key == 'ACN':
             pass
         else:
             try:
@@ -551,9 +397,9 @@ class SerialConsole(threading.Thread):
                 ))
                 docb = True
             elif ':' in l:
+                self._equeue.put(('message', l))
+                docb = True
                 if l.startswith('Trigger:'):
-                    self._equeue.put(('message', l))
-                    docb = True
                     if 'reset' in l:
                         # re-auth required
                         self._cqueue.put_nowait(('_auth', None))
@@ -561,7 +407,7 @@ class SerialConsole(threading.Thread):
                 lv = l.split(' = ', maxsplit=1)
                 if len(lv) == 2:
                     key = _subkey(lv[0].strip())
-                    if key != 'PIN':
+                    if key != 'ACN':
                         self._setvalue(key, lv[1].strip())
                         docb = True
                         if self.configured() and not wasconfigured:
@@ -570,7 +416,7 @@ class SerialConsole(threading.Thread):
                                 None,
                             ))
                     else:
-                        _log.debug('PIN Updated')
+                        _log.debug('ACN Updated')
 
                 else:
                     _log.debug('Ignored unexpected response %r', l)
@@ -601,21 +447,11 @@ class SerialConsole(threading.Thread):
         if self.portdev is not None:
             self._portinproc = True
             self._sreq = 0
-            if isbtcaddr(self.portdev):
-                _log.debug('Connecting BTC device: %r', self.portdev)
-                self._portdev = BTCSerial()
-                if self._portdev.open(self.portdev):
-                    _log.debug('BTC Device connected OK')
-                else:
-                    _log.debug('BTC Device did not connect')
-                    self._portdev = None
-                    self.clearproc()
-            else:
-                _log.debug('Connecting serial device: %r', self.portdev)
-                self._portdev = Serial(port=self.portdev,
-                                       baudrate=_BAUDRATE,
-                                       rtscts=False,
-                                       timeout=_SERPOLL)
+            _log.debug('Connecting serial device: %r', self.portdev)
+            self._portdev = Serial(port=self.portdev,
+                                   baudrate=_BAUDRATE,
+                                   rtscts=False,
+                                   timeout=_SERPOLL)
         return self._portdev is not None
 
     def _getvalues(self, data=None):
@@ -684,39 +520,23 @@ class SerialConsole(threading.Thread):
 
 
 class HHConfig:
-    """TK configuration utility for Hay Hoist"""
+    """TK Hay Hoist serial console utility"""
 
     def getports(self):
         """Update the list of available ports"""
         self._ioports = []
         self._ionames = []
 
-        self._ioports.append(None)
-        self._ionames.append(' -- Bluetooth Devices -- ')
-
-        if self.scanio.devs:
-            for dev in self.scanio.devs:
-                devname = self.scanio.devs[dev]
-                if dev not in self.btdevs:
-                    self.logvar.set('Found hoist: %s' % (devname, ))
-                self.btdevs[dev] = devname
-                self._ioports.append(dev)
-                self._ionames.append(devname)
-
-        # Add serial ports after BTCs
         devs = {}
         try:
             from serial.tools.list_ports import comports
             for port in comports():
                 devname = str(port)
-                # ignore windows auto add SPP COM ports
-                if 'Serial over Bluetooth' not in devname:
+                if ' n/a' not in devname:
                     devs[port.device] = devname
         except Exception:
             pass
         if devs:
-            self._ioports.append(None)
-            self._ionames.append(' -- Serial Devices -- ')
             for cp in sorted(devs):
                 self._ioports.append(cp)
                 self._ionames.append(devs[cp])
@@ -792,13 +612,13 @@ class HHConfig:
         fwver = fwver.lstrip('v')
         if fwver and fwver.isdigit():
             fvno = int(fwver)
-        if fvno < _VER_PIN:
-            _log.debug('PIN entry disabled: %d < %d', fvno, _VER_PIN)
-            self.pinentry.state(['disabled'])
-            self.pinenabled = False
+        if fvno < _VER_ACN:
+            _log.debug('ACN entry disabled: %d < %d', fvno, _VER_ACN)
+            self.acnentry.state(['disabled'])
+            self.acnenabled = False
         else:
-            self.pinentry.state(['!disabled'])
-            self.pinenabled = True
+            self.acnentry.state(['!disabled'])
+            self.acnenabled = True
         if fvno < _VER_RETRY:
             _log.debug('Home-Retry entry disabled: %d < %d', fvno, _VER_RETRY)
             self.retryentry.state(['disabled'])
@@ -840,7 +660,7 @@ class HHConfig:
 
     def devcallback(self, data=None):
         """Trigger an event in tk main loop"""
-        self.window.event_generate('<<SerialDevEvent>>')
+        self.window.event_generate('<<SerialDevEvent>>', when='tail')
 
     def doreconnect(self):
         """Initiate a re-list and re-connect sequence"""
@@ -899,6 +719,9 @@ class HHConfig:
         """Reformat time value for display in user interface"""
         v = None
         fv = None
+        if k not in self.uival:
+            _log.warning('xfertimeval key %s not in uival', k)
+            return
         nv = self.uival[k].get()
         if nv:
             try:
@@ -921,6 +744,9 @@ class HHConfig:
         """Reformat integer value for display in user interface"""
         v = None
         fv = None
+        if k not in self.uival:
+            _log.warning('xferint key %s not in uival', k)
+            return
         nv = self.uival[k].get()
         if nv:
             try:
@@ -931,7 +757,7 @@ class HHConfig:
             except Exception:
                 pass
         else:
-            if self.devval[k] is not None:
+            if k in self.devval and self.devval[k] is not None:
                 v = self.devval[k]
                 fv = '%d' % (v, )
 
@@ -939,34 +765,47 @@ class HHConfig:
         if fv is not None and fv != nv:
             self.uival[k].set(fv)
 
-    def _savepin(self):
-        """Write the cache pin config"""
+    def _saveacn(self):
+        """Write the cache acn config"""
         try:
             with open(_CFGFILE, 'w') as f:
-                f.write('%d\r\n' % (self.pin, ))
+                f.write('%d\r\n' % (self.acn, ))
         except Exception as e:
             _log.error('%s saving cfg: %s', e.__class__.__name__, e)
 
-    def xferpin(self):
-        """Check for an updated console PIN"""
-        if self.pinenabled:
-            newpin = self.pin
+    def xferacn(self):
+        """Check for an updated console ACN"""
+        if self.acnenabled:
+            newacn = self.acn
             try:
-                pv = self.pinval.get()
+                pv = self.acnval.get()
                 if pv and pv.isdigit():
-                    newpin = int(pv)
+                    newacn = int(pv)
                 else:
-                    newpin = 0
+                    newacn = 0
             except Exception as e:
                 pass
-            if newpin != self.pin:
-                if newpin == 0:
-                    self.pinval.set('')
-                self.pin = newpin
-                self._savepin()
-                self.devio.updatepin(self.pin)
+            if newacn != self.acn:
+                if newacn == 0:
+                    self.acnval.set('')
+                self.acn = newacn
+                self._saveacn()
+                self.devio.updateacn(self.acn)
         else:
-            _log.debug('PIN disabled due to firmware')
+            _log.debug('ACN disabled due to firmware')
+
+    def hp1update(self, data=None):
+        """Process a change in the H-P1 time"""
+        oldp1 = self.uval['H-P1']
+        oldp2 = self.uval['P1-P2']
+        self.xfertimeval('H-P1')
+        newp1 = self.uval['H-P1']
+        if newp1 != oldp1:
+            diff = newp1 - oldp1
+            newp2 = max(0, min(oldp2 - diff, 12000))
+            fv = '%0.2f' % (newp2 / 100.0, )
+            self.uival['P1-P2'].set(fv)
+        self.uiupdate()
 
     def uiupdate(self, data=None):
         """Check for required updates and send to attached device"""
@@ -975,8 +814,7 @@ class HHConfig:
             self.xfertimeval(k)
         for k in _INTKEYS:
             self.xferintval(k)
-
-        self.xferpin()
+        self.xferacn()
 
         # if connected, update device
         if self.devio.connected():
@@ -1003,11 +841,6 @@ class HHConfig:
                     if self.devio.connected():
                         _log.debug('Disconnect')
                         self.devio.setport(None)
-                    else:
-                        if not self.scanio.inscan():
-                            _log.debug('Trigger BTC scan')
-                            self.scanio.trigger()
-                            self.logvar.set('Scanning Bluetooth...')
                 else:
                     # force reconnect to specified port
                     self._devpollcnt = 0
@@ -1042,14 +875,14 @@ class HHConfig:
                 except Exception as e:
                     _log.error('%s loading int key %r: %s',
                                e.__class__.__name__, k, e)
-            elif k == 'PIN':
+            elif k == 'ACN':
                 if isinstance(cfg[key], int):
-                    if cfg[key] != self.pin:
+                    if cfg[key] != self.acn:
                         if cfg[key]:
-                            self.pinval.set('%d' % (cfg[key], ))
+                            self.acnval.set('%d' % (cfg[key], ))
                         else:
-                            self.pinval.set('')
-                        _log.debug('Console PIN updated')
+                            self.acnval.set('')
+                        _log.debug('Console ACN updated')
                         doupdate = True
             else:
                 _log.debug('Ignored invalid config key %r', k)
@@ -1059,7 +892,7 @@ class HHConfig:
     def flatconfig(self):
         """Return a flattened config for the current values"""
         cfg = {}
-        cfg['PIN'] = self.pin
+        cfg['ACN'] = self.acn
         for k in self.uval:
             if self.uval[k] is not None:
                 cfg[k] = self.uval[k]
@@ -1101,24 +934,22 @@ class HHConfig:
         self.help.replace('1.0', 'end', text)
         self.help['state'] = 'disabled'
 
-    def _loadpin(self):
-        """Check for a cached pin config"""
+    def _loadacn(self):
+        """Check for a cached access control number config"""
         if os.path.exists(_CFGFILE):
             with open(_CFGFILE) as f:
                 a = f.read().strip()
                 if a and a.isdigit():
                     aval = int(a)
                     if aval > 0 and aval < 65535:
-                        self.pin = aval
+                        self.acn = aval
 
-    def __init__(self, window=None, devio=None, scanio=None):
-        self.pin = 0
-        self._loadpin()
-        self.scanio = scanio
-        self.btdevs = {}
+    def __init__(self, window=None, devio=None):
+        self.acn = 0
+        self._loadacn()
         self.devio = devio
         self.devio.cb = self.devcallback
-        self.devio.setpin(self.pin)
+        self.devio.setacn(self.acn)
         self._devpollcnt = 0
         window.title('Hay Hoist Config')
         row = 0
@@ -1192,13 +1023,13 @@ class HHConfig:
         check_cent_wrapper = (window.register(self.check_cent), '%P', '%V')
         check_int_wrapper = (window.register(self.check_int), '%P', '%V')
 
-        # PIN entry
-        self.pinenabled = True
-        self.pinval, self.pinentry = _mkopt(frame, "PIN:", "", row,
+        # ACN entry
+        self.acnenabled = True
+        self.acnval, self.acnentry = _mkopt(frame, "ACN:", "", row,
                                             check_int_wrapper, self.uiupdate,
-                                            self.setHelp, _HELP_PIN)
-        if self.pin:  # is nonzero
-            self.pinval.set(str(self.pin))
+                                            self.setHelp, _HELP_ACN)
+        if self.acn:  # is nonzero
+            self.acnval.set(str(self.acn))
         row += 1
 
         # device values
@@ -1213,12 +1044,12 @@ class HHConfig:
         # config options
         self.uival = {}
         self.uival['H-P1'], junk = _mkopt(frame, "H-P1:", "seconds", row,
-                                          check_cent_wrapper, self.uiupdate,
-                                          self.setHelp, _HELP_HP1,'H-P1')
+                                          check_cent_wrapper, self.hp1update,
+                                          self.setHelp, _HELP_HP1, 'H-P1')
         row += 1
         self.uival['P1-P2'], junk = _mkopt(frame, "P1-P2:", "seconds", row,
                                            check_cent_wrapper, self.uiupdate,
-                                           self.setHelp, _HELP_P1P2,'P1-P2')
+                                           self.setHelp, _HELP_P1P2, 'P1-P2')
         row += 1
         self.uival['Man'], junk = _mkopt(frame, "Man:", "seconds", row,
                                          check_cent_wrapper, self.uiupdate,
@@ -1259,7 +1090,7 @@ class HHConfig:
         ttk.Label(frame, text="Tool Version:").grid(column=0,
                                                     row=row,
                                                     sticky=(E, ))
-        lbl = ttk.Label(frame, text=_VERSION)
+        lbl = ttk.Label(frame, text=__version__)
         lbl.grid(column=1, row=row, sticky=(
             E,
             W,
@@ -1358,7 +1189,6 @@ class HHConfig:
 
         # start device polling
         self.devpoll()
-        self.scanio.trigger()
 
 
 def main():
@@ -1368,10 +1198,8 @@ def main():
         _log.debug('Enabled debug logging')
     sio = SerialConsole()
     sio.start()
-    btc = BTCScan()
-    btc.start()
     win = Tk()
-    app = HHConfig(window=win, devio=sio, scanio=btc)
+    app = HHConfig(window=win, devio=sio)
     win.mainloop()
     return 0
 
