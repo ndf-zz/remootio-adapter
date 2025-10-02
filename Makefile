@@ -4,7 +4,7 @@
 #
 
 PROJECT = remootio-adapter
-VERSION = 25002
+VERSION = 25003
 
 # Build objects
 OBJECTS = src/main.o

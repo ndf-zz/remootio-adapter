@@ -22,7 +22,7 @@
 #define DEFAULT_MAN	400U	// 4s MAN adjustment
 #define DEFAULT_H	4000U	// 40s Max return home time
 #define DEFAULT_HR	250U	// 2.5s Home retry timeout
-#define DEFAULT_S	45U	// 45 minutes safe time, triggers M_H
+#define DEFAULT_S	60U	// 60 minutes safe time, triggers M_H
 #define DEFAULT_PK	0U	// Default Console PIN
 
 // Fixed voltage threshold
@@ -30,6 +30,9 @@
 
 // Auto lowering voltage threshold
 #define NIGHTVOLTS	0x53	// ~13.2V
+#define OVRNONE		0x00	// No voltage override
+#define OVRNIGHT	0x01	// Flag override of night volts
+#define OVRLOW		0x02	// Flag override of low voltage
 
 // Define I/O aliases, Refer: pcb/m328pb_portpins.pdf
 #define S1	0		// PORTC.0
@@ -126,6 +129,7 @@ struct state_machine {
 	uint16_t f_timeout;	// maximum minutes at p1
 	uint16_t nf;		// number of feeds/day
 	uint16_t nf_timeout;	// target minutes for h->p1
+	uint16_t clock;		// 0.01s system clock
 	uint16_t count;		// 0.01s state counter
 	uint16_t mincount;	// 0.01s state counter for determining minutes
 	uint16_t minutes;	// minute state counter

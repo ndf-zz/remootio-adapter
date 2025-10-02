@@ -36,8 +36,9 @@ static uint8_t check_voltage(uint8_t override)
 {
 	uint8_t curvolts = ADCH;
 	if (curvolts < LOWVOLTS) {
-		return 0;
+		return override & OVRLOW;
 	} else {
+		// allow any set override
 		return (override || curvolts >= NIGHTVOLTS);
 	}
 }
@@ -304,7 +305,8 @@ static void read_triggers(void)
 			trigger_home();
 		} else {
 			if (triggers & TRIGGER_DOWN) {
-				trigger_down(1U);
+				// remootio may override night voltage
+				trigger_down(OVRNIGHT);
 			}
 			if (triggers & TRIGGER_UP) {
 				// up cancels a concurrent down
@@ -356,7 +358,7 @@ static void read_timers(void)
 		break;
 	case state_at_h:
 		if (feed.nf_timeout > 0 && feed.minutes >= feed.nf_timeout) {
-			trigger_down(0);
+			trigger_down(OVRNONE);
 		} else if (feed.hr_timeout > 0 && feed.count > feed.hr_timeout) {
 			if ((feed.bstate & TRIGGER_HOME) == 0) {
 				console_write("Trigger: notathome\r\n");
@@ -385,6 +387,7 @@ static void read_timers(void)
 
 static void update_state(uint8_t clock)
 {
+	feed.clock++;
 	read_triggers();
 	read_timers();
 	if (clock == 0) {
@@ -529,7 +532,8 @@ static void handle_event(struct console_event *event)
 		show_values();
 		break;
 	case event_down:
-		trigger_down(1U);
+                // console trigger may override low voltage
+		trigger_down(OVRLOW);
 		break;
 	case event_up:
 		trigger_up();

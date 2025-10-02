@@ -10,7 +10,7 @@
 #define BUFMASK (BUFLEN-1)
 #define RXWI GPIOR1
 #define RXRI GPIOR2
-#define IDLE_TIMEOUT	700U	// Disable console after 7s idle
+#define IDLE_TIMEOUT	30000U	// Disable console after ~5min idle
 
 static uint8_t rxbuf[BUFLEN];
 static uint8_t txbuf[BUFLEN];
@@ -389,6 +389,12 @@ void console_read(struct console_event *event)
 	}
 }
 
+static void show_clock(void)
+{
+	write_string(" @");
+	write_wordval(feed.clock);
+}
+
 static void show_voltage(uint8_t vsense)
 {
 	uint16_t scaled = (uint16_t) (vsense << 7U);
@@ -455,6 +461,7 @@ void console_showstate(uint8_t state, uint8_t error, uint8_t vsense)
 		write_string(" [Error]");
 	}
 	show_voltage(vsense);
+	show_clock();
 	newline();
 }
 
