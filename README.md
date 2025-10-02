@@ -24,7 +24,7 @@ after a programmable duration without input.
 ![State Machine](reference/remootio_adapter_state_diagram.svg "State Diagram")
 
 
-### Scheduled Feeding
+### Automated Feeding
 
 If a number of feeds per week is specified, the hoist will lower
 from the home position to P1 after a randomly chosen interval,
@@ -33,9 +33,9 @@ charge in the battery to retract.
 
 The hoist will remain at P1 until feed time minutes have elapsed, 
 then retract to the home position. Manual operation "down" or
-"up" will cancel a pending automatic schedule.
+"up" will cancel a pending automatic operation.
 
-To disable scheduled feeding, manually lower the hoist slightly
+To disable automated feeding, manually lower the hoist slightly
 from the home position. To re-enable, return hoist to home
 ("open") position.
 
@@ -50,9 +50,10 @@ then up to the home position.
 
 Errors and exceptions may be triggered by the following conditions:
 
-   - Low Battery: Scheduled feeding is suppressed when battery
-     voltage falls below 11.8V. In this state, the battery LED
-     is illuminated, manual operation is still enabled.
+   - Low Battery: Automated feeding is suppressed when battery
+     voltage falls below 13V. In this state, manual operation
+     is still enbaled. If the battery falls below 11.8V,
+     a warning LED is illuminated and remootio operation is disabled.
    - Spurious Sensor: In the case of a spurious triggering of
      the home sensor, an error condition is flagged and the
      motor is stopped.
@@ -65,14 +66,17 @@ Errors and exceptions may be triggered by the following conditions:
      H time has elapsed, the hoist will flag an error condition.
    - Safetime: If the hoist is left at position P2, between P1 and P2,
      or in the STOP state, it will attempt to retract automatically
-     to the home position after about 30 minutes.
-   - Disable Schedule: Scheduled feeding may be temporarily disabled
-     by manually lowering the hoist slightly from the home position
-     to state "STOP H-P1". To re-enable scheduled feeding, return
+     to the home position after about 60 minutes.
+   - Disable Automation: Automated random feeding may be temporarily
+     disabled by manually lowering the hoist slightly from the home
+     position to state "STOP H-P1". To re-enable random feeding, return
      hoist to home position.
 
 
 ### Serial Console
+
+**Note**: Serial console is not available on units supplied with
+BLE adapter.
 
 Connect RS-232 serial adapter to J4 (console)
 and open a terminal at 19200 baud, 8n1.
@@ -155,6 +159,11 @@ J6:8 | M:Gnd | "GND" Controller ground (black)
 
 ### Version Summaries
 
+   - 25003: Version 2.1, October 2025
+      - include system clock with state summary
+      - adjust low battery override states
+      - extend console idle timeout to 5 minutes
+      - extend safe time to 60 minutes
    - 25002: Version 2.1, ignore home trigger when at P1
    - 25001: Version 2
       - include Home Retry option & logic
@@ -202,16 +211,10 @@ On a Debian system, use make to install required packages:
 	$ make requires
 
 
-## Production Unit Assembly
+## Production Unit Info
 
    - [assembly/](assembly/ "Assembly instruction")
-
-
-## Prototype Unit Reference
-
-![Prototype](reference/remootio_adapter_prototype.jpg "Prototype")
-
-   - [wiring diagram](reference/remootio_adapter_protoype_wiring.pdf)
-   - [port-pins diagram](reference/remootio_adapter_prototype_portpins.pdf)
-   - [schematic diagram](reference/remootio_adapter_prototype_schematic.pdf)
-
+   - [assembly/burn-in.sh](assembly/burn-in.sh "Burn-in":
+     Prepare unit for first-time use.
+   - [assembly/update25001.sh](assembly/update25001.sh "Update to v25001+"):
+     Update unit with firmware < v25001, retaining configuration.
