@@ -52,7 +52,7 @@ Errors and exceptions may be triggered by the following conditions:
 
    - Low Battery: Automated feeding is suppressed when battery
      voltage falls below 13V. In this state, manual operation
-     is still enbaled. If the battery falls below 11.8V,
+     is still enabled. If the battery falls below 11.8V,
      a warning LED is illuminated and remootio operation is disabled.
    - Spurious Sensor: In the case of a spurious triggering of
      the home sensor, an error condition is flagged and the
@@ -150,7 +150,7 @@ J6:8 | M:Gnd | "GND" Controller ground (black)
 
 ### Source Layout
 
-	Main event loop:	src/main.c: 	main()
+	Main event loop:		src/main.c: 	main()
 	State machine logic:	src/main.c:	update_state()
 	Reset/initialisation:	src/system.c:	system_init()
 	Serial console logic:	src/console.c:	read_input()
@@ -159,7 +159,7 @@ J6:8 | M:Gnd | "GND" Controller ground (black)
 
 ### Version Summaries
 
-   - 25003: Version 2.1, October 2025
+   - 25003: BLE adapter updates, October 2025
       - include system clock with state summary
       - adjust low battery override states
       - extend console idle timeout to 5 minutes
@@ -214,7 +214,7 @@ On a Debian system, use make to install required packages:
 ## Production Unit Info
 
    - [assembly/](assembly/ "Assembly instruction")
-   - [assembly/burn-in.sh](assembly/burn-in.sh "Burn-in":
+   - [assembly/burn-in.sh](assembly/burn-in.sh "Burn-in"):
      Prepare unit for first-time use.
    - [assembly/update25001.sh](assembly/update25001.sh "Update to v25001+"):
      Update unit with firmware < v25001, retaining configuration.
