@@ -151,7 +151,7 @@ J6:8 | M:Gnd | "GND" Controller ground (black)
 ### Source Layout
 
 	Main event loop:		src/main.c: 	main()
-	State machine logic:	src/main.c:	update_state()
+	State machine logic:	src/main.c:		update_state()
 	Reset/initialisation:	src/system.c:	system_init()
 	Serial console logic:	src/console.c:	read_input()
 	SPM controller setting:	src/spmcheck.c	spm_check()

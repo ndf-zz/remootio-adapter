@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "blehhconfig"
+version = "1.0.0"
+description = "Hay Hoist Bluetooth Configuration Tool"
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = ["tk", "ble", "bleak", "bluetooth"]
+authors = [
+    {email = "ndf-zz@6-v.org", name = "Nathan Fraser"}
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Win32 (MS Windows)",
+    "Environment :: X11 Applications",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering",
+]
+
+dependencies = [
+    "bleak",
+]
+
+[project.urls]
+homepage = "https://github.com/ndf-zz/remootio-adapter/util/blehhconfig"
+
+[project.scripts]
+hhconfig = "blehhconfig:main"
